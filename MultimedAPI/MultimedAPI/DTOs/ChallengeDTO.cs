@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MultimedAPI.Models
+namespace MultimedAPI.DTOs
 {
-    public class Category
+    public class ChallengeDTO
     {
-
-
     }
 }
