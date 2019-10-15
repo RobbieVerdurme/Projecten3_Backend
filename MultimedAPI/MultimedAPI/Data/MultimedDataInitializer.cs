@@ -9,12 +9,12 @@ namespace MultimedAPI.Data
     public class MultimedDataInitializer
     {
 
-        private readonly MultimedContext _dbContext;
+        private readonly MultimedDbContext _dbContext;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public MultimedDataInitializer(MultimedContext context, UserManager<IdentityUser> userManager)
+        public MultimedDataInitializer(MultimedDbContext dbContext, UserManager<IdentityUser> userManager)
         {
-            _dbContext = context;
+            _dbContext = dbContext;
             _userManager = userManager;
         }
 

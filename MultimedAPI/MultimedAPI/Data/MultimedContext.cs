@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MultimedAPI.Data
 {
-    public class MultimedContext : IdentityDbContext
+    public class MultimedDbContext : IdentityDbContext
     {
 
-        public MultimedContext(DbContextOptions<MultimedContext> options)
+        public MultimedDbContext(DbContextOptions<MultimedDbContext> options)
             : base(options)
         {
         }
