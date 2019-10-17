@@ -20,10 +20,12 @@ namespace MultimedAPI.Controllers
     {
 
         private readonly IChallengeRepository _challengeRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ChallengeController(IChallengeRepository challengeRepository)
+        public ChallengeController(IChallengeRepository challengeRepository, ICategoryRepository categoryRepository)
         {
             _challengeRepository = challengeRepository;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: api/Challenge
@@ -61,10 +63,10 @@ namespace MultimedAPI.Controllers
         [HttpPost]
         public ActionResult<Challenge> AddChallenge(ChallengeDTO challenge)
         {
-            Challenge challengeToCreate = new Challenge() { Title = challenge.Title, Description = challenge.Description, Category = challenge.Category };
-            foreach(var u in challenge.ChallengeUsers)
+            Challenge challengeToCreate = new Challenge() { Title = challenge.Title, Description = challenge.Description};
+            if (challenge.CategoryId != 0)
             {
-                challengeToCreate.AddUser(new User() { Email = u.User.Email, FirstName = u.User.FirstName, FamilyName = u.User.FamilyName });
+                challengeToCreate.Category = _categoryRepository.GetById(challenge.CategoryId);
             }
             _challengeRepository.AddChallenge(challengeToCreate);
             _challengeRepository.SaveChanges();
@@ -72,6 +74,22 @@ namespace MultimedAPI.Controllers
             return CreatedAtAction(nameof(AddChallenge), new { id = challengeToCreate.ChallengeId }, challengeToCreate);
         }
 
-
+        // PUT: api/Challenge/5
+        /// <summary>
+        /// Modifies a challenge
+        /// </summary>
+        /// <param name="id">id of the challenge to be modified</param>
+        /// <param name="recipe">the modified challenge</param>
+        [HttpPut("{id}")]
+        public IActionResult UpdateChallenge(int id, Challenge challenge)
+        {
+            if( id != challenge.ChallengeId)
+            {
+                return BadRequest();
+            }
+            _challengeRepository.updateChallenge(challenge);
+            _challengeRepository.SaveChanges();
+            return NoContent();
+        }
     }
 }

@@ -13,7 +13,6 @@ namespace MultimedAPI.Models
 
         public string Name { get; set; }
 
-
         #endregion
 
         #region Constructors
