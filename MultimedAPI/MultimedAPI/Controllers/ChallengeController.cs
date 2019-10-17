@@ -21,11 +21,15 @@ namespace MultimedAPI.Controllers
 
         private readonly IChallengeRepository _challengeRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IChallengeUserRepository _challengeUserRepository;
 
-        public ChallengeController(IChallengeRepository challengeRepository, ICategoryRepository categoryRepository)
+        public ChallengeController(IChallengeRepository challengeRepository, ICategoryRepository categoryRepository, IUserRepository userRepository, IChallengeUserRepository challengeUserRepository)
         {
             _challengeRepository = challengeRepository;
             _categoryRepository = categoryRepository;
+            _userRepository = userRepository;
+            _challengeUserRepository = challengeUserRepository;
         }
 
         // GET: api/Challenge
@@ -73,6 +77,8 @@ namespace MultimedAPI.Controllers
 
             return CreatedAtAction(nameof(AddChallenge), new { id = challengeToCreate.ChallengeId }, challengeToCreate);
         }
+
+
 
         // PUT: api/Challenge/5
         /// <summary>

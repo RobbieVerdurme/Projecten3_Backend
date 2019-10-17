@@ -19,6 +19,8 @@ namespace MultimedAPI.Data
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<ChallengeUser> ChallengeUsers { get; set; }
+
         #endregion
 
         public MultimedDbContext(DbContextOptions<MultimedDbContext> options)

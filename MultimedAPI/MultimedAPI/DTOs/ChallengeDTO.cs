@@ -15,6 +15,5 @@ namespace MultimedAPI.DTOs
 
         public int CategoryId{ get; set; }
 
-        public IList<ChallengeUser> ChallengeUsers { get; set; }
     }
 }
