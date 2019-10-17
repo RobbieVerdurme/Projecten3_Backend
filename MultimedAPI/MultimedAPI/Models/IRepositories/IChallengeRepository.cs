@@ -12,8 +12,6 @@ namespace MultimedAPI.Models.IRepositories
 
         IEnumerable<Challenge> GetAll();
 
-        IEnumerable<Challenge> GetAllChallengesForCategory(Category category);
-
         void AddChallenge(Challenge challenge);
 
         void DeleteChallenge(Challenge challenge);

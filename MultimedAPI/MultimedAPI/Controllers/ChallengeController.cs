@@ -61,7 +61,17 @@ namespace MultimedAPI.Controllers
         [HttpPost]
         public ActionResult<Challenge> AddChallenge(ChallengeDTO challenge)
         {
-            throw new NotImplementedException();
+            Challenge challengeToCreate = new Challenge() { Title = challenge.Title, Description = challenge.Description, Category = challenge.Category };
+            foreach(var u in challenge.ChallengeUsers)
+            {
+                challengeToCreate.AddUser(new User() { Email = u.User.Email, FirstName = u.User.FirstName, FamilyName = u.User.FamilyName });
+            }
+            _challengeRepository.AddChallenge(challengeToCreate);
+            _challengeRepository.SaveChanges();
+
+            return CreatedAtAction(nameof(AddChallenge), new { id = challengeToCreate.ChallengeId }, challengeToCreate);
         }
+
+
     }
 }

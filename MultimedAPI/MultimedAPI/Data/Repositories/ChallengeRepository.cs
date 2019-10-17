@@ -30,11 +30,6 @@ namespace MultimedAPI.Data.Repositories
             return _challenges.Include(c => c.ChallengeUsers);
         }
 
-        public IEnumerable<Challenge> GetAllChallengesForCategory(Category category)
-        {
-            return _challenges.Include(c => c.ChallengeUsers).Where(c => c.Category == category).OrderBy(c => c.Title);
-        }
-
         public void AddChallenge(Challenge challenge)
         {
             _challenges.Add(challenge);
