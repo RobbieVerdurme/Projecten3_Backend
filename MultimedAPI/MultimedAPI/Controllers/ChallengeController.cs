@@ -91,5 +91,23 @@ namespace MultimedAPI.Controllers
             _challengeRepository.SaveChanges();
             return NoContent();
         }
+
+        // DELETE: api/Challenge/5
+        /// <summary>
+        /// Deletes a challenge
+        /// </summary>
+        /// <param name="id">The id of the challenge to be deleted</param>
+        [HttpDelete("{id}")]
+        public ActionResult<Challenge> DeleteChallenge(int id)
+        {
+            Challenge challenge= _challengeRepository.GetById(id);
+            if (challenge == null)
+            {
+                return NotFound();
+            }
+            _challengeRepository.DeleteChallenge(challenge);
+            _challengeRepository.SaveChanges();
+            return challenge;
+        }
     }
 }
