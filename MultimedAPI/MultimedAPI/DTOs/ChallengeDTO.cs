@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultimedAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,5 +8,13 @@ namespace MultimedAPI.DTOs
 {
     public class ChallengeDTO
     {
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public Category Category{ get; set; }
+
+        public IList<ChallengeUser> ChallengeUsers { get; set; }
     }
 }

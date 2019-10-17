@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,11 @@ namespace MultimedAPI
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddDbContext<MultimedDbContext>(options =>
+              options.UseSqlServer(Configuration.GetConnectionString("MultimedContext")));
+
+            services.AddScoped<MultimedDataInitializer>();
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IChallengeRepository, ChallengeRepository>();
 
@@ -45,7 +51,7 @@ namespace MultimedAPI
                 c.Description = "The MultimedAPI documentation.";
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>(cfg => cfg.User.RequireUniqueEmail = true).AddEntityFrameworkStores<MultimedContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(cfg => cfg.User.RequireUniqueEmail = true).AddEntityFrameworkStores<MultimedDbContext>();
 
 
 
@@ -88,7 +94,7 @@ namespace MultimedAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MultimedDataInitializer multimedDataInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -109,7 +115,7 @@ namespace MultimedAPI
 
             app.UseCors("AllowAllOrigins");
 
-            //multimedDataInitializer.InitializeData().Wait();
+            multimedDataInitializer.InitializeData().Wait();
         }
     }
 }

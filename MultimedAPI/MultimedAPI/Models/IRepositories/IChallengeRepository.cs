@@ -8,9 +8,9 @@ namespace MultimedAPI.Models.IRepositories
     public interface IChallengeRepository
     {
 
-        Challenge GetChallenge(int id);
+        Challenge GetById(int id);
 
-        IEnumerable<Challenge> GetAllChallenges();
+        IEnumerable<Challenge> GetAll();
 
         IEnumerable<Challenge> GetAllChallengesForCategory(Category category);
 

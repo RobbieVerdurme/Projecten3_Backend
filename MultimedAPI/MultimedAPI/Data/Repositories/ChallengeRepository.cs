@@ -20,14 +20,14 @@ namespace MultimedAPI.Data.Repositories
             _challenges = _dbContext.Challenges;
         }
 
-        public Challenge GetChallenge(int id)
+        public Challenge GetById(int id)
         {
             return _challenges.Include(c => c.ChallengeUsers).SingleOrDefault(c => c.ChallengeId == id);
         }
 
-        public IEnumerable<Challenge> GetAllChallenges()
+        public IEnumerable<Challenge> GetAll()
         {
-            return _challenges.Include(c => c.ChallengeUsers).OrderBy(c => c.Title);
+            return _challenges.Include(c => c.ChallengeUsers);
         }
 
         public IEnumerable<Challenge> GetAllChallengesForCategory(Category category)
