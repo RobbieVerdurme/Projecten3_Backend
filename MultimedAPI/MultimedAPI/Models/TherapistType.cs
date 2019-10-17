@@ -5,29 +5,39 @@ using System.Threading.Tasks;
 
 namespace MultimedAPI.Models
 {
-    public class Category
+    public class TherapistType
     {
+
         #region Properties
 
-        public int CategoryId { get; set; }
+        public int TherapistTypeId { get; set; }
 
         public string Name { get; set; }
+        #endregion
+
+        #region Collections
+
+        public ICollection<Category> Categories{ get; set; }
 
 
         #endregion
 
         #region Constructors
 
-        public Category()
+        public TherapistType()
         {
         }
 
-        public Category(string name)
+        public TherapistType(string name)
         {
             Name = name;
         }
 
         #endregion
 
+        #region Methods
+
+
+        #endregion
     }
 }

@@ -18,14 +18,19 @@ namespace MultimedAPI.Models
 
         public string Email { get; set; }
 
-        public ICollection<Challenge> Challenges { get; set; }
+        #endregion
+
+        #region Collections
+
+        public ICollection<ChallengeUser> ChallengesUser { get; set; }
+
         #endregion
 
         #region Constructors
 
         public User()
         {
-            Challenges = new List<Challenge>();
+            ChallengesUser = new List<ChallengeUser>();
         }
 
         public User(string firstName, string familyName, string email)
@@ -41,9 +46,9 @@ namespace MultimedAPI.Models
 
         #region Methods
 
-        public void AddChallenge(Challenge challenge) => Challenges.Add(challenge);
+        public void AddChallenge(Challenge challenge) => ChallengesUser.Add(new ChallengeUser(this, challenge));
 
-        public Challenge GetChallenge(int id) => Challenges.SingleOrDefault(c => c.ChallengeId == id);
+        public Challenge GetChallenge(int id) => ChallengesUser.SingleOrDefault(c => c.ChallengeId == id).Challenge;
 
         #endregion
     }
