@@ -36,15 +36,14 @@ namespace MultimedAPI.Controllers
 
 
         /// <summary>
-        /// Register a user
+        /// Login
         /// </summary>
-        /// <param name="model">the user details</param>
-        /// <returns></returns>
+        /// <param name="model">the login details</param>
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<String>> CreateToken(LoginDTO model)
         {
-            var user = await _userManager.FindByNameAsync(model.Email);
+            var user = await _userManager.FindByNameAsync(model.Email).ConfigureAwait(false);
 
             if (user != null)
             {
@@ -60,6 +59,29 @@ namespace MultimedAPI.Controllers
         }
 
         /// <summary>
+        /// Register a user
+        /// </summary>
+        /// <param name="model">the user details</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult<String>> Register(LoginDTO model)
+        {
+            IdentityUser user = new IdentityUser { UserName = model.Email, Email = model.Email };
+            try
+            {
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        /// <summary>
         /// Checks if an email is available as username
         /// </summary>
         /// <returns>true if the email is not registered yet</returns>
@@ -71,7 +93,6 @@ namespace MultimedAPI.Controllers
             var user = await _userManager.FindByNameAsync(email);
             return user == null;
         }
-
 
         private String GetToken(IdentityUser user)
         {

@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MultimedAPI.Data;
+using MultimedAPI.Data.Repositories;
+using MultimedAPI.Models.IRepositories;
 using NSwag;
 using NSwag.SwaggerGeneration.Processors.Security;
 using System;
@@ -30,13 +33,17 @@ namespace MultimedAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDbContext<MultimedDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("MultimedContext")));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<MultimedDataInitializer>();
 
             services.AddOpenApiDocument(c =>
             {
                 c.DocumentName = "apidocs";
-                c.Title = "Recipe API";
+                c.Title = "Multimed API";
                 c.Version = "v1";
-                c.Description = "The Recipe API documentation description.";
+                c.Description = "The Multimed API documentation description.";
                 c.DocumentProcessors.Add(new SecurityDefinitionAppender("JWT Token", new SwaggerSecurityScheme
                 {
                     Type = SwaggerSecuritySchemeType.ApiKey,
@@ -45,7 +52,8 @@ namespace MultimedAPI
                     Description = "Copy 'Bearer' + valid JWT token into field"
                 }));
                 c.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT Token"));
-            });
+            }); //for OpenAPI 3.0 else AddSwaggerDocument();
+
 
             services.AddIdentity<IdentityUser, IdentityRole>(cfg => cfg.User.RequireUniqueEmail = true).AddEntityFrameworkStores<MultimedDbContext>();
 
@@ -97,7 +105,7 @@ namespace MultimedAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MultimedDataInitializer multimedDataInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -118,7 +126,7 @@ namespace MultimedAPI
 
             app.UseCors("AllowAllOrigins");
 
-            //multimedDataInitializer.InitializeData().Wait();
+            multimedDataInitializer.InitializeData().Wait();
         }
     }
 }
