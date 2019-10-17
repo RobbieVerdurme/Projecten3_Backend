@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MultimedAPI.Data;
+using MultimedAPI.Data.Repositories;
+using MultimedAPI.Models.IRepositories;
 
 namespace MultimedAPI
 {
@@ -31,6 +33,10 @@ namespace MultimedAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IChallengeRepository, ChallengeRepository>();
+
             services.AddOpenApiDocument(c => 
             {
                 c.DocumentName = "apidocs";
@@ -74,7 +80,7 @@ namespace MultimedAPI
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             })
-                .AddEntityFrameworkStores<MultimedContext>()
+                .AddEntityFrameworkStores<MultimedDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin()));

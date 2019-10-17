@@ -26,6 +26,7 @@ namespace MultimedAPI.Models
 
         public TherapistType()
         {
+            Categories = new List<Category>();
         }
 
         public TherapistType(string name)
@@ -37,6 +38,7 @@ namespace MultimedAPI.Models
 
         #region Methods
 
+        public void AddCategory(Category category) => Categories.Add(category);
 
         #endregion
     }
