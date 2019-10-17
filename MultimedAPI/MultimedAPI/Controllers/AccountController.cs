@@ -43,7 +43,7 @@ namespace MultimedAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<String>> CreateToken(LoginDTO model)
         {
-            var user = await _userManager.FindByNameAsync(model.Email).ConfigureAwait(false);
+            var user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
 
             if (user != null)
             {

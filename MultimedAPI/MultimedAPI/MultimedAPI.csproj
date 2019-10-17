@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <UserSecretsId>a4f954eb-ac0f-4d49-8f0e-c6690dd59fe5</UserSecretsId>
   </PropertyGroup>
 
 
@@ -12,7 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.1.3" />
+    <PackageReference Include="NSwag.AspNetCore" Version="12.0.0" />
   </ItemGroup>
 
 </Project>

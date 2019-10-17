@@ -24,7 +24,7 @@ namespace MultimedAPI.Data
             _dbContext.Database.EnsureDeleted();
             if(_dbContext.Database.EnsureCreated())
             {
-                await CreateUser("ShawnVanRanst", "shawnvanranst@gmail.com", "Drakengrot");
+                await CreateUser("ShawnVanRanst", "shawnvanranst@gmail.com", "P@ssword123");
                 User user = new User("Shawn", "Van Ranst", "shawnvanranst@gmail.com");
                 _dbContext.Users.Add(user);
                 _dbContext.SaveChanges();
