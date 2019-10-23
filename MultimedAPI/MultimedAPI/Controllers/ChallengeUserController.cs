@@ -33,21 +33,25 @@ namespace MultimedAPI.Controllers
         ///<summary>
         /// Get all challenges for this user
         ///</summary>
+        /// <param name="email">The email of the user</param>
         ///<returns>Array of challenges</returns>
         [HttpGet]
-        public IEnumerable<Challenge> GetAllChallengesForUser(User user)
+        public IEnumerable<Challenge> GetAllChallengesForUser(string email)
         {
+            User user = _userRepository.GetByEmail(email);
             return _challengeUserRepository.GetAllChallengesForUser(user);
         }
 
-        // Get: api/ChallengeUser
+        // Get: api/ChallengeUser/5
         ///<summary>
         /// Get all users for this challenge
         ///</summary>
+        /// <param name="id">Id of the challenge</param>
         ///<returns>Array of users</returns>
-        [HttpGet]
-        public IEnumerable<User> GetAllUsersOfChallenge(Challenge challenge)
+        [HttpGet("{id}")]
+        public IEnumerable<User> GetAllUsersOfChallenge(int id)
         {
+            Challenge challenge = _challengeRepository.GetById(id);
             return _challengeUserRepository.GetAllUsersOfChallenge(challenge);
         }
 
@@ -58,15 +62,15 @@ namespace MultimedAPI.Controllers
         /// </summary>
         /// <param name="challengeUser">The new challengeUser/param>
         [HttpPost]
-        public ActionResult<Challenge> AddChallengeUser(ChallengeUserDTO challengeUser)
+        public ActionResult<ChallengeUser> AddChallengeUser(ChallengeUserDTO challengeUserDTO)
         {
-            Challenge challenge = _challengeRepository.GetById(challengeUser.ChallengeId);
-            User user = _userRepository.GetUserById(challengeUser.UserId);
-            ChallengeUser challengeUserToCreate = new ChallengeUser(user, challenge);
-            _challengeUserRepository.AddChallengeUser(challengeUserToCreate);
+            Challenge challenge = _challengeRepository.GetById(challengeUserDTO.ChallengeId);
+            User user = _userRepository.GetById(challengeUserDTO.UserId);
+            ChallengeUser challengeUser = new ChallengeUser(user, challenge);
+            _challengeUserRepository.AddChallengeUser(challengeUser);
             _challengeUserRepository.SaveChanges();
-
-            return CreatedAtAction(nameof(AddChallengeUser), new { id = challengeUserToCreate.ChallengeUserId }, challengeUserToCreate);
+            return challengeUser;
+            //METHODE WERKT MAAR RESPONS DOET NOG IETS VREEMDS
         }
 
         // Delete: api/ChallengeUser/5

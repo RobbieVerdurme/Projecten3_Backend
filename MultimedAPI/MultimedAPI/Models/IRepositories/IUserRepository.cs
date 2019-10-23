@@ -9,7 +9,9 @@ namespace MultimedAPI.Models.IRepositories
     {
         IEnumerable<User> GetUsers();
 
-        User GetUserById(int id);
+        User GetById(int id);
+
+        User GetByEmail(string email);
 
         void AddUser(User user);
 

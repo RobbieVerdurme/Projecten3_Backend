@@ -43,6 +43,7 @@ namespace MultimedAPI
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IChallengeRepository, ChallengeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IChallengeUserRepository, ChallengeUserRepository>();
 
             services.AddOpenApiDocument(c => 
             {

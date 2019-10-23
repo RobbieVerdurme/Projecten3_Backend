@@ -1,4 +1,5 @@
-﻿using MultimedAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MultimedAPI.Models;
 using MultimedAPI.Models.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,23 @@ namespace MultimedAPI.Data.Repositories
     public class UserRepository : IUserRepository
     {
 
-        public User GetUserById(int id)
+        private readonly MultimedDbContext _dbContext;
+        private readonly DbSet<User> _users;
+
+        public UserRepository(MultimedDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _users = _dbContext.Users;
+        }
+
+        public User GetById(int id)
+        {
+            return _users.SingleOrDefault(u => u.UserId == id);
+        }
+
+        public User GetByEmail(string email)
+        {
+            return _users.SingleOrDefault(u => u.Email == email);
         }
 
         public IEnumerable<User> GetUsers()
@@ -33,7 +48,7 @@ namespace MultimedAPI.Data.Repositories
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _dbContext.SaveChanges();
         }
     }
 }

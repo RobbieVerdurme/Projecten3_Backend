@@ -79,7 +79,6 @@ namespace MultimedAPI.Controllers
         }
 
 
-
         // PUT: api/Challenge/5
         /// <summary>
         /// Modifies a challenge
