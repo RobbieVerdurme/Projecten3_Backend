@@ -11,6 +11,18 @@ namespace MultimedAPI.Data
     public class MultimedDbContext : IdentityDbContext
     {
 
+        #region DbSets
+
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Challenge> Challenges { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<ChallengeUser> ChallengeUsers { get; set; }
+
+        #endregion
+
         public MultimedDbContext(DbContextOptions<MultimedDbContext> options)
             : base(options)
         {
@@ -22,7 +34,6 @@ namespace MultimedAPI.Data
             
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Challenge> Challenges { get; set; }
+        
     }
 }
