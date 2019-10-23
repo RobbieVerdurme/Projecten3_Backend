@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿        using Microsoft.AspNetCore.Identity;
 using MultimedAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ namespace MultimedAPI.Data
         private readonly MultimedDbContext _dbContext;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public MultimedDataInitializer(MultimedDbContext context, UserManager<IdentityUser> userManager)
+        public MultimedDataInitializer(MultimedDbContext dbContext, UserManager<IdentityUser> userManager)
         {
-            _dbContext = context;
+            _dbContext = dbContext;
             _userManager = userManager;
         }
 
@@ -24,19 +24,10 @@ namespace MultimedAPI.Data
             _dbContext.Database.EnsureDeleted();
             if(_dbContext.Database.EnsureCreated())
             {
-                Category category1 = new Category("Overweight");
-                _dbContext.Categories.Add(category1);
-
-                Challenge challenge1 = new Challenge("Rustdag", "Je hebt deze week al hard gewerkt. Je lichaam heeft natuurlijk ook rust nodig, dus doe vandaag eens lekker niets!", category1);
-                _dbContext.Challenges.Add(challenge1);
-
-                User user1 = new User() { FirstName = "Arno", FamilyName = "Boel", Email = "banaan@hotmail.com"};
-
-                _dbContext.Users.Add(user1);
-                //_dbContext.ChallengeUsers.Add(new ChallengeUser(user1, challenge1));
-
+                await CreateUser("ShawnVanRanst", "shawnvanranst@gmail.com", "P@ssword123");
+                User user = new User("Shawn", "Van Ranst", "shawnvanranst@gmail.com");
+                _dbContext.Users.Add(user);
                 _dbContext.SaveChanges();
-                
             }
         }
 
