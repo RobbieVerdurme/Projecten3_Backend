@@ -28,16 +28,21 @@ namespace MultimedAPI.Controllers
 
         
         [HttpGet()]
-        public IEnumerable<UserDTO> GetUsers()
+        public IEnumerable<User> GetUsers()
         {
-            throw new NotImplementedException();
+            return _userRepository.GetUsers();
         }
 
         
         [HttpGet("{id}")]
-        public ActionResult<UserDTO> GetUser(int id)
+        public ActionResult<User> GetUser(int id)
         {
-            throw new NotImplementedException();
+            User user = _userRepository.GetById(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return user;
         }
 
         #endregion
@@ -45,18 +50,12 @@ namespace MultimedAPI.Controllers
         #region -- POST --
 
         [HttpPost()]
-        public ActionResult<User> CreateUser(User user)
+        public ActionResult<User> AddUser(UserDTO userDTO)
         {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region -- PUT --
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, User user)
-        {
-            throw new NotImplementedException();
+            User userToCreate = new User() { FirstName = userDTO.FirstName, FamilyName = userDTO.FamilyName, Email = userDTO.Email };
+            _userRepository.AddUser(userToCreate);
+            _userRepository.SaveChanges();
+            return CreatedAtAction(nameof(AddUser), new { id = userToCreate.UserId }, userToCreate);
         }
         #endregion
 
@@ -65,7 +64,14 @@ namespace MultimedAPI.Controllers
         [HttpDelete("{id}")]
         public ActionResult<User> DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            User user = _userRepository.GetById(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            _userRepository.DeleteUser(user);
+            _userRepository.SaveChanges();
+            return user;
         }
         #endregion
     }

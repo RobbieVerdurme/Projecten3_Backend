@@ -64,8 +64,6 @@ namespace MultimedAPI
                 c.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT Token"));
             }); //for OpenAPI 3.0 else AddSwaggerDocument();
 
-            services.AddIdentity<IdentityUser, IdentityRole>(cfg => cfg.User.RequireUniqueEmail = true).AddEntityFrameworkStores<MultimedContext>();
-
             services.AddIdentity<IdentityUser, IdentityRole>(cfg => cfg.User.RequireUniqueEmail = true).AddEntityFrameworkStores<MultimedDbContext>();
 
 

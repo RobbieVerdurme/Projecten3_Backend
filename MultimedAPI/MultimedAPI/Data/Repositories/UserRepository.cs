@@ -32,18 +32,18 @@ namespace MultimedAPI.Data.Repositories
 
         public IEnumerable<User> GetUsers()
         {
-            throw new NotImplementedException();
+            return _users.ToList();
         }
 
         public void AddUser(User user)
         {
-            throw new NotImplementedException();
+            _users.Add(user);
         }
         
 
-        public void RemoveUser(User user)
+        public void DeleteUser(User user)
         {
-            throw new NotImplementedException();
+            _users.Remove(user);
         }
 
         public void SaveChanges()
