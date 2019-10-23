@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿        using Microsoft.AspNetCore.Identity;
+using MultimedAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,9 @@ namespace MultimedAPI.Data
             _dbContext.Database.EnsureDeleted();
             if(_dbContext.Database.EnsureCreated())
             {
-
+                await CreateUser("ShawnVanRanst", "shawnvanranst@gmail.com", "P@ssword123");
+                User user = new User("Shawn", "Van Ranst", "shawnvanranst@gmail.com");
+                _dbContext.Users.Add(user);
                 _dbContext.SaveChanges();
             }
         }
