@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MultimedAPI.Models;
+using MultimedAPI.Models.ManyToManies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace MultimedAPI.Data
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<ChallengeUser> ChallengeUsers { get; set; }
+        public DbSet<Therapist> Therapists { get;   set; }
 
         #endregion
 

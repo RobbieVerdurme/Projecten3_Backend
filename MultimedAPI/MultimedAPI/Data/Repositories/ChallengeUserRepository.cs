@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MultimedAPI.Models;
 using MultimedAPI.Models.IRepositories;
+using MultimedAPI.Models.ManyToManies;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -12,7 +12,7 @@ namespace MultimedAPI.Models
 
         public int TherapistTypeId { get; set; }
 
-        public string Name { get; set; }
+        public string Type { get; set; }
         #endregion
 
         #region Collections
@@ -29,16 +29,16 @@ namespace MultimedAPI.Models
             Categories = new List<Category>();
         }
 
-        public TherapistType(string name)
+        public TherapistType(string type)
         {
-            Name = name;
+            Type = type;
         }
 
         #endregion
 
         #region Methods
 
-        public void AddCategory(Category category) => Categories.Add(category);
+         public void AddCategory(Category category) => Categories.Add(category);
 
         #endregion
     }

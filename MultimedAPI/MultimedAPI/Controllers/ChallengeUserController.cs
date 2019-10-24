@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using MultimedAPI.DTOs;
 using MultimedAPI.Models;
 using MultimedAPI.Models.IRepositories;
+using MultimedAPI.Models.ManyToManies;
 
 namespace MultimedAPI.Controllers
 {
@@ -73,7 +74,6 @@ namespace MultimedAPI.Controllers
             _userRepository.UpdateUser(user);
             _userRepository.SaveChanges();
             return NoContent();
-            //METHODE WERKT MAAR RESPONS DOET NOG IETS VREEMDS
         }
 
         // Delete: api/ChallengeUser/5
