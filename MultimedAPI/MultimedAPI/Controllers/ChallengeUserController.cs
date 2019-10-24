@@ -62,14 +62,17 @@ namespace MultimedAPI.Controllers
         /// </summary>
         /// <param name="challengeUser">The new challengeUser/param>
         [HttpPost]
-        public ActionResult<ChallengeUser> AddChallengeUser(ChallengeUserDTO challengeUserDTO)
+        public ActionResult<User> AddChallengesForUser(ChallengesUserDTO challengeUserDTO)
         {
-            Challenge challenge = _challengeRepository.GetById(challengeUserDTO.ChallengeId);
             User user = _userRepository.GetById(challengeUserDTO.UserId);
-            ChallengeUser challengeUser = new ChallengeUser(user, challenge);
-            _challengeUserRepository.AddChallengeUser(challengeUser);
-            _challengeUserRepository.SaveChanges();
-            return challengeUser;
+            foreach(int id in challengeUserDTO.ChallengeIds)
+            {
+                Challenge challenge = _challengeRepository.GetById(id);
+                user.AddChallengeUser(challenge);
+            }
+            _userRepository.UpdateUser(user);
+            _userRepository.SaveChanges();
+            return NoContent();
             //METHODE WERKT MAAR RESPONS DOET NOG IETS VREEMDS
         }
 

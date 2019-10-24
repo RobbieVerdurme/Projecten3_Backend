@@ -46,6 +46,11 @@ namespace MultimedAPI.Data.Repositories
             _users.Remove(user);
         }
 
+        public void UpdateUser(User user)
+        {
+            _users.Update(user);
+        }
+
         public void SaveChanges()
         {
             _dbContext.SaveChanges();

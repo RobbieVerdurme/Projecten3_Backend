@@ -46,7 +46,7 @@ namespace MultimedAPI.Models
 
         #region Methods
 
-        public void AddChallengeUser(ChallengeUser challengeUser) => ChallengesUser.Add(challengeUser);
+        public void AddChallengeUser(Challenge challenge) => ChallengesUser.Add(new ChallengeUser(this, challenge));
 
         public Challenge GetChallenge(int id) => ChallengesUser.SingleOrDefault(c => c.ChallengeId == id).Challenge;
 

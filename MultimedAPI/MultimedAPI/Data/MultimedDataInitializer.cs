@@ -24,10 +24,27 @@ namespace MultimedAPI.Data
             _dbContext.Database.EnsureDeleted();
             if(_dbContext.Database.EnsureCreated())
             {
+                #region Users
                 await CreateUser("ShawnVanRanst", "shawnvanranst@gmail.com", "P@ssword123");
                 User user = new User("Shawn", "Van Ranst", "shawnvanranst@gmail.com");
                 _dbContext.Users.Add(user);
+                
+                #endregion
+
+                #region Category
+                Category category1 = new Category("Overgewicht");
+                _dbContext.Categories.Add(category1);
+                #endregion
+
+                #region Challenges
+                Challenge challenge1 = new Challenge("Lopen", "Loop vandaag 5 km", category1);
+                _dbContext.Challenges.Add(challenge1);
+                #endregion
+
+
+                #region Save changes
                 _dbContext.SaveChanges();
+                #endregion
             }
         }
 
