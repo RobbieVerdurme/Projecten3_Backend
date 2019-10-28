@@ -27,6 +27,8 @@ namespace MultimedAPI.Models
 
         public ICollection<TherapistUser> TherapistUsers{ get; set; }
 
+        public ICollection<Category> Categories { get; set; }
+
         #endregion
 
         #region Constructors
@@ -35,6 +37,7 @@ namespace MultimedAPI.Models
         {
             ChallengesUsers = new List<ChallengeUser>();
             TherapistUsers = new List<TherapistUser>();
+            Categories = new List<Category>();
         }
 
         public User(string firstName, string familyName, string email)
