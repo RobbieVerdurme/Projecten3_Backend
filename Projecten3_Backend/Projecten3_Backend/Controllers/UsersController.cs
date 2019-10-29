@@ -78,6 +78,9 @@ namespace Projecten3_Backend.Controllers
         [HttpPost]
         public IActionResult PostUser(User user)
         {
+            //create login for the user of the app
+
+            //add user in db
             _userRepo.AddUser(user);
             _userRepo.SaveChanges();
 

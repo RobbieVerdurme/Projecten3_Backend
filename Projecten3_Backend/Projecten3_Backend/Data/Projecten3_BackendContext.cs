@@ -14,6 +14,9 @@ namespace Projecten3_Backend.Models
         {
         }
 
-        public DbSet<Projecten3_Backend.Model.User> User { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Therapist> Therapist { get; set; }
+        public DbSet<Company> Company { get; set; }
+        public DbSet<Challenge> Challenges { get; set; }
     }
 }

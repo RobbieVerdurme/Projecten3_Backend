@@ -21,24 +21,24 @@ namespace Projecten3_Backend.Model
 
         public string Phone { get; set; }
 
+        public Company company { get; set; }
+
         #endregion
 
         #region Collections
 
-        public ICollection<Challenge> Challenges { get; set; } = new List<Challenge>();
+        public virtual ICollection<ChallengeUser> Challenges { get; set; } = new List<ChallengeUser>();
 
         public virtual ICollection<TherapistUser> Therapists { get; set; } = new List<TherapistUser>();
 
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
+        public  ICollection<Category> Categories { get; set; } = new List<Category>();
 
         #endregion
 
         #region Methods
-
-        public void AddChallenge(Challenge challenge) => Challenges.Add(new Challenge() { Title = challenge.Title, Description = challenge.Description, Category = challenge.Category });
+        public void addChallenges(List<ChallengeUser> challenges) => challenges.AddRange(challenges);
 
         public void AddTherapist(Therapist therapist) => Therapists.Add(new TherapistUser() { Therapist = therapist, TherapistId = therapist.TherapistId, User = this, UserId = this.UserId});
-        //public void AddTherapist(Therapist therapist) => Therapists.Add(new Therapist() {FirstName = therapist.FirstName, LastName = therapist.LastName, Email = therapist.Email, PhoneNumber = therapist.PhoneNumber,Website = therapist.Website,Street = therapist.Street, HouseNumber =  therapist.HouseNumber,PostalCode =  therapist.PostalCode,City =  therapist.City, TherapistType = therapist.TherapistType });
 
         public static UserDTO MapUserToUserDTO(User usr)
         {
