@@ -32,9 +32,12 @@ namespace Projecten3_Backend
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITherapistRepository, TherapistRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IChallengeRepository, ChallengeRepository>();
+           
 
-            services.AddDbContext<Projecten3_BackendContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("Projecten3_BackendContext")));
+            services.AddDbContext<Projecten3_BackendContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Projecten3_BackendContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
