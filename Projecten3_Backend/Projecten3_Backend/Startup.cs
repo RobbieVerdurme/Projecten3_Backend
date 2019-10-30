@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NSwag.Generation.Processors.Security;
+using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.Data.Repository;
 using Projecten3_Backend.Models;
@@ -30,6 +31,8 @@ namespace Projecten3_Backend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddScoped<MultimedDataInitializer>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITherapistRepository, TherapistRepository>();
@@ -62,6 +65,12 @@ namespace Projecten3_Backend
                 options.AddPolicy("Multimed", policy => {
                     policy.RequireClaim(ClaimTypes.Role, "Multimed");
                     policy.RequireRole("Multimed");
+                    policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+                });
+
+                options.AddPolicy("Therapist", policy => {
+                    policy.RequireClaim(ClaimTypes.Role, "Therapist");
+                    policy.RequireRole("Therapist");
                     policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
                 });
 
@@ -116,7 +125,7 @@ namespace Projecten3_Backend
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MultimedDataInitializer multimedDataInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -134,6 +143,7 @@ namespace Projecten3_Backend
             app.UseCors("AllowAllOrigins");
             app.UseSwaggerUi3();
             app.UseSwagger();
+            multimedDataInitializer.InitializeData().Wait();
         }
     }
 }

@@ -14,18 +14,5 @@ namespace Projecten3_Backend.Model
         public string Name { get; set; }
 
         #endregion
-
-        #region Constructors
-
-        public Category()
-        {
-        }
-
-        public Category(string name)
-        {
-            Name = name;
-        }
-
-        #endregion
     }
 }
