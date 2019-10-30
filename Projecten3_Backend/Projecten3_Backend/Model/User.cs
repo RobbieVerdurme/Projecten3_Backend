@@ -21,7 +21,8 @@ namespace Projecten3_Backend.Model
 
         public string Phone { get; set; }
 
-        public Company company { get; set; }
+        public virtual Company Company { get; set; }
+
 
         #endregion
 
