@@ -81,7 +81,7 @@ namespace Projecten3_Backend.Controllers
                 //return ok so the user knows the account has been created
                 return Ok();
             }
-            return StatusCode(408);
+            return StatusCode(500);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Projecten3_Backend.Controllers
                 //return ok so the user knows the account has been created
                 return Ok();
             }
-            return StatusCode(408);
+            return StatusCode(500);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Projecten3_Backend.Controllers
                 //return ok so the user knows the account has been created
                 return Ok();
             }
-            return StatusCode(408);
+            return StatusCode(500);
         }
 
         /// <summary>
