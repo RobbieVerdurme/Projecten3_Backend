@@ -26,15 +26,20 @@ namespace Projecten3_Backend.DTO
         #region methods
         public static User MapUserDTOToUser(UserDTO user)
         {
-            User usr = new User()
-            {
-                FirstName = user.FirstName,
-                FamilyName = user.FamilyName,
-                Email = user.Email,
-                Categories = user.Categories
-            };
+            if (user != null) {
+                User usr = new User()
+                {
+                    FirstName = user.FirstName,
+                    FamilyName = user.FamilyName,
+                    Email = user.Email,
+                    Categories = user.Categories
+                };
 
-            return usr;
+                return usr;
+            } else {
+                return null;
+            }
+
         }
         #endregion
     }

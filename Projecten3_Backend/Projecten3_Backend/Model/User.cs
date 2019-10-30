@@ -43,15 +43,22 @@ namespace Projecten3_Backend.Model
 
         public static UserDTO MapUserToUserDTO(User usr)
         {
-            UserDTO user = new UserDTO()
-            {
-                FirstName = usr.FirstName,
-                FamilyName = usr.FamilyName,
-                Email = usr.Email,
-                Categories = usr.Categories
-            };
+            if(usr != null) {
+                UserDTO user = new UserDTO()
+                {
+                    FirstName = usr.FirstName,
+                    FamilyName = usr.FamilyName,
+                    Email = usr.Email,
+                    Categories = usr.Categories
+                };
 
-            return user;
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         #endregion
