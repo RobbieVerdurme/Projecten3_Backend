@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Projecten3_Backend.DTO
 {
+    /// <summary>
+    /// This DTO is used for adding challenges to a user.
+    /// </summary>
     public class ChallengesUserDTO
     {
 
