@@ -38,6 +38,7 @@ namespace Projecten3_Backend
             services.AddScoped<ITherapistRepository, TherapistRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IChallengeRepository, ChallengeRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
            
 
             services.AddDbContext<Projecten3_BackendContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Projecten3_BackendContext")));
