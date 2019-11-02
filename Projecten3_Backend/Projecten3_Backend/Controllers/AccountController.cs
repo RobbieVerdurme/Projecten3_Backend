@@ -47,6 +47,8 @@ namespace Projecten3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<String>> CreateToken(LoginDTO model)
         {
+            if(model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
+
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user != null)
@@ -73,6 +75,8 @@ namespace Projecten3_Backend.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<String>> Register(RegisterDTO model)
         {
+            if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
+
             IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Username };
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "User");
@@ -93,6 +97,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPost("registerTherapist")]
         public async Task<ActionResult<String>> RegisterTherapist(RegisterDTO model)
         {
+            if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
             IdentityUser user = new IdentityUser { UserName = model.Username };
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "Therapist");
@@ -113,6 +118,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPost("registerMultimed")]
         public async Task<ActionResult<String>> RegisterMultimed(RegisterDTO model)
         {
+            if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
             IdentityUser user = new IdentityUser { UserName = model.Username};
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "Multimed");

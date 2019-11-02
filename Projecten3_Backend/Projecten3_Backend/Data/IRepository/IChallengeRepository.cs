@@ -11,6 +11,10 @@ namespace Projecten3_Backend.Data.IRepository
     {
         IEnumerable<Challenge> GetChallenges();
 
+        bool ChallengesExist(List<int> ids);
+
+        bool ChallengeExists(Challenge challenge);
+
         Challenge GetById(int id);
 
         void AddChallenge(Challenge challenge);

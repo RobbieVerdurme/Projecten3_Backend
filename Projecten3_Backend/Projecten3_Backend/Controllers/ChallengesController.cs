@@ -27,13 +27,46 @@ namespace Projecten3_Backend.Controllers
         /// <summary>
         /// Add a set of challenges to a user.
         /// </summary>
+        /// <param name="payload">The JSON body that was sent.</param>
+        /// <returns>
+        /// HTTP 400 if the payload is malformed.
+        /// HTTP 500 if saving failed.
+        /// HTTP 200 if successful.
+        /// </returns>
         [Route("api/challenge/user/add")]
         [HttpPost]
         public IActionResult AddChallengesToUser(ChallengesUserDTO payload)
         {
-            
+            if(payload == null || payload.ChallengeIds == null) return BadRequest();
+            User user = _userRepo.GetById(payload.UserId);
+            List<int> challenges = new List<int>(payload.ChallengeIds);
+            if (user == null || !_repo.ChallengesExist(challenges)) return BadRequest();
+            try {
+                _repo.AddChallengesToUser(payload.UserId, challenges);
+            } catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
         }
 
+        /// <summary>
+        /// Add a challenge.
+        /// </summary>
+        /// <param name="challenge">The challenge to add</param>
+        /// <returns></returns>
+        public IActionResult AddChallenge(Challenge challenge) {
+            if (challenge == null || challenge.Title == null || challenge.Description == null || challenge.Category == null) return BadRequest();
+            //Already exists -> return a 303 See Other StatusCode
+            if (_repo.ChallengeExists(challenge)) return StatusCode(303);
+            try {
+                _repo.AddChallenge(challenge);
+                return Ok();
+            }
+            catch (Exception) {
+                return StatusCode(500);
+            }
+        }
         //Add
 
         //Edit

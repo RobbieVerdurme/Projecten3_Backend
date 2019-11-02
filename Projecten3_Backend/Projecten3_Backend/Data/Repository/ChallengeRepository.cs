@@ -48,6 +48,32 @@ namespace Projecten3_Backend.Data.Repository
             _dbContext.SaveChanges();
         }
 
+        /// <summary>
+        /// Check if a given challenge already exists
+        /// </summary>
+        /// <param name="challenge"></param>
+        /// <returns></returns>
+        public bool ChallengeExists(Challenge challenge)
+        {
+            return _dbContext.Challenges
+                .Where(c => c.Title == challenge.Title && c.Description == challenge.Description && c.Category.Name == challenge.Category.Name)
+                .FirstOrDefault() != null;
+        }
+
+        /// <summary>
+        /// Check if the given challenge id's actually map to valid challenges
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public bool ChallengesExist(List<int> ids)
+        {
+            List<int> challenges = _dbContext.Challenges.Select(c => c.ChallengeId).ToList();
+            foreach (int id in ids) {
+                if (!challenges.Contains(id)) return false;
+            }
+            return true;
+        }
+
         public void CompleteChallenge(int userid, int challengeid)
         {
             User usr = _users.FirstOrDefault(u => u.UserId == userid);
