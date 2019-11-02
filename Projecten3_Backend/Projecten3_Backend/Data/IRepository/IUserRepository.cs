@@ -9,17 +9,17 @@ namespace Projecten3_Backend.Data.IRepository
 {
     public interface IUserRepository
     {
-        IEnumerable<UserDTO> GetUsers();
+        IEnumerable<User> GetUsers();
 
-        UserDTO GetById(int id);
+        User GetById(int id);
 
-        UserDTO GetByEmail(string email);
+        User GetByEmail(string email);
 
         void AddUser(User user);
 
         void DeleteUser(int id);
 
-        void UpdateUser(UserDTO user);
+        void UpdateUser(User user);
 
         void SaveChanges();
     }

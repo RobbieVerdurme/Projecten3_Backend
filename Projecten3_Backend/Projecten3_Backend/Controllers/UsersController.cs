@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
-using Projecten3_Backend.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +27,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IEnumerable<UserDTO> GetUser()
         {
-            return _userRepo.GetUsers();
+            return _userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u));
         }
 
         // GET: api/Users/5
@@ -42,7 +41,7 @@ namespace Projecten3_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(Model.User.MapUserToUserDTO(user));
         }
 
         // PUT: api/Users/5
@@ -56,7 +55,14 @@ namespace Projecten3_Backend.Controllers
 
             try
             {
-                _userRepo.UpdateUser(user);
+                User u = new User {
+                    FirstName = user.FirstName,
+                    FamilyName = user.FamilyName,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    Categories = user.Categories
+                };
+                _userRepo.UpdateUser(u);
                 _userRepo.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)

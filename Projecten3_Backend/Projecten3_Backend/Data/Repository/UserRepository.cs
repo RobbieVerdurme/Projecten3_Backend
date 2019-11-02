@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data.IRepository;
-using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
 using Projecten3_Backend.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Projecten3_Backend.Data.Repository
 {
@@ -37,24 +34,22 @@ namespace Projecten3_Backend.Data.Repository
             _users.Remove(usr);
         }
 
-        public UserDTO GetByEmail(string email)
+        public User GetByEmail(string email)
         {
-            User usr = _users.FirstOrDefault(u => u.Email == email);
-            return User.MapUserToUserDTO(usr);
+            return _users.FirstOrDefault(u => u.Email == email);
         }
 
-        public UserDTO GetById(int id)
+        public User GetById(int id)
         {
-            User usr = _users.FirstOrDefault(u => u.UserId == id);
-            return User.MapUserToUserDTO(usr);
+            return _users.FirstOrDefault(u => u.UserId == id);
         }
 
-        public IEnumerable<UserDTO> GetUsers()
+        public IEnumerable<User> GetUsers()
         {
-            return _users.Select(u => User.MapUserToUserDTO(u)).ToList();
+            return _users.ToList();
         }
 
-        public void UpdateUser(UserDTO user)
+        public void UpdateUser(User user)
         {
             User usr = _users.FirstOrDefault(u => u.UserId == user.UserId);
 
