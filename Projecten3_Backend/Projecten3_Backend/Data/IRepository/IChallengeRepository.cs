@@ -1,5 +1,6 @@
 ﻿
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace Projecten3_Backend.Data.IRepository
         void DeleteChallenge(int id);
 
         void UpdateChallenge(Challenge challenge);
+
+        IEnumerable<ChallengeUser> GetUserChallenges(int userId);
 
         void CompleteChallenge(int userid, int challengeid);
 

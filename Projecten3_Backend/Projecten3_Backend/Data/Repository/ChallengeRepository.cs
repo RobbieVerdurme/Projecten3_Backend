@@ -36,8 +36,9 @@ namespace Projecten3_Backend.Data.Repository
         {
             User usr =_users.FirstOrDefault(u => u.UserId == userid);
             List<Challenge> challenges =_challenges.Where(c => challengeids.Contains(c.ChallengeId)).ToList();
+            List<int> existing = _dbContext.ChallengeUser.Where(cu => cu.UserId == userid).Select( cu => cu.ChallengeId).ToList();
 
-            usr.AddChallenges(challenges.Select(c =>
+            usr.AddChallenges(challenges.Where(c => !existing.Contains(c.ChallengeId)).Select(c =>
                 new ChallengeUser() {
                     ChallengeId = c.ChallengeId,
                     Challenge = c,
@@ -95,6 +96,11 @@ namespace Projecten3_Backend.Data.Repository
         public IEnumerable<Challenge> GetChallenges()
         {
             return _challenges.ToList();
+        }
+
+        public IEnumerable<ChallengeUser> GetUserChallenges(int userId)
+        {
+            return _dbContext.ChallengeUser.Where(c => c.UserId == userId).Include( c => c.Challenge).Include(c => c.User).ToList();
         }
 
         public void SaveChanges()

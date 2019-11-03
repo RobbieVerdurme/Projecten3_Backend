@@ -10,6 +10,7 @@ using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using Projecten3_Backend.Models;
 
 namespace Projecten3_Backend.Controllers
@@ -79,11 +80,61 @@ namespace Projecten3_Backend.Controllers
             }
         }
 
-        //Get user challenges(android)
+        /// <summary>
+        /// Get a user's challenges
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>
+        /// HTTP 400 if the user doesn't exist.
+        /// HTTP 200 otherwise.
+        /// </returns>
+        [Route("api/challenge/user/{id:int}")]
+        [HttpGet]
+        public IActionResult GetUserChallenges(int userId) {
+            User user = _userRepo.GetById(userId);
 
-        //Get all
+            if (user == null) return BadRequest();
 
-        //Complete challenge(android)
+            return Ok(_repo.GetUserChallenges(userId).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
+        }
+
+        [Route("api/challenge")]
+        [HttpGet]
+        public IActionResult GetChallenges() {
+            return Ok(_repo.GetChallenges().ToList());
+        }
+
+        /// <summary>
+        /// Complete a challenge.
+        /// </summary>
+        /// <param name="complete"></param>
+        /// <returns>
+        /// HTTP 400 if the user and or challenge is invalid.
+        /// HTTP 304 if said challenge was already completed.
+        /// HTTP 500 if saving failed.
+        /// HTTP 200 if successful.
+        /// </returns>
+        [Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
+        [Route("api/challenge/complete")]
+        [HttpPost]
+        public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
+            if (complete == null || _userRepo.GetById(complete.UserID) == null) return BadRequest();
+
+            ChallengeUser challenge = _repo.GetUserChallenges(complete.UserID).FirstOrDefault(c => c.ChallengeId == complete.ChallengeID);
+            if (challenge == null) return BadRequest();
+
+            if (challenge.CompletedDate != null) return StatusCode(304);
+
+            try
+            {
+                _repo.CompleteChallenge(complete.UserID, complete.ChallengeID);
+            }
+            catch (Exception) {
+                return StatusCode(500);
+            }
+
+            return Ok();
+        }
 
 
 

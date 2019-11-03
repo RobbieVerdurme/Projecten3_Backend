@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projecten3_Backend.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,5 +27,15 @@ namespace Projecten3_Backend.Model.ManyToMany
         public virtual User User { get; set; }
 
         #endregion
+
+        public static UserChallengeDTO MapToUserChallengeDTO(ChallengeUser challengeUser) {
+            return challengeUser == null || challengeUser.User == null || challengeUser.Challenge == null ? null: new UserChallengeDTO {
+                UserId = challengeUser.UserId,
+                UserFirstName = challengeUser.User.FirstName,
+                UserFamilyName = challengeUser.User.FamilyName,
+                CompletedDate = challengeUser.CompletedDate,
+                Challenge = challengeUser.Challenge
+            };
+        }
     }
 }
