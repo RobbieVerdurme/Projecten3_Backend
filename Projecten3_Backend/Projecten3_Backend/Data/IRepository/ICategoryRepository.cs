@@ -13,5 +13,15 @@ namespace Projecten3_Backend.Data.IRepository
         IEnumerable<Category> GetCategories();
 
         IEnumerable<Category> GetCategoriesById(IList<int> ids);
+
+        Category GetById(int id);
+
+        void AddCategory(Category category);
+
+        void SaveChanges();
+        bool CategoryExists(string name);
+
+        void Update(Category category);
+        void DeleteCategory(int id);
     }
 }

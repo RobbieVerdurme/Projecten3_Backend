@@ -85,10 +85,11 @@ namespace Projecten3_Backend.Controllers
             u.Email = user.Email;
             u.Phone = user.Phone;
             u.Categories = categories;
-            _userRepo.UpdateUser(u);
+            
 
             if (_userRepo.AlreadyExists(u)) return StatusCode(303);
 
+            _userRepo.UpdateUser(u);
             try
             {
                 _userRepo.SaveChanges();

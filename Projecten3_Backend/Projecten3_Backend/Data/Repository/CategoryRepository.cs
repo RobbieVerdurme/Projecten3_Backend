@@ -17,6 +17,11 @@ namespace Projecten3_Backend.Data.Repository
             _dbContext = context;
         }
 
+        public void AddCategory(Category category)
+        {
+            _dbContext.Category.Add(category);
+        }
+
         public bool CategoriesExist(IList<int> ids)
         {
             IList<int> categories = _dbContext.Category.Select( c => c.CategoryId).ToList();
@@ -27,6 +32,22 @@ namespace Projecten3_Backend.Data.Repository
             return true;
         }
 
+        public bool CategoryExists(string name)
+        {
+            return _dbContext.Category.Where(c => c.Name == name).FirstOrDefault() != null;
+        }
+
+        public void DeleteCategory(int id)
+        {
+            Category cat =_dbContext.Category.Where(c => c.CategoryId == id).FirstOrDefault();
+            if (cat != null) _dbContext.Remove(cat);
+        }
+
+        public Category GetById(int id)
+        {
+            return _dbContext.Category.FirstOrDefault(c => c.CategoryId == id);
+        }
+
         public IEnumerable<Category> GetCategories()
         {
             return _dbContext.Category.ToList();
@@ -35,6 +56,15 @@ namespace Projecten3_Backend.Data.Repository
         public IEnumerable<Category> GetCategoriesById(IList<int> ids)
         {
             return _dbContext.Category.Where(c => ids.Contains(c.CategoryId)).ToList();
+        }
+
+        public void SaveChanges() {
+            _dbContext.SaveChanges();
+        }
+
+        public void Update(Category category)
+        {
+            _dbContext.Update(category);
         }
     }
 }
