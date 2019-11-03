@@ -10,7 +10,7 @@ namespace Projecten3_Backend.Models
 {
     public class Projecten3_BackendContext : IdentityDbContext
     {
-        public Projecten3_BackendContext (DbContextOptions<Projecten3_BackendContext> options)
+        public Projecten3_BackendContext(DbContextOptions<Projecten3_BackendContext> options)
             : base(options)
         {
         }
@@ -19,6 +19,8 @@ namespace Projecten3_Backend.Models
         public DbSet<Therapist> Therapist { get; set; }
         public DbSet<Company> Company { get; set; }
         public DbSet<Challenge> Challenges { get; set; }
+
+        public DbSet<Category> Category { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -2,6 +2,9 @@
 
 namespace Projecten3_Backend.Controllers
 {
+    /// <summary>
+    /// This DTO is the payload for a login request.
+    /// </summary>
     public class LoginDTO
     {
         [Required]

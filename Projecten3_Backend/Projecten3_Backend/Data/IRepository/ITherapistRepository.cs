@@ -10,6 +10,8 @@ namespace Projecten3_Backend.Data.IRepository
     {
         IEnumerable<Therapist> GetTherapists();
 
+        bool TherapistsExist(IList<int> ids);
+
         Therapist GetById(int id);
 
         Therapist GetByEmail(string email);

@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NSwag.Generation.Processors.Security;
 using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.Data.Repository;
@@ -143,7 +142,7 @@ namespace Projecten3_Backend
             app.UseMvc();
             app.UseCors("AllowAllOrigins");
             app.UseSwaggerUi3();
-            app.UseSwagger();
+            app.UseOpenApi();
             multimedDataInitializer.InitializeData().Wait();
         }
     }

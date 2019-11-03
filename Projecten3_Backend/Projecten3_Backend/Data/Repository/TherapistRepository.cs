@@ -50,6 +50,21 @@ namespace Projecten3_Backend.Data.Repository
             return _therapists.ToList();
         }
 
+        /// <summary>
+        /// Check if the given therapists exist
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public bool TherapistsExist(IList<int> ids)
+        {
+            List<int> therapists = _dbContext.Therapist.Select(c => c.TherapistId).ToList();
+            foreach (int id in ids)
+            {
+                if (!therapists.Contains(id)) return false;
+            }
+            return true;
+        }
+
         public void SaveChanges()
         {
             _dbContext.SaveChanges();

@@ -1,37 +1,46 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Projecten3_Backend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         #region prop
         private readonly IUserRepository _userRepo;
+        private readonly ICategoryRepository _categoryRepo;
+        private readonly ICompanyRepository _companyRepo;
+        private readonly ITherapistRepository _therapistRepo;
         #endregion
 
         #region ctor
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo)
         {
             _userRepo = userRepository;
+            _categoryRepo = categoryRepository;
+            _companyRepo = companyRepo;
+            _therapistRepo = therapistRepo;
+            
         }
         #endregion
 
-        // GET: api/Users
+        [Route("api/users")]
         [HttpGet]
         public IEnumerable<UserDTO> GetUser()
         {
             return _userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u));
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
+        [Route("api/users/{id:int}")]
+        [HttpGet]
         public IActionResult GetUser(int id)
         {
             var user = _userRepo.GetById(id);
@@ -44,57 +53,110 @@ namespace Projecten3_Backend.Controllers
             return Ok(Model.User.MapUserToUserDTO(user));
         }
 
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public IActionResult PutUser(int id, UserDTO user)
+        /// <summary>
+        /// Edit a user's personal details
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>
+        /// HTTP 400 if the payload is malformed.
+        /// HTTP 500 if saving failed.
+        /// HTTP 303 if a user with the updated values already exists.
+        /// HTTP 200 if successful.
+        /// </returns>
+        [Route("api/users/edit")]
+        [HttpPut]
+        [Authorize(Roles = UserRole.MULTIMED_AND_USER)]
+        public IActionResult PutUser(EditUserDTO user)
         {
-            if (id != user.UserId)
+            if (user == null || string.IsNullOrEmpty(user.FamilyName) || string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.Phone) || string.IsNullOrEmpty(user.Email) || user.Categories == null)
             {
                 return BadRequest();
             }
 
+            IList<int> categoryIds = new List<int>(user.Categories);
+            if (!_categoryRepo.CategoriesExist(categoryIds)) return BadRequest();
+
+            User u = _userRepo.GetById(user.UserId);
+            if (u == null) return BadRequest();
+            IList<Category> categories = _categoryRepo.GetCategories().Where(c => categoryIds.Contains(c.CategoryId)).ToList();
+
+            u.FirstName = user.FirstName;
+            u.FamilyName = user.FamilyName;
+            u.Email = user.Email;
+            u.Phone = user.Phone;
+            u.Categories = categories;
+            _userRepo.UpdateUser(u);
+
+            if (_userRepo.AlreadyExists(u)) return StatusCode(303);
+
             try
             {
-                User u = new User {
-                    FirstName = user.FirstName,
-                    FamilyName = user.FamilyName,
-                    Email = user.Email,
-                    Phone = user.Phone,
-                    Categories = user.Categories
-                };
-                _userRepo.UpdateUser(u);
                 _userRepo.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return StatusCode(500);
-                }
+                return StatusCode(500);
             }
 
             return Ok();
         }
 
-        // POST: api/Users
+        /// <summary>
+        /// Add a new user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>
+        /// HTTP 400 if the payload is malformed.
+        /// HTTP 303 if such a user already exists.
+        /// HTTP 500 if saving failed.
+        /// HTTP 200 if successful.
+        /// </returns>
+        [Route("api/users/add")]
         [HttpPost]
-        public IActionResult PostUser(User user)
+        [Authorize(Policy = UserRole.MULTIMED,Roles = UserRole.MULTIMED)]
+        public IActionResult PostUser(AddUserDTO user)
         {
-            //create login for the user of the app
+            if (user == null || string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.FamilyName) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Phone)) return BadRequest();
 
-            //add user in db
-            _userRepo.AddUser(user);
-            _userRepo.SaveChanges();
+            Company comp = _companyRepo.GetById(user.Company);
+            if (comp == null) return BadRequest();
+            if (!_categoryRepo.CategoriesExist(user.Categories) || !_therapistRepo.TherapistsExist(user.Therapists)) return BadRequest();
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            User u = new User {
+                FirstName = user.FirstName,
+                FamilyName = user.FamilyName,
+                Phone = user.Phone,
+                Email = user.Email,
+                Company = comp,
+                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories))
+            };
+            if (_userRepo.AlreadyExists(u)) return StatusCode(303);
+
+
+            _userRepo.AddUser(u);
+            try
+            {
+                _userRepo.SaveChanges();
+            }
+            catch (Exception) {
+                return StatusCode(500);
+            }
+
+            return Ok();
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        /// <summary>
+        /// Delete a user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// HTTP 404 if the user was not found.
+        /// HTTP 500 if deleting failed.
+        /// HTTP 200 if deleted.
+        /// </returns>
+        [Route("api/users/delete/{id:int}")]
+        [HttpDelete]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         public IActionResult DeleteUser(int id)
         {
             var user = _userRepo.GetById(id);
@@ -113,11 +175,6 @@ namespace Projecten3_Backend.Controllers
             }
 
             return Ok();
-        }
-
-        private bool UserExists(int id)
-        {
-            return _userRepo.GetById(id) != null;
         }
     }
 }

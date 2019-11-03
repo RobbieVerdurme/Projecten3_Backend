@@ -37,7 +37,7 @@ namespace Projecten3_Backend.Model
         #endregion
 
         #region Methods
-        public void addChallenges(List<ChallengeUser> challenges) => challenges.AddRange(challenges);
+        public void AddChallenges(List<ChallengeUser> challenges) => challenges.AddRange(challenges);
 
         public void AddTherapist(Therapist therapist) => Therapists.Add(new TherapistUser() { Therapist = therapist, TherapistId = therapist.TherapistId, User = this, UserId = this.UserId});
 

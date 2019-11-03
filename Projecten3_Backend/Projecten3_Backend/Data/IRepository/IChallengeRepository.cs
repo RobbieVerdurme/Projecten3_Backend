@@ -11,7 +11,7 @@ namespace Projecten3_Backend.Data.IRepository
     {
         IEnumerable<Challenge> GetChallenges();
 
-        bool ChallengesExist(List<int> ids);
+        bool ChallengesExist(IList<int> ids);
 
         bool ChallengeExists(Challenge challenge);
 
@@ -25,7 +25,7 @@ namespace Projecten3_Backend.Data.IRepository
 
         void CompleteChallenge(int userid, int challengeid);
 
-        void AddChallengesToUser(int userid, List<int> challengeids);
+        void AddChallengesToUser(int userid, IList<int> challengeids);
 
         void SaveChanges();
     }

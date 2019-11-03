@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 
 namespace Projecten3_Backend.Controllers
@@ -71,7 +72,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the user details</param>
         /// <returns></returns>
-        [Authorize(Policy = "Multimed", Roles = "Multimed")]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("register")]
         public async Task<ActionResult<String>> Register(RegisterDTO model)
         {
@@ -93,7 +94,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the therapist details</param>
         /// <returns></returns>
-        [Authorize(Policy = "Multimed", Roles = "Multimed")]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("registerTherapist")]
         public async Task<ActionResult<String>> RegisterTherapist(RegisterDTO model)
         {
@@ -114,7 +115,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the multimed user details</param>
         /// <returns></returns>
-        [Authorize(Policy = "Multimed", Roles = "Multimed")]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("registerMultimed")]
         public async Task<ActionResult<String>> RegisterMultimed(RegisterDTO model)
         {

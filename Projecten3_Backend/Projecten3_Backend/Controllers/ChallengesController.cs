@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
@@ -33,6 +35,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
+        [Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
         [Route("api/challenge/user/add")]
         [HttpPost]
         public IActionResult AddChallengesToUser(ChallengesUserDTO payload)
@@ -54,7 +57,15 @@ namespace Projecten3_Backend.Controllers
         /// Add a challenge.
         /// </summary>
         /// <param name="challenge">The challenge to add</param>
-        /// <returns></returns>
+        /// <returns>
+        /// HTTP 400 if the payload is malformed.
+        /// HTTP 303 if such a challenge already exists.
+        /// HTTP 200 if added.
+        /// HTTP 500 if saving failed.
+        /// </returns>
+        [Route("api/challenge/add")]
+        [Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
+        [HttpPost]
         public IActionResult AddChallenge(Challenge challenge) {
             if (challenge == null || challenge.Title == null || challenge.Description == null || challenge.Category == null) return BadRequest();
             //Already exists -> return a 303 See Other StatusCode
@@ -67,18 +78,20 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
         }
-        //Add
-
-        //Edit
 
         //Get user challenges(android)
 
         //Get all
 
+        //Complete challenge(android)
+
+
+
+
+        //Edit
+
         //Delete
 
-        //Add challenges to user
 
-        //Complete challenge(android)
     }
 }

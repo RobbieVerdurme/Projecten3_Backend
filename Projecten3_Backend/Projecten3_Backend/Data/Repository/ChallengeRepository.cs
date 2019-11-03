@@ -32,12 +32,12 @@ namespace Projecten3_Backend.Data.Repository
             _challenges.Add(challenge);
         }
 
-        public void AddChallengesToUser(int userid, List<int> challengeids)
+        public void AddChallengesToUser(int userid, IList<int> challengeids)
         {
             User usr =_users.FirstOrDefault(u => u.UserId == userid);
             List<Challenge> challenges =_challenges.Where(c => challengeids.Contains(c.ChallengeId)).ToList();
 
-            usr.addChallenges(challenges.Select(c =>
+            usr.AddChallenges(challenges.Select(c =>
                 new ChallengeUser() {
                     ChallengeId = c.ChallengeId,
                     Challenge = c,
@@ -65,7 +65,7 @@ namespace Projecten3_Backend.Data.Repository
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        public bool ChallengesExist(List<int> ids)
+        public bool ChallengesExist(IList<int> ids)
         {
             List<int> challenges = _dbContext.Challenges.Select(c => c.ChallengeId).ToList();
             foreach (int id in ids) {

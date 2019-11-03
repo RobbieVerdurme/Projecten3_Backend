@@ -32,17 +32,17 @@ namespace Projecten3_Backend.Data
 
                 #region Users
                 //Multimeduser
-                await CreateUser("SofieV@gmail.com", "P@ssword123", "Multimed");
+                await CreateUser("SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
 
                 //therapist
                 Therapist th = new Therapist() { FirstName = "Therapist", LastName = "De pape", Email = "Therapist.DePape@gmail.com" };
                 _dbContext.Therapist.Add(th);
-                await CreateUser(th.Email, "P@ssword123", "Therapist");
+                await CreateUser(th.Email, "P@ssword123", UserRole.THERAPIST);
 
                 //User
                 User user = new User() {FirstName = "Robbie", FamilyName = "Verdurme", Email="robbievrdrm@gmail.com" };
                 _dbContext.User.Add(user);
-                await CreateUser(user.Email, "P@ssword123", "User");
+                await CreateUser(user.Email, "P@ssword123", UserRole.USER);
 
 
                 #endregion
@@ -73,9 +73,9 @@ namespace Projecten3_Backend.Data
 
         private async Task CreateRoles()
         {
-            await _roleManager.CreateAsync(new IdentityRole("User"));
-            await _roleManager.CreateAsync(new IdentityRole("Multimed"));
-            await _roleManager.CreateAsync(new IdentityRole("Therapist"));
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.USER));
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.MULTIMED));
+            await _roleManager.CreateAsync(new IdentityRole(UserRole.THERAPIST));
         }
     }
 }

@@ -66,6 +66,13 @@ namespace Projecten3_Backend.Data.Repository
         {
             _dbContext.SaveChanges();
         }
+
+        public bool AlreadyExists(User u)
+        {
+            return _dbContext.User.Where(
+                (user) => user.FirstName == u.FirstName && user.FamilyName == u.FamilyName && user.Email == u.Email && u.Phone == user.Phone && u.Company.CompanyId == user.Company.CompanyId)
+                .FirstOrDefault() != null;
+        }
         #endregion
     }
 }

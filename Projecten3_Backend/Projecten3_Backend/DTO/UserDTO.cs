@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Projecten3_Backend.DTO
 {
+    /// <summary>
+    /// This DTO is the output DTO for a <see cref="User"/>
+    /// </summary>
     public class UserDTO
     {
         #region Properties

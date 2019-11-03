@@ -22,5 +22,6 @@ namespace Projecten3_Backend.Data.IRepository
         void UpdateUser(User user);
 
         void SaveChanges();
+        bool AlreadyExists(User u);
     }
 }
