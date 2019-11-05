@@ -34,13 +34,11 @@ namespace Projecten3_Backend.Model
         #endregion
 
         #region Methodes
-        public void AddCompanyMember(User user) => CompanyMembers.Add(user);
 
         public override bool Equals(object obj)
         {
             var company = obj as Company;
             return company != null &&
-                   CompanyId == company.CompanyId &&
                    Name == company.Name &&
                    Phone == company.Phone &&
                    Mail == company.Mail &&
@@ -55,7 +53,6 @@ namespace Projecten3_Backend.Model
         public override int GetHashCode()
         {
             var hash = new HashCode();
-            hash.Add(CompanyId);
             hash.Add(Name);
             hash.Add(Phone);
             hash.Add(Mail);
@@ -69,13 +66,13 @@ namespace Projecten3_Backend.Model
         }
 
         public static bool operator ==(Company c1, Company c2) {
-            return c1.CompanyId == c2.CompanyId && c1.City == c2.City && c1.Country == c2.Country && c1.HouseNumber == c2.HouseNumber && c1.Mail == c2.Mail && c1.Name == c2.Name && c1.Phone == c2.Phone
+            return c1.City == c2.City && c1.Country == c2.Country && c1.HouseNumber == c2.HouseNumber && c1.Mail == c2.Mail && c1.Name == c2.Name && c1.Phone == c2.Phone
                 && c1.PostalCode == c2.PostalCode && c1.Site == c2.Site && c1.Street == c2.Street;
         }
 
         public static bool operator !=(Company c1, Company c2)
         {
-            return c1.CompanyId != c2.CompanyId &&  c1.City != c2.City && c1.Country != c2.Country && c1.HouseNumber != c2.HouseNumber && c1.Mail != c2.Mail && c1.Name != c2.Name && c1.Phone != c2.Phone
+            return  c1.City != c2.City && c1.Country != c2.Country && c1.HouseNumber != c2.HouseNumber && c1.Mail != c2.Mail && c1.Name != c2.Name && c1.Phone != c2.Phone
                 && c1.PostalCode != c2.PostalCode && c1.Site != c2.Site && c1.Street != c2.Street;
         }
         #endregion

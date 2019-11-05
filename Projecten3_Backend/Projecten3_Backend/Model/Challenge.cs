@@ -21,7 +21,6 @@ namespace Projecten3_Backend.Model
         {
             var challenge = obj as Challenge;
             return challenge != null &&
-                   ChallengeId == challenge.ChallengeId &&
                    Title == challenge.Title &&
                    Description == challenge.Description &&
                    EqualityComparer<Category>.Default.Equals(Category, challenge.Category);
@@ -29,18 +28,18 @@ namespace Projecten3_Backend.Model
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ChallengeId, Title, Description, Category);
+            return HashCode.Combine(Title, Description, Category);
         }
 
         #endregion
 
         public static bool operator ==(Challenge c1, Challenge c2) {
-            return c1.Category == c2.Category && c1.ChallengeId == c2.ChallengeId && c1.Description == c2.Description && c1.Title == c2.Title;
+            return c1.Category == c2.Category && c1.Description == c2.Description && c1.Title == c2.Title;
         }
 
         public static bool operator !=(Challenge c1, Challenge c2)
         {
-            return c1.Category != c2.Category && c1.ChallengeId != c2.ChallengeId && c1.Description != c2.Description && c1.Title != c2.Title;
+            return c1.Category != c2.Category && c1.Description != c2.Description && c1.Title != c2.Title;
         }
     }
 }

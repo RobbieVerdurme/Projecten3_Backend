@@ -65,7 +65,6 @@ namespace Projecten3_Backend.Model
         {
             var user = obj as User;
             return user != null &&
-                   UserId == user.UserId &&
                    FirstName == user.FirstName &&
                    FamilyName == user.FamilyName &&
                    Email == user.Email &&
@@ -75,16 +74,16 @@ namespace Projecten3_Backend.Model
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(UserId, FirstName, FamilyName, Email, Phone, Company);
+            return HashCode.Combine(FirstName, FamilyName, Email, Phone, Company);
         }
 
         public static bool operator ==(User u1, User u2) {
-            return u1.UserId == u2.UserId && u1.Company == u2.Company && u1.Email == u2.Email && u1.FamilyName == u2.FamilyName && u1.FirstName == u2.FirstName && u1.Phone == u2.Phone;
+            return u1.Company == u2.Company && u1.Email == u2.Email && u1.FamilyName == u2.FamilyName && u1.FirstName == u2.FirstName && u1.Phone == u2.Phone;
         }
 
         public static bool operator !=(User u1, User u2)
         {
-            return u1.UserId != u2.UserId && u1.Company != u2.Company && u1.Email != u2.Email && u1.FamilyName != u2.FamilyName && u1.FirstName != u2.FirstName && u1.Phone != u2.Phone;
+            return u1.Company != u2.Company && u1.Email != u2.Email && u1.FamilyName != u2.FamilyName && u1.FirstName != u2.FirstName && u1.Phone != u2.Phone;
         }
 
         #endregion

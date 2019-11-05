@@ -72,7 +72,7 @@ namespace Projecten3_Backend.Data.Repository
             return _dbContext.User.Where((user) => u == user).FirstOrDefault() != null;
         }
 
-        public bool ClientsExist(IList<int> ids)
+        public bool UsersExist(IList<int> ids)
         {
             List<int> existingClients = _dbContext.User.Select(u => u.UserId).ToList();
             foreach (int id in ids)

@@ -17,24 +17,23 @@ namespace Projecten3_Backend.Model
         {
             var category = obj as Category;
             return category != null &&
-                   CategoryId == category.CategoryId &&
                    Name == category.Name;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(CategoryId, Name);
+            return HashCode.Combine(Name);
         }
 
         #endregion
 
         public static bool operator ==(Category c1, Category c2) {
-            return c1.CategoryId == c2.CategoryId && c1.Name == c2.Name;
+            return c1.Name == c2.Name;
         }
 
         public static bool operator !=(Category c1, Category c2)
         {
-            return c1.CategoryId != c2.CategoryId && c1.Name != c2.Name;
+            return c1.Name != c2.Name;
         }
     }
 }

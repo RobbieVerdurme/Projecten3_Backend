@@ -24,6 +24,6 @@ namespace Projecten3_Backend.Data.IRepository
         void SaveChanges();
         bool UserExists(User u);
 
-        bool ClientsExist(IList<int> ids);
+        bool UsersExist(IList<int> ids);
     }
 }

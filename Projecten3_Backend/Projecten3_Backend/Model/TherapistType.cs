@@ -29,22 +29,21 @@ namespace Projecten3_Backend.Model
         {
             var type = obj as TherapistType;
             return type != null &&
-                   TherapistTypeId == type.TherapistTypeId &&
                    Type == type.Type;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(TherapistTypeId, Type);
+            return HashCode.Combine(Type);
         }
 
         public static bool operator ==(TherapistType t1, TherapistType t2) {
-            return t1.TherapistTypeId == t2.TherapistTypeId && t1.Type == t2.Type;
+            return t1.Type == t2.Type;
         }
 
         public static bool operator !=(TherapistType t1, TherapistType t2)
         {
-            return t1.TherapistTypeId != t2.TherapistTypeId && t1.Type != t2.Type;
+            return t1.Type != t2.Type;
         }
 
         #endregion

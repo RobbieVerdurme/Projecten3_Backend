@@ -80,7 +80,7 @@ namespace Projecten3_Backend.Controllers
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
             if (!_repo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
             if (therapist.OpeningTimes == null || _repo.HasInvalidOpeningTimes(therapist.OpeningTimes)) return BadRequest(); //Opening times
-            if (!_userRepo.ClientsExist(therapist.Clients)) return BadRequest();//Clients
+            if (!_userRepo.UsersExist(therapist.Clients)) return BadRequest();//Clients
 
             Therapist edited = _repo.GetById(therapist.TherapistId);
             List<OpeningTimes> openingTimes = new List<OpeningTimes>(_repo.GetOpeningTimesForTherapist(therapist.TherapistId));

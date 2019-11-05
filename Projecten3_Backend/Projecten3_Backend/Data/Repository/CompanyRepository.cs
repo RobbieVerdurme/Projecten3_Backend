@@ -29,6 +29,18 @@ namespace Projecten3_Backend.Data.Repository
             _companies.Add(company);
         }
 
+        public void AddEmployees(Company company, IList<int> employees)
+        {
+            if (company != null) {
+                IList<User> users = _dbContext.User.Where(u => employees.Contains(u.UserId)).ToList();
+                foreach (User user in users) {
+                    if (!company.CompanyMembers.Contains(user)) {
+                        company.CompanyMembers.Add(user);
+                    }        
+                }
+            }
+        }
+
         public bool CompanyExists(Company company)
         {
             return _dbContext.Company.Where(c => c == company).FirstOrDefault() != null;
