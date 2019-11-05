@@ -12,15 +12,35 @@ namespace Projecten3_Backend.Data.IRepository
 
         bool TherapistsExist(IList<int> ids);
 
+        bool TherapistExists(Therapist therapist);
+
+        bool TherapistTypeExists(int id);
+
+        bool TherapistTypeExists(TherapistType therapistType);
+
+        bool TherapistTypeExists(string type, IList<int> categories);
+
+        IEnumerable<TherapistType> GetTherapistTypes();
+
+        TherapistType GetTherapistType(int id);
+
+        bool HasInvalidOpeningTimes(IList<string> times);
+
         Therapist GetById(int id);
 
         Therapist GetByEmail(string email);
 
+        IEnumerable<OpeningTimes> GetOpeningTimesForTherapist(int id);
+
         void AddTherapist(Therapist therapist);
+
+        void AddTherapistType(TherapistType therapistType);
 
         void DeleteTherapist(int id);
 
         void UpdateTherapist(Therapist therapist);
+
+        void EditTherapistType(TherapistType therapistType);
 
         void SaveChanges();
     }

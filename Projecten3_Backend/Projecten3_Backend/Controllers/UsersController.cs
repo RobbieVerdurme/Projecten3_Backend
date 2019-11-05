@@ -39,6 +39,14 @@ namespace Projecten3_Backend.Controllers
             return _userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u));
         }
 
+        /// <summary>
+        /// Get a specific user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// HTTP 404 if not found.
+        /// HTTP 200 otherwise.
+        /// </returns>
         [Route("api/users/{id:int}")]
         [HttpGet]
         public IActionResult GetUser(int id)
@@ -87,7 +95,7 @@ namespace Projecten3_Backend.Controllers
             u.Categories = categories;
             
 
-            if (_userRepo.AlreadyExists(u)) return StatusCode(303);
+            if (_userRepo.UserExists(u)) return StatusCode(303);
 
             _userRepo.UpdateUser(u);
             try
@@ -131,7 +139,7 @@ namespace Projecten3_Backend.Controllers
                 Company = comp,
                 Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories))
             };
-            if (_userRepo.AlreadyExists(u)) return StatusCode(303);
+            if (_userRepo.UserExists(u)) return StatusCode(303);
 
 
             _userRepo.AddUser(u);

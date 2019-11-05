@@ -32,22 +32,22 @@ namespace Projecten3_Backend.Data.Repository
         public void DeleteTherapist(int id)
         {
             Therapist th = _therapists.FirstOrDefault(t => t.TherapistId == id);
-            _therapists.Remove(th);
+            if(th != null) _therapists.Remove(th);
         }
 
         public Therapist GetByEmail(string email)
         {
-            return _therapists.FirstOrDefault(t => t.Email == email);
+            return _therapists.Include(t => t.Clients).Include(t => t.OpeningTimes).FirstOrDefault(t => t.Email == email);
         }
 
         public Therapist GetById(int id)
         {
-            return _therapists.FirstOrDefault(t => t.TherapistId == id);
+            return _therapists.Include(t => t.Clients).Include(t => t.OpeningTimes).FirstOrDefault(t => t.TherapistId == id);
         }
 
         public IEnumerable<Therapist> GetTherapists()
         {
-            return _therapists.ToList();
+            return _therapists.Include(t => t.Clients).Include(t => t.OpeningTimes).ToList();
         }
 
         /// <summary>
@@ -73,6 +73,64 @@ namespace Projecten3_Backend.Data.Repository
         public void UpdateTherapist(Therapist therapist)
         {
             _therapists.Update(therapist);
+        }
+
+        public bool TherapistTypeExists(int id)
+        {
+            return _dbContext.TherapistType.FirstOrDefault(type => type.TherapistTypeId == id) != null;
+        }
+
+        public IEnumerable<TherapistType> GetTherapistTypes()
+        {
+            return _dbContext.TherapistType.ToList();
+        }
+
+        public bool HasInvalidOpeningTimes(IList<string> times)
+        {
+            return Therapist.HasInvalidOpeningTimes(times);
+        }
+
+        public bool TherapistExists(Therapist therapist)
+        {
+            return _dbContext.Therapist.Where(t => t == therapist).FirstOrDefault() != null;
+        }
+
+        public TherapistType GetTherapistType(int id)
+        {
+            return _dbContext.TherapistType.Where(t => t.TherapistTypeId == id).FirstOrDefault();
+        }
+
+        public IEnumerable<OpeningTimes> GetOpeningTimesForTherapist(int id)
+        {
+            Therapist ther = _dbContext.Therapist.Where(t => t.TherapistId == id).Include(t => t.OpeningTimes).FirstOrDefault();
+            if (ther == null) return null;
+            return ther.OpeningTimes.ToList();
+        }
+
+        public bool TherapistTypeExists(TherapistType therapistType)
+        {
+            return _dbContext.TherapistType.Where(t => t == therapistType).FirstOrDefault() != null;
+        }
+
+        public void EditTherapistType(TherapistType therapistType)
+        {
+            _dbContext.TherapistType.Update(therapistType);
+        }
+
+        public bool TherapistTypeExists(string type, IList<int> categories)
+        {
+            TherapistType t = _dbContext.TherapistType.Where(therapistType => therapistType.Type == type).FirstOrDefault();
+            if (t == null) return false;
+            List<int> categoryIds = t.Categories.Select( c => c.CategoryId).ToList();
+            foreach (int c in categories) {
+                if (!categoryIds.Contains(c)) return false;
+            }
+            return true;
+        }
+
+        public void AddTherapistType(TherapistType therapistType)
+        {
+            _dbContext.TherapistType.Add(therapistType);
         }
     }
 }

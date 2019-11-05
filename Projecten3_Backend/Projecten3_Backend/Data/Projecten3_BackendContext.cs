@@ -27,6 +27,10 @@ namespace Projecten3_Backend.Models
 
         public DbSet<Category> Category { get; set; }
 
+        public DbSet<TherapistType> TherapistType { get; set; }
+
+        public DbSet<OpeningTimes> OpeningTimes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -120,14 +120,15 @@ namespace Projecten3_Backend.Controllers
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
             if (complete == null || _userRepo.GetById(complete.UserID) == null) return BadRequest();
 
-            ChallengeUser challenge = _repo.GetUserChallenges(complete.UserID).FirstOrDefault(c => c.ChallengeId == complete.ChallengeID);
+            ChallengeUser challenge = _repo.GetUserChallenge(complete.UserID,complete.ChallengeID);
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
 
             try
             {
-                _repo.CompleteChallenge(complete.UserID, complete.ChallengeID);
+                _repo.CompleteChallenge(challenge);
+                _repo.SaveChanges();
             }
             catch (Exception) {
                 return StatusCode(500);

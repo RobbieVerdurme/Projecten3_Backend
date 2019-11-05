@@ -29,6 +29,11 @@ namespace Projecten3_Backend.Data.Repository
             _companies.Add(company);
         }
 
+        public bool CompanyExists(Company company)
+        {
+            return _dbContext.Company.Where(c => c == company).FirstOrDefault() != null;
+        }
+
         public void DeleteCompany(Company company)
         {
             _companies.Remove(company);

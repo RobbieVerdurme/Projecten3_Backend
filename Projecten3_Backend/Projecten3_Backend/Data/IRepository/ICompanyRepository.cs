@@ -14,6 +14,8 @@ namespace Projecten3_Backend.Data.IRepository
 
         void AddCompany(Company company);
 
+        bool CompanyExists(Company company);
+
         void UpdateCompany(Company company);
 
         void DeleteCompany(Company company);

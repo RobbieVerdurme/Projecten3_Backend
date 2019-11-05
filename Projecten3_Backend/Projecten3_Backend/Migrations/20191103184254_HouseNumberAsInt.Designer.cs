@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projecten3_Backend.Models;
 
 namespace Projecten3_Backend.Migrations
 {
     [DbContext(typeof(Projecten3_BackendContext))]
-    partial class Projecten3_BackendContextModelSnapshot : ModelSnapshot
+    [Migration("20191103184254_HouseNumberAsInt")]
+    partial class HouseNumberAsInt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,21 +291,29 @@ namespace Projecten3_Backend.Migrations
                     b.ToTable("TherapistUser");
                 });
 
-            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTimes", b =>
+            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTime", b =>
                 {
-                    b.Property<int>("OpeningTimesId")
+                    b.Property<int>("OpeningTimeId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Interval");
+                    b.Property<string>("ClosingHourAfternoon");
+
+                    b.Property<string>("ClosingHourMorning");
+
+                    b.Property<int>("Day");
+
+                    b.Property<string>("OpeningHourAfternoon");
+
+                    b.Property<string>("OpeningHourMorning");
 
                     b.Property<int?>("TherapistId");
 
-                    b.HasKey("OpeningTimesId");
+                    b.HasKey("OpeningTimeId");
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("OpeningTimes");
+                    b.ToTable("OpeningTime");
                 });
 
             modelBuilder.Entity("Projecten3_Backend.Model.Therapist", b =>
@@ -464,7 +474,7 @@ namespace Projecten3_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTimes", b =>
+            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTime", b =>
                 {
                     b.HasOne("Projecten3_Backend.Model.Therapist")
                         .WithMany("OpeningTimes")

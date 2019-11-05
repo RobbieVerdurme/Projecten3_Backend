@@ -24,9 +24,11 @@ namespace Projecten3_Backend.Data.IRepository
 
         void UpdateChallenge(Challenge challenge);
 
+        ChallengeUser GetUserChallenge(int userId,int challengeId);
+
         IEnumerable<ChallengeUser> GetUserChallenges(int userId);
 
-        void CompleteChallenge(int userid, int challengeid);
+        void CompleteChallenge(ChallengeUser challenge);
 
         void AddChallengesToUser(int userid, IList<int> challengeids);
 

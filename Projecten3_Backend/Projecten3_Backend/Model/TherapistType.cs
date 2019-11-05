@@ -21,23 +21,31 @@ namespace Projecten3_Backend.Model
 
         #endregion
 
-        #region Constructors
-
-        public TherapistType()
-        {
-            Categories = new List<Category>();
-        }
-
-        public TherapistType(string type)
-        {
-            Type = type;
-        }
-
-        #endregion
-
         #region Methods
 
         public void AddCategory(Category category) => Categories.Add(category);
+
+        public override bool Equals(object obj)
+        {
+            var type = obj as TherapistType;
+            return type != null &&
+                   TherapistTypeId == type.TherapistTypeId &&
+                   Type == type.Type;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(TherapistTypeId, Type);
+        }
+
+        public static bool operator ==(TherapistType t1, TherapistType t2) {
+            return t1.TherapistTypeId == t2.TherapistTypeId && t1.Type == t2.Type;
+        }
+
+        public static bool operator !=(TherapistType t1, TherapistType t2)
+        {
+            return t1.TherapistTypeId != t2.TherapistTypeId && t1.Type != t2.Type;
+        }
 
         #endregion
     }

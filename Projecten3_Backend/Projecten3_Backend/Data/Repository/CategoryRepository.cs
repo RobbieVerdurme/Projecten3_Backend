@@ -32,9 +32,9 @@ namespace Projecten3_Backend.Data.Repository
             return true;
         }
 
-        public bool CategoryExists(string name)
+        public bool CategoryExists(Category category)
         {
-            return _dbContext.Category.Where(c => c.Name == name).FirstOrDefault() != null;
+            return _dbContext.Category.Where(c => c == category).FirstOrDefault() != null;
         }
 
         public void DeleteCategory(int id)

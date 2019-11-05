@@ -16,7 +16,6 @@ namespace Projecten3_Backend.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly Projecten3_BackendContext _context;
         private readonly ICategoryRepository _repo;
 
         public CategoriesController(ICategoryRepository repo)
@@ -39,7 +38,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPut]
         public IActionResult EditCategory(Category category) {
             if (category == null || string.IsNullOrEmpty(category.Name)) return BadRequest();
-            if (_repo.CategoryExists(category.Name)) return StatusCode(303);
+            if (_repo.CategoryExists(category)) return StatusCode(303);
 
             Category edited = _repo.GetById(category.CategoryId);
             if (edited == null) return BadRequest();
@@ -48,7 +47,7 @@ namespace Projecten3_Backend.Controllers
             _repo.Update(edited);
             try
             {
-                _context.SaveChanges();
+                _repo.SaveChanges();
             }
             catch (Exception) {
                 return StatusCode(500);
@@ -110,7 +109,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPost]
         public IActionResult AddCategory(Category category) {
             if (category == null || string.IsNullOrEmpty(category.Name)) return BadRequest();
-            if (_repo.CategoryExists(category.Name)) return StatusCode(303);
+            if (_repo.CategoryExists(category)) return StatusCode(303);
 
             _repo.AddCategory(category);
 
