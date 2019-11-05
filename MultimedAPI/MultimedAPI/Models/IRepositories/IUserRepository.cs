@@ -17,6 +17,8 @@ namespace MultimedAPI.Models.IRepositories
 
         void DeleteUser(User user);
 
+        void UpdateUser(User user);
+
         void SaveChanges();
     }
 }

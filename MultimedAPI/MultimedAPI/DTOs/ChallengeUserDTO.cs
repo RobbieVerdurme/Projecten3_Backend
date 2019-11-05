@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace MultimedAPI.DTOs
 {
-    public class ChallengeUserDTO
+    public class ChallengesUserDTO
     {
 
-        public int ChallengeId { get; set; }
-
         public int UserId { get; set; }
+
+        public ICollection<int> ChallengeIds { get; set; }
     }
 }

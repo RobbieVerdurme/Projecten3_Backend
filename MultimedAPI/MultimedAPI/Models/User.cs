@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MultimedAPI.Models.ManyToManies;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,11 @@ namespace MultimedAPI.Models
 
         #region Collections
 
-        public ICollection<ChallengeUser> ChallengesUser { get; set; }
+        public ICollection<ChallengeUser> ChallengesUsers { get; set; }
+
+        public ICollection<TherapistUser> TherapistUsers{ get; set; }
+
+        public ICollection<Category> Categories { get; set; }
 
         #endregion
 
@@ -30,7 +35,9 @@ namespace MultimedAPI.Models
 
         public User()
         {
-            ChallengesUser = new List<ChallengeUser>();
+            ChallengesUsers = new List<ChallengeUser>();
+            TherapistUsers = new List<TherapistUser>();
+            Categories = new List<Category>();
         }
 
         public User(string firstName, string familyName, string email)
@@ -46,9 +53,10 @@ namespace MultimedAPI.Models
 
         #region Methods
 
-        public void AddChallengeUser(ChallengeUser challengeUser) => ChallengesUser.Add(challengeUser);
+        public void AddChallengeUser(Challenge challenge) => ChallengesUsers.Add(new ChallengeUser(this, challenge));
 
-        public Challenge GetChallenge(int id) => ChallengesUser.SingleOrDefault(c => c.ChallengeId == id).Challenge;
+        public void AddTherapistUser(Therapist therapist) => TherapistUsers.Add(new TherapistUser(therapist, this));
+
 
         #endregion
     }
