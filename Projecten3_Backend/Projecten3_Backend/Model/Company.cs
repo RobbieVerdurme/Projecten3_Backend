@@ -35,35 +35,35 @@ namespace Projecten3_Backend.Model
 
         #region Methodes
 
-        public override bool Equals(object obj)
-        {
-            var company = obj as Company;
-            return company != null &&
-                   Name == company.Name &&
-                   Phone == company.Phone &&
-                   Mail == company.Mail &&
-                   Street == company.Street &&
-                   HouseNumber == company.HouseNumber &&
-                   City == company.City &&
-                   PostalCode == company.PostalCode &&
-                   Country == company.Country &&
-                   Site == company.Site;
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    var company = obj as Company;
+        //    return company != null &&
+        //           Name == company.Name &&
+        //           Phone == company.Phone &&
+        //           Mail == company.Mail &&
+        //           Street == company.Street &&
+        //           HouseNumber == company.HouseNumber &&
+        //           City == company.City &&
+        //           PostalCode == company.PostalCode &&
+        //           Country == company.Country &&
+        //           Site == company.Site;
+        //}
 
-        public override int GetHashCode()
-        {
-            var hash = new HashCode();
-            hash.Add(Name);
-            hash.Add(Phone);
-            hash.Add(Mail);
-            hash.Add(Street);
-            hash.Add(HouseNumber);
-            hash.Add(City);
-            hash.Add(PostalCode);
-            hash.Add(Country);
-            hash.Add(Site);
-            return hash.ToHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    var hash = new HashCode();
+        //    hash.Add(Name);
+        //    hash.Add(Phone);
+        //    hash.Add(Mail);
+        //    hash.Add(Street);
+        //    hash.Add(HouseNumber);
+        //    hash.Add(City);
+        //    hash.Add(PostalCode);
+        //    hash.Add(Country);
+        //    hash.Add(Site);
+        //    return hash.ToHashCode();
+        //}
 
         public static bool operator ==(Company c1, Company c2) {
             if (c1 == null && c2 == null) return true;

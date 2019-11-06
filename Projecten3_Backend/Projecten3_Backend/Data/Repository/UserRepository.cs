@@ -69,7 +69,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public bool UserExists(User u)
         {
-            return _dbContext.User.Where((user) => u == user).FirstOrDefault() != null;
+            return _dbContext.User.Where((user) => u.Email == user.Email).FirstOrDefault() != null;
         }
 
         public bool UsersExist(IList<int> ids)
