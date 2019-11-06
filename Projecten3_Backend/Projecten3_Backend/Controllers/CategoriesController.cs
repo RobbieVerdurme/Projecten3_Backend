@@ -89,8 +89,8 @@ namespace Projecten3_Backend.Controllers
 
         [Route("api/category")]
         [HttpGet]
-        public IEnumerable<Category> GetCategories() {
-            return _repo.GetCategories();
+        public IActionResult GetCategories() {
+            return Ok(_repo.GetCategories());
         }
 
 
@@ -104,7 +104,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 303 if such a category already exists.
         /// HTTP 200 if saved.
         /// </returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [Route("api/category/add")]
         [HttpPost]
         public IActionResult AddCategory(Category category) {

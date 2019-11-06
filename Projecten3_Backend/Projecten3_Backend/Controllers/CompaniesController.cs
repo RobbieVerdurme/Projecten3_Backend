@@ -28,9 +28,9 @@ namespace Projecten3_Backend.Controllers
 
         [Route("api/company")]
         [HttpGet]
-        public IEnumerable<Company> GetCompany()
+        public IActionResult GetCompany()
         {
-            return _companyRepo.GetAll();
+            return Ok(_companyRepo.GetAll());
         }
 
         /// <summary>

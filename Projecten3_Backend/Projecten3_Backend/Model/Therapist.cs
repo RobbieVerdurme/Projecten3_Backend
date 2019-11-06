@@ -82,50 +82,56 @@ namespace Projecten3_Backend.Model
             return false;
         }
 
-        public override bool Equals(object obj)
-        {
-            var therapist = obj as Therapist;
-            return therapist != null &&
-                   FirstName == therapist.FirstName &&
-                   LastName == therapist.LastName &&
-                   Email == therapist.Email &&
-                   PhoneNumber == therapist.PhoneNumber &&
-                   Website == therapist.Website &&
-                   Street == therapist.Street &&
-                   HouseNumber == therapist.HouseNumber &&
-                   PostalCode == therapist.PostalCode &&
-                   City == therapist.City &&
-                   EqualityComparer<TherapistType>.Default.Equals(TherapistType, therapist.TherapistType);
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    var therapist = obj as Therapist;
+        //    return therapist != null &&
+        //           FirstName == therapist.FirstName &&
+        //           LastName == therapist.LastName &&
+        //           Email == therapist.Email &&
+        //           PhoneNumber == therapist.PhoneNumber &&
+        //           Website == therapist.Website &&
+        //           Street == therapist.Street &&
+        //           HouseNumber == therapist.HouseNumber &&
+        //           PostalCode == therapist.PostalCode &&
+        //           City == therapist.City &&
+        //           EqualityComparer<TherapistType>.Default.Equals(TherapistType, therapist.TherapistType);
+        //}
 
-        public override int GetHashCode()
-        {
-            var hash = new HashCode();
-            hash.Add(FirstName);
-            hash.Add(LastName);
-            hash.Add(Email);
-            hash.Add(PhoneNumber);
-            hash.Add(Website);
-            hash.Add(Street);
-            hash.Add(HouseNumber);
-            hash.Add(PostalCode);
-            hash.Add(City);
-            hash.Add(TherapistType);
-            return hash.ToHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    var hash = new HashCode();
+        //    hash.Add(FirstName);
+        //    hash.Add(LastName);
+        //    hash.Add(Email);
+        //    hash.Add(PhoneNumber);
+        //    hash.Add(Website);
+        //    hash.Add(Street);
+        //    hash.Add(HouseNumber);
+        //    hash.Add(PostalCode);
+        //    hash.Add(City);
+        //    hash.Add(TherapistType);
+        //    return hash.ToHashCode();
+        //}
 
-        public static bool operator ==(Therapist t1, Therapist t2) {
-            return t1.City == t2.City && t1.Email == t2.Email && t1.FirstName == t2.FirstName && t1.HouseNumber == t2.HouseNumber && t1.LastName == t2.LastName
-                && t1.PhoneNumber == t2.PhoneNumber && t1.PostalCode == t2.PostalCode && t1.Street == t2.Street
-                && t1.TherapistType == t2.TherapistType && t1.Website == t2.Website;
-        }
+        //public static bool operator ==(Therapist t1, Therapist t2) {
+        //    if (t1 == null && t2 == null) return true;
+        //    if (t1 != null && t2 == null || t1 == null && t2 != null) return false;
 
-        public static bool operator !=(Therapist t1, Therapist t2)
-        {
-            return t1.City != t2.City && t1.Email != t2.Email && t1.FirstName != t2.FirstName && t1.HouseNumber != t2.HouseNumber && t1.LastName != t2.LastName
-                && t1.PhoneNumber != t2.PhoneNumber && t1.PostalCode != t2.PostalCode && t1.Street != t2.Street
-                && t1.TherapistType != t2.TherapistType && t1.Website != t2.Website;
-        }
+        //    return t1.City == t2.City && t1.Email == t2.Email && t1.FirstName == t2.FirstName && t1.HouseNumber == t2.HouseNumber && t1.LastName == t2.LastName
+        //        && t1.PhoneNumber == t2.PhoneNumber && t1.PostalCode == t2.PostalCode && t1.Street == t2.Street
+        //        && t1.TherapistType == t2.TherapistType && t1.Website == t2.Website;
+        //}
+
+        //public static bool operator !=(Therapist t1, Therapist t2)
+        //{
+        //    if (t1 == null && t2 == null) return false;
+        //    if (t1 != null && t2 == null || t1 == null && t2 != null) return true;
+
+        //    return t1.City != t2.City && t1.Email != t2.Email && t1.FirstName != t2.FirstName && t1.HouseNumber != t2.HouseNumber && t1.LastName != t2.LastName
+        //        && t1.PhoneNumber != t2.PhoneNumber && t1.PostalCode != t2.PostalCode && t1.Street != t2.Street
+        //        && t1.TherapistType != t2.TherapistType && t1.Website != t2.Website;
+        //}
         #endregion
     }
 }

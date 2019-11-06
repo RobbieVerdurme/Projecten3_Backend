@@ -34,7 +34,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public bool CategoryExists(Category category)
         {
-            return _dbContext.Category.Where(c => c == category).FirstOrDefault() != null;
+            return _dbContext.Category.Where(c => c.Name == category.Name).FirstOrDefault() != null;
         }
 
         public void DeleteCategory(int id)

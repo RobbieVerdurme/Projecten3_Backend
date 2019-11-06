@@ -43,7 +43,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public bool CompanyExists(Company company)
         {
-            return _dbContext.Company.Where(c => c == company).FirstOrDefault() != null;
+            return _dbContext.Company.Where(c => c.Name == company.Name).FirstOrDefault() != null;
         }
 
         public void DeleteCompany(Company company)

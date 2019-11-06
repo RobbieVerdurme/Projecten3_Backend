@@ -92,7 +92,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public bool TherapistExists(Therapist therapist)
         {
-            return _dbContext.Therapist.Where(t => t == therapist).FirstOrDefault() != null;
+            return _dbContext.Therapist.Where(t => t.Email == therapist.Email).FirstOrDefault() != null;
         }
 
         public TherapistType GetTherapistType(int id)
@@ -109,7 +109,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public bool TherapistTypeExists(TherapistType therapistType)
         {
-            return _dbContext.TherapistType.Where(t => t == therapistType).FirstOrDefault() != null;
+            return _dbContext.TherapistType.Where(t => t.Type == therapistType.Type).FirstOrDefault() != null;
         }
 
         public void EditTherapistType(TherapistType therapistType)

@@ -35,7 +35,7 @@ namespace Projecten3_Backend.Data
                 await CreateUser("SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
 
                 //therapist
-                Therapist th = new Therapist() { FirstName = "Therapist", LastName = "De pape", Email = "Therapist.DePape@gmail.com" };
+                Therapist th = new Therapist() { FirstName = "Therapist", LastName = "De pape", Email = "Therapist.DePape@gmail.com", OpeningTimes = new List<OpeningTimes>() };
                 _dbContext.Therapist.Add(th);
                 await CreateUser(th.Email, "P@ssword123", UserRole.THERAPIST);
 
