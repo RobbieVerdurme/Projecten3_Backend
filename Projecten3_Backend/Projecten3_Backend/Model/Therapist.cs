@@ -115,6 +115,9 @@ namespace Projecten3_Backend.Model
         }
 
         public static bool operator ==(Therapist t1, Therapist t2) {
+            if (t1 == null && t2 == null) return true;
+            if (t1 != null && t2 == null || t1 == null && t2 != null) return false;
+
             return t1.City == t2.City && t1.Email == t2.Email && t1.FirstName == t2.FirstName && t1.HouseNumber == t2.HouseNumber && t1.LastName == t2.LastName
                 && t1.PhoneNumber == t2.PhoneNumber && t1.PostalCode == t2.PostalCode && t1.Street == t2.Street
                 && t1.TherapistType == t2.TherapistType && t1.Website == t2.Website;
@@ -122,6 +125,9 @@ namespace Projecten3_Backend.Model
 
         public static bool operator !=(Therapist t1, Therapist t2)
         {
+            if (t1 == null && t2 == null) return false;
+            if (t1 != null && t2 == null || t1 == null && t2 != null) return true;
+
             return t1.City != t2.City && t1.Email != t2.Email && t1.FirstName != t2.FirstName && t1.HouseNumber != t2.HouseNumber && t1.LastName != t2.LastName
                 && t1.PhoneNumber != t2.PhoneNumber && t1.PostalCode != t2.PostalCode && t1.Street != t2.Street
                 && t1.TherapistType != t2.TherapistType && t1.Website != t2.Website;

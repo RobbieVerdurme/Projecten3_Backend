@@ -31,9 +31,9 @@ namespace Projecten3_Backend.Controllers
 
         [Route("api/therapist")]
         [HttpGet]
-        public IEnumerable<Therapist> GetTherapist()
+        public IActionResult GetTherapist()
         {
-            return _repo.GetTherapists();
+            return Ok(_repo.GetTherapists());
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Projecten3_Backend.Controllers
         /// </returns>
         [Route("api/therapist/{id:int}")]
         [HttpGet]
-        public ActionResult<Therapist> GetTherapist(int id)
+        public IActionResult GetTherapist(int id)
         {
             Therapist t = _repo.GetById(id);
 
@@ -55,7 +55,7 @@ namespace Projecten3_Backend.Controllers
                 return NotFound();
             }
 
-            return t;
+            return Ok(t);
         }
 
         /// <summary>
@@ -200,8 +200,8 @@ namespace Projecten3_Backend.Controllers
 
         [Route("api/therapist/type")]
         [HttpGet]
-        public IEnumerable<TherapistType> GetTherapistTypes() {
-            return _repo.GetTherapistTypes();
+        public IActionResult GetTherapistTypes() {
+            return Ok(_repo.GetTherapistTypes());
         }
 
         /// <summary>

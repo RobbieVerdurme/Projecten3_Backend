@@ -89,8 +89,8 @@ namespace Projecten3_Backend.Controllers
 
         [Route("api/category")]
         [HttpGet]
-        public IEnumerable<Category> GetCategories() {
-            return _repo.GetCategories();
+        public IActionResult GetCategories() {
+            return Ok(_repo.GetCategories());
         }
 
 

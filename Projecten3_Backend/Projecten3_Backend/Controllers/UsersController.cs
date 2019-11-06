@@ -34,9 +34,9 @@ namespace Projecten3_Backend.Controllers
 
         [Route("api/users")]
         [HttpGet]
-        public IEnumerable<UserDTO> GetUser()
+        public IActionResult GetUser()
         {
-            return _userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u));
+            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u)));
         }
 
         /// <summary>

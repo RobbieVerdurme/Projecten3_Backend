@@ -66,12 +66,18 @@ namespace Projecten3_Backend.Model
         }
 
         public static bool operator ==(Company c1, Company c2) {
+            if (c1 == null && c2 == null) return true;
+            if (c1 != null && c2 == null || c1 == null && c2 != null) return false;
+
             return c1.City == c2.City && c1.Country == c2.Country && c1.HouseNumber == c2.HouseNumber && c1.Mail == c2.Mail && c1.Name == c2.Name && c1.Phone == c2.Phone
                 && c1.PostalCode == c2.PostalCode && c1.Site == c2.Site && c1.Street == c2.Street;
         }
 
         public static bool operator !=(Company c1, Company c2)
         {
+            if (c1 == null && c2 == null) return false;
+            if (c1 != null && c2 == null || c1 == null && c2 != null) return true;
+
             return  c1.City != c2.City && c1.Country != c2.Country && c1.HouseNumber != c2.HouseNumber && c1.Mail != c2.Mail && c1.Name != c2.Name && c1.Phone != c2.Phone
                 && c1.PostalCode != c2.PostalCode && c1.Site != c2.Site && c1.Street != c2.Street;
         }

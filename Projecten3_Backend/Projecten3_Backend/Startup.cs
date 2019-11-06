@@ -143,7 +143,8 @@ namespace Projecten3_Backend
             app.UseCors("AllowAllOrigins");
             app.UseSwaggerUi3();
             app.UseOpenApi();
-            multimedDataInitializer.InitializeData().Wait();
+
+            //multimedDataInitializer.InitializeData().Wait();
         }
     }
 }
