@@ -35,27 +35,8 @@ namespace Projecten3_Backend.Data
                 await CreateUser("SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
 
                 //therapist
-                Therapist th = new Therapist() { FirstName = "Therapist", LastName = "De pape", Email = "Therapist.DePape@gmail.com", OpeningTimes = new List<OpeningTimes>() };
-                _dbContext.Therapist.Add(th);
-                await CreateUser(th.Email, "P@ssword123", UserRole.THERAPIST);
-
-                //User
-                User user = new User() {FirstName = "Robbie", FamilyName = "Verdurme", Email="robbievrdrm@gmail.com" };
-                _dbContext.User.Add(user);
-                await CreateUser(user.Email, "P@ssword123", UserRole.USER);
-
 
                 #endregion
-
-                #region Category
-                Category category1 = new Category() { Name = "Overgewicht"};
-                #endregion
-
-                #region Challenges
-                Challenge challenge1 = new Challenge() {Title = "Lopen", Description = "Loop vandaag 5 km", Category = category1 };
-                _dbContext.Challenges.Add(challenge1);
-                #endregion
-
 
                 #region Save changes
                 _dbContext.SaveChanges();

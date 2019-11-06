@@ -144,7 +144,7 @@ namespace Projecten3_Backend
             app.UseSwaggerUi3();
             app.UseOpenApi();
 
-            //multimedDataInitializer.InitializeData().Wait();
+            multimedDataInitializer.InitializeData().Wait();
         }
     }
 }
