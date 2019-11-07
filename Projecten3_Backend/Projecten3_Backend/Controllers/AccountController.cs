@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@ using Projecten3_Backend.Data.IRepository;
 namespace Projecten3_Backend.Controllers
 {
     [Route("api/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -72,13 +74,13 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the user details</param>
         /// <returns></returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        [Authorize( Roles = UserRole.MULTIMED)]
         [HttpPost("register")]
         public async Task<ActionResult<String>> Register(RegisterDTO model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
 
-            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Username };
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "User");
             if (result.Succeeded)
@@ -86,7 +88,7 @@ namespace Projecten3_Backend.Controllers
                 //return ok so the user knows the account has been created
                 return Ok();
             }
-            return StatusCode(500);
+            return StatusCode(303);
         }
 
         /// <summary>
@@ -115,12 +117,12 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the multimed user details</param>
         /// <returns></returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("registerMultimed")]
         public async Task<ActionResult<String>> RegisterMultimed(RegisterDTO model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
-            IdentityUser user = new IdentityUser { UserName = model.Username};
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email};
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "Multimed");
             if (result.Succeeded)
@@ -157,9 +159,10 @@ namespace Projecten3_Backend.Controllers
             // Create the token
             var claims = new[]
             {
+              new Claim(JwtRegisteredClaimNames.Sub, user.Email),
               new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
               new Claim("Id", userid),
-              new Claim("Role", role)
+              new Claim("roles", role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));

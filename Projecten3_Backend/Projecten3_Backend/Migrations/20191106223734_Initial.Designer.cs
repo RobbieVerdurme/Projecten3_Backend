@@ -10,14 +10,14 @@ using Projecten3_Backend.Models;
 namespace Projecten3_Backend.Migrations
 {
     [DbContext(typeof(Projecten3_BackendContext))]
-    [Migration("20191103164915_Initial")]
+    [Migration("20191106223734_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -232,7 +232,7 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("Country");
 
-                    b.Property<string>("HouseNumber");
+                    b.Property<int>("HouseNumber");
 
                     b.Property<string>("Mail");
 
@@ -240,7 +240,7 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("Phone");
 
-                    b.Property<string>("PostalCode");
+                    b.Property<int>("PostalCode");
 
                     b.Property<string>("Site");
 
@@ -291,29 +291,21 @@ namespace Projecten3_Backend.Migrations
                     b.ToTable("TherapistUser");
                 });
 
-            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTime", b =>
+            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTimes", b =>
                 {
-                    b.Property<int>("OpeningTimeId")
+                    b.Property<int>("OpeningTimesId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClosingHourAfternoon");
-
-                    b.Property<string>("ClosingHourMorning");
-
-                    b.Property<int>("Day");
-
-                    b.Property<string>("OpeningHourAfternoon");
-
-                    b.Property<string>("OpeningHourMorning");
+                    b.Property<string>("Interval");
 
                     b.Property<int?>("TherapistId");
 
-                    b.HasKey("OpeningTimeId");
+                    b.HasKey("OpeningTimesId");
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("OpeningTime");
+                    b.ToTable("OpeningTimes");
                 });
 
             modelBuilder.Entity("Projecten3_Backend.Model.Therapist", b =>
@@ -328,13 +320,13 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("FirstName");
 
-                    b.Property<string>("HouseNumber");
+                    b.Property<int>("HouseNumber");
 
                     b.Property<string>("LastName");
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<string>("PostalCode");
+                    b.Property<int>("PostalCode");
 
                     b.Property<string>("Street");
 
@@ -474,7 +466,7 @@ namespace Projecten3_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTime", b =>
+            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTimes", b =>
                 {
                     b.HasOne("Projecten3_Backend.Model.Therapist")
                         .WithMany("OpeningTimes")

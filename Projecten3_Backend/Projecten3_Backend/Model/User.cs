@@ -49,6 +49,7 @@ namespace Projecten3_Backend.Model
                     FirstName = usr.FirstName,
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
+                    Phone = usr.Phone,
                     Categories = usr.Categories
                 };
 

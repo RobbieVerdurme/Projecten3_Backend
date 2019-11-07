@@ -15,6 +15,7 @@ using Projecten3_Backend.Models;
 namespace Projecten3_Backend.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyRepository _companyRepo;
@@ -26,7 +27,6 @@ namespace Projecten3_Backend.Controllers
             _userRepo = userRepository;
         }
 
-        [Route("api/company")]
         [HttpGet]
         public IActionResult GetCompany()
         {
@@ -41,7 +41,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 404 if not found.
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("api/company/{id:int}")]
+        [Route("{id}")]
         [HttpGet]
         public IActionResult GetCompany(int id)
         {
@@ -66,7 +66,6 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 200 if successful.
         /// </returns>
         [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
-        [Route("api/company/add")]
         [HttpPost]
         public IActionResult AddCompany(AddCompanyDTO addCompany) {
             if (addCompany == null || string.IsNullOrEmpty(addCompany.City) || string.IsNullOrEmpty(addCompany.Country) || string.IsNullOrEmpty(addCompany.Mail)
@@ -108,7 +107,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 200 if successful.
         /// </returns>
         [Authorize(Policy = UserRole.MULTIMED,Roles = UserRole.MULTIMED)]
-        [Route("api/company/employee/add")]
+        [Route("/employee/add")]
         [HttpPut]
         public IActionResult AddEmployees(AddEmployeesDTO addEmployees) {
             if (addEmployees == null || addEmployees.Employees == null) return BadRequest();

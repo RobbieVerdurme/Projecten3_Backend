@@ -57,9 +57,9 @@ namespace Projecten3_Backend.Migrations
                     Phone = table.Column<string>(nullable: true),
                     Mail = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<string>(nullable: true),
+                    HouseNumber = table.Column<int>(nullable: false),
                     City = table.Column<string>(nullable: true),
-                    PostalCode = table.Column<string>(nullable: true),
+                    PostalCode = table.Column<int>(nullable: false),
                     Country = table.Column<string>(nullable: true),
                     Site = table.Column<string>(nullable: true)
                 },
@@ -222,8 +222,8 @@ namespace Projecten3_Backend.Migrations
                     PhoneNumber = table.Column<string>(nullable: true),
                     Website = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<string>(nullable: true),
-                    PostalCode = table.Column<string>(nullable: true),
+                    HouseNumber = table.Column<int>(nullable: false),
+                    PostalCode = table.Column<int>(nullable: false),
                     City = table.Column<string>(nullable: true),
                     TherapistTypeId = table.Column<int>(nullable: true)
                 },
@@ -266,23 +266,19 @@ namespace Projecten3_Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OpeningTime",
+                name: "OpeningTimes",
                 columns: table => new
                 {
-                    OpeningTimeId = table.Column<int>(nullable: false)
+                    OpeningTimesId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Day = table.Column<int>(nullable: false),
-                    OpeningHourMorning = table.Column<string>(nullable: true),
-                    ClosingHourMorning = table.Column<string>(nullable: true),
-                    OpeningHourAfternoon = table.Column<string>(nullable: true),
-                    ClosingHourAfternoon = table.Column<string>(nullable: true),
+                    Interval = table.Column<string>(nullable: true),
                     TherapistId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OpeningTime", x => x.OpeningTimeId);
+                    table.PrimaryKey("PK_OpeningTimes", x => x.OpeningTimesId);
                     table.ForeignKey(
-                        name: "FK_OpeningTime_Therapist_TherapistId",
+                        name: "FK_OpeningTimes_Therapist_TherapistId",
                         column: x => x.TherapistId,
                         principalTable: "Therapist",
                         principalColumn: "TherapistId",
@@ -428,8 +424,8 @@ namespace Projecten3_Backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpeningTime_TherapistId",
-                table: "OpeningTime",
+                name: "IX_OpeningTimes_TherapistId",
+                table: "OpeningTimes",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
@@ -474,7 +470,7 @@ namespace Projecten3_Backend.Migrations
                 name: "ChallengeUser");
 
             migrationBuilder.DropTable(
-                name: "OpeningTime");
+                name: "OpeningTimes");
 
             migrationBuilder.DropTable(
                 name: "TherapistUser");
