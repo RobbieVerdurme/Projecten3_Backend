@@ -27,6 +27,7 @@ namespace Projecten3_Backend.Controllers
             _userRepo = userRepository;
         }
 
+        [Route("api/company")]
         [HttpGet]
         public IActionResult GetCompany()
         {
@@ -41,7 +42,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 404 if not found.
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("{id}")]
+        [Route("api/company/{id:int}")]
         [HttpGet]
         public IActionResult GetCompany(int id)
         {
@@ -82,7 +83,8 @@ namespace Projecten3_Backend.Controllers
                 Phone = addCompany.Phone,
                 PostalCode = addCompany.PostalCode,
                 Site = addCompany.Site,
-                Street = addCompany.Street
+                Street = addCompany.Street,
+                Contract = addCompany.Contract
             };
 
             if (_companyRepo.CompanyExists(company)) return StatusCode(303);
@@ -98,39 +100,83 @@ namespace Projecten3_Backend.Controllers
         }
 
         /// <summary>
-        /// Add employees to a company
+        /// Edit a company
         /// </summary>
-        /// <param name="addEmployees"></param>
+        /// <param name="company"></param>
         /// <returns>
         /// HTTP 400 if the payload is malformed.
         /// HTTP 500 if saving failed.
+        /// HTTP 303 if a company with the updated values already exists.
         /// HTTP 200 if successful.
         /// </returns>
-        [Authorize(Policy = UserRole.MULTIMED,Roles = UserRole.MULTIMED)]
-        [Route("/employee/add")]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        [Route("api/company/edit")] 
         [HttpPut]
-        public IActionResult AddEmployees(AddEmployeesDTO addEmployees) {
-            if (addEmployees == null || addEmployees.Employees == null) return BadRequest();
+        public IActionResult EditCompany(EditCompanyDTO company)
+        {
+            if (company == null || string.IsNullOrEmpty(company.City) || string.IsNullOrEmpty(company.Country)
+                || string.IsNullOrEmpty(company.Mail) || string.IsNullOrEmpty(company.Name) || string.IsNullOrEmpty(company.Phone)
+                || string.IsNullOrEmpty(company.Site) || string.IsNullOrEmpty(company.Street)) return BadRequest();
 
-            Company company = _companyRepo.GetById(addEmployees.CompanyId);
-            if (company == null) return BadRequest();
-            if (!_userRepo.UsersExist(addEmployees.Employees)) return BadRequest();
+            if (company.PostalCode < 1000 || 9999 < company.PostalCode) return BadRequest();//Belgian postal codes
+            if (company.HouseNumber < 1 || 999 < company.HouseNumber) return BadRequest();//House numbers
 
-            _companyRepo.AddEmployees(company, addEmployees.Employees);
+            Company c = new Company
+            {
+                City = company.City,
+                CompanyMembers = company.CompanyMembers,
+                Contract = company.Contract,
+                Country = company.Country,
+                HouseNumber = company.HouseNumber,
+                Mail = company.Mail,
+                Name = company.Name,
+                Phone = company.Phone,
+                PostalCode = company.PostalCode,
+                Site = company.Site,
+                Street = company.Street
+                
+            };
+
+            if (_companyRepo.CompanyExists(c)) return StatusCode(303);
+            _companyRepo.AddCompany(c);
             try
             {
                 _companyRepo.SaveChanges();
-                return Ok();
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return StatusCode(500);
             }
+            return Ok();
         }
 
-        //edit
+        /// <summary>
+        /// Delete a company
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// HTTP 404 if the company was not found.
+        /// HTTP 500 if deleting failed.
+        /// HTTP 200 if deleted.
+        /// </returns>
+        [Route("api/company/delete/{id:int}")]
+        [HttpDelete]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        public IActionResult DeleteCompany(int id)
+        {
+            if (_companyRepo.GetById(id) == null) return NotFound();
 
-        //Delete
-
+            try
+            {
+                _companyRepo.DeleteCompany(id);
+                _companyRepo.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
 
     }
 }

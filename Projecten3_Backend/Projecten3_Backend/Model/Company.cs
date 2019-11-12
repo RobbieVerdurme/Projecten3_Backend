@@ -27,6 +27,8 @@ namespace Projecten3_Backend.Model
         public string Country { get; set; }
 
         public string Site { get; set; }
+
+        public DateTime Contract { get; set; }
         #endregion
 
         #region Collections

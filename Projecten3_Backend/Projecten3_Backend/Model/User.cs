@@ -23,6 +23,7 @@ namespace Projecten3_Backend.Model
 
         public virtual Company Company { get; set; }
 
+        public DateTime Contract { get; set; }
 
         #endregion
 
@@ -50,7 +51,8 @@ namespace Projecten3_Backend.Model
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
                     Phone = usr.Phone,
-                    Categories = usr.Categories
+                    Categories = usr.Categories,
+                    Contract = usr.Contract
                 };
 
                 return user;

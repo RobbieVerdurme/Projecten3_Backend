@@ -43,12 +43,13 @@ namespace Projecten3_Backend.Data.Repository
 
         public bool CompanyExists(Company company)
         {
-            return _dbContext.Company.Where(c => c.Name == company.Name).FirstOrDefault() != null;
+            return _dbContext.Company.Where(c => c.Mail == company.Mail).FirstOrDefault() != null;
         }
 
-        public void DeleteCompany(Company company)
+        public void DeleteCompany(int id)
         {
-            _companies.Remove(company);
+            Company c = _companies.FirstOrDefault(com => com.CompanyId == id);
+            if (c != null) _companies.Remove(c);
         }
 
         public IEnumerable<Company> GetAll()
