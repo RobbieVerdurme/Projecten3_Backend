@@ -58,6 +58,7 @@ namespace Projecten3_Backend.Data.Repository
             usr.Phone = user.Phone;
             usr.Email = user.Email;
             usr.Categories = user.Categories;
+            usr.Contract = user.Contract;
 
             _users.Update(usr);
         }

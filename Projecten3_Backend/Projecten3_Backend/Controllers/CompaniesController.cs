@@ -27,7 +27,6 @@ namespace Projecten3_Backend.Controllers
             _userRepo = userRepository;
         }
 
-        [Route("api/company")]
         [HttpGet]
         public IActionResult GetCompany()
         {
@@ -42,7 +41,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 404 if not found.
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("api/company/{id:int}")]
+        [Route("{id}")]
         [HttpGet]
         public IActionResult GetCompany(int id)
         {
@@ -110,7 +109,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 200 if successful.
         /// </returns>
         [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
-        [Route("api/company/edit")] 
+        [Route("edit")] 
         [HttpPut]
         public IActionResult EditCompany(EditCompanyDTO company)
         {
@@ -159,7 +158,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if deleting failed.
         /// HTTP 200 if deleted.
         /// </returns>
-        [Route("api/company/delete/{id:int}")]
+        [Route("{id}")]
         [HttpDelete]
         [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         public IActionResult DeleteCompany(int id)
