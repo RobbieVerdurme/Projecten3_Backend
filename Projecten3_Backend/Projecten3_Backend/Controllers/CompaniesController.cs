@@ -47,7 +47,7 @@ namespace Projecten3_Backend.Controllers
         {
             Company company = _companyRepo.GetById(id);
 
-            if (company == null)
+            if(company == null)
             {
                 return NotFound();
             }
