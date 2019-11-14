@@ -33,6 +33,13 @@ namespace Projecten3_Backend.Data
                 #region Users
                 //Multimeduser
                 await CreateUser("SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
+                
+
+                Company cmp = new Company() { Name = "test", Street = "es", City = "", Contract = DateTime.Now, Country = "", Mail = "", Phone = "", PostalCode = 9000, HouseNumber = 1, Site = "" };
+                _dbContext.Add(cmp);
+
+                User usr = new User() { FirstName = "", Company = cmp, Email = "" };
+                _dbContext.Add(usr);
 
                 //therapist
 

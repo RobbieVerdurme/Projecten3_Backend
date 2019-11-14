@@ -94,6 +94,7 @@ namespace Projecten3_Backend.Controllers
             u.Email = user.Email;
             u.Phone = user.Phone;
             u.Categories = categories;
+            u.Contract = user.Contract;
             
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
@@ -138,7 +139,8 @@ namespace Projecten3_Backend.Controllers
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories))
+                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories)),
+                Contract = comp.Contract
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
 

@@ -117,7 +117,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the multimed user details</param>
         /// <returns></returns>
-        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("registerMultimed")]
         public async Task<ActionResult<String>> RegisterMultimed(RegisterDTO model)
         {

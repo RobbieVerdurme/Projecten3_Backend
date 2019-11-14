@@ -1,12 +1,12 @@
-﻿using Projecten3_Backend.DTO;
+﻿using Projecten3_Backend.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Projecten3_Backend.Model
+namespace Projecten3_Backend.DTO
 {
-    public class Company
+    public class CompanyDTO
     {
         #region Properties
         public int CompanyId { get; set; }
@@ -33,15 +33,15 @@ namespace Projecten3_Backend.Model
         #endregion
 
         #region Collections
-        public IEnumerable<User> CompanyMembers { get; set; } = new List<User>();
+        public IEnumerable<UserDTO> CompanyMembers { get; set; } = new List<UserDTO>();
         #endregion
 
         #region methods
-        public static CompanyDTO MapCompanyToCompanyDTO(Company cmp)
+        public static Company MapCompanyDTOToCompany(CompanyDTO cmp)
         {
-            if (cmp != null)
+            if(cmp != null)
             {
-                CompanyDTO newcmp = new CompanyDTO()
+                Company newcmp = new Company()
                 {
                     CompanyId = cmp.CompanyId,
                     Name = cmp.Name,
@@ -55,13 +55,11 @@ namespace Projecten3_Backend.Model
                     Site = cmp.Site,
                     Contract = cmp.Contract
                 };
-                newcmp.CompanyMembers = cmp.CompanyMembers.Select(u => User.MapUserToUserDTO(u));
+                newcmp.CompanyMembers = cmp.CompanyMembers.Select( u => UserDTO.MapUserDTOToUser(u));
                 return newcmp;
-            }
-            else
-            {
+            } else {
                 return null;
-            };
+                    };
         }
         #endregion
     }
