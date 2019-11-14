@@ -35,7 +35,7 @@ namespace Projecten3_Backend.Data.Repository
                 IList<User> users = _dbContext.User.Where(u => employees.Contains(u.UserId)).ToList();
                 foreach (User user in users) {
                     if (!company.CompanyMembers.Contains(user)) {
-                        company.CompanyMembers.Add(user);
+                        company.CompanyMembers.Append(user);
                     }        
                 }
             }

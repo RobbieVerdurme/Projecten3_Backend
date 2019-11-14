@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
-using Projecten3_Backend.Models;
+
 
 namespace Projecten3_Backend.Controllers
 {
@@ -30,7 +29,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetCompany()
         {
-            return Ok(_companyRepo.GetAll());
+            return Ok(_companyRepo.GetAll().Select(c =>Company.MapCompanyToCompanyDTO(c)));
         }
 
         /// <summary>
@@ -51,8 +50,7 @@ namespace Projecten3_Backend.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(company);
+            return Ok(Company.MapCompanyToCompanyDTO(company));
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Projecten3_Backend.Data;
@@ -31,7 +32,9 @@ namespace Projecten3_Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            }); ;
 
             services.AddScoped<MultimedDataInitializer>();
 
@@ -146,7 +149,7 @@ namespace Projecten3_Backend
             app.UseSwaggerUi3();
             app.UseOpenApi();
 
-            //multimedDataInitializer.InitializeData().Wait();
+            multimedDataInitializer.InitializeData().Wait();
         }
     }
 }
