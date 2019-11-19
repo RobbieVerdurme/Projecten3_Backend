@@ -17,15 +17,21 @@ namespace Projecten3_Backend.Controllers
     [Route("api/[controller]")]
     public class CompaniesController : ControllerBase
     {
+        #region prop
         private readonly ICompanyRepository _companyRepo;
         private readonly IUserRepository _userRepo;
+        #endregion
 
+        #region ctor
         public CompaniesController(ICompanyRepository companyRepository, IUserRepository userRepository)
         {
             _companyRepo = companyRepository;
             _userRepo = userRepository;
         }
+        #endregion
 
+        #region methodes
+        [Route("api/companies")]
         [HttpGet]
         public IActionResult GetCompany()
         {
@@ -174,6 +180,6 @@ namespace Projecten3_Backend.Controllers
             }
             return Ok();
         }
-
+        #endregion
     }
 }
