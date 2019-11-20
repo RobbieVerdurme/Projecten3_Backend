@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
+using Projecten3_Backend.Model;
 
 namespace Projecten3_Backend.Controllers
 {
@@ -61,7 +62,12 @@ namespace Projecten3_Backend.Controllers
                  if (result.Succeeded)
                 {
                     var role = await _userManager.GetRolesAsync(user);
-                    var token = GetToken(user, role.First());
+                    var userid = getUserid(user, role.First());
+                    if(userid == null)
+                    {
+                        return StatusCode(401);
+                    }
+                    var token = GetToken(user, role.First(), userid);
                     //returns json object                   
                     return Ok(token); 
                 }
@@ -146,15 +152,8 @@ namespace Projecten3_Backend.Controllers
             return user == null;
         }
 
-        private String GetToken(IdentityUser user, string role)
-        {
-            //getuserid from correct table
-            var userid = role.Equals("Multimed")
-                ?""
-                :role.Equals("Therapist")
-                    ? _therapistRepo.GetByEmail(user.Email).TherapistId.ToString()
-                    : _userRepo.GetByEmail(user.Email).UserId.ToString();
-            
+        private String GetToken(IdentityUser user, string role, string userid)
+        {          
 
             // Create the token
             var claims = new[]
@@ -176,6 +175,32 @@ namespace Projecten3_Backend.Controllers
               signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string getUserid(IdentityUser user, string role)
+        {
+            //getuserid from correct table
+
+            if (role.Equals("Multimed"))
+            {
+                return "";
+            }
+            else if (role.Equals("Therapist"))
+            {
+                return _therapistRepo.GetByEmail(user.Email).TherapistId.ToString();
+            }
+            else
+            {
+                User usr = _userRepo.GetByEmail(user.Email);
+                if (usr.Contract <= DateTime.Now)
+                {
+                    return null;
+                }
+                else
+                {
+                    return usr.UserId.ToString();
+                }
+            }
         }
     }
 }
