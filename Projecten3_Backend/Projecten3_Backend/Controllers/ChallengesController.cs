@@ -20,11 +20,13 @@ namespace Projecten3_Backend.Controllers
     {
         private readonly IChallengeRepository _repo;
         private readonly IUserRepository _userRepo;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ChallengesController(IChallengeRepository repo, IUserRepository userRepo)
+        public ChallengesController(IChallengeRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository)
         {
             _repo = repo;
             _userRepo = userRepo;
+            _categoryRepository = categoryRepository;
         }
 
         /// <summary>
@@ -67,8 +69,14 @@ namespace Projecten3_Backend.Controllers
         [Route("api/challenge/add")]
         [Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
         [HttpPost]
-        public IActionResult AddChallenge(Challenge challenge) {
-            if (challenge == null || challenge.Title == null || challenge.Description == null || challenge.Category == null) return BadRequest();
+        public IActionResult AddChallenge(AddChallengeDTO dto) {
+            if (dto == null || dto.Title == null || dto.Description == null || dto.Category == null) return BadRequest();
+            if(!_categoryRepository.CategoryExists(dto.Category)) return BadRequest();
+            Challenge challenge = new Challenge() {
+                Title = dto.Title,
+                Description = dto.Description,
+                Category = dto.Category
+            };
             //Already exists -> return a 303 See Other StatusCode
             if (_repo.ChallengeExists(challenge)) return StatusCode(303);
             try {
