@@ -26,6 +26,8 @@ namespace Projecten3_Backend.DTO
         public DateTime Contract { get; set; }
 
         public ICollection<Category> Categories { get; set; }
+
+        public int ExperiencePoints { get; set; }
         #endregion
 
         #region methods

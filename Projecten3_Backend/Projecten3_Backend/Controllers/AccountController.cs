@@ -49,6 +49,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the login details</param>
         [HttpPost]
+        //[AllowAnonymous]
         public async Task<ActionResult<String>> CreateToken(LoginDTO model)
         {
             if(model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
@@ -107,7 +108,7 @@ namespace Projecten3_Backend.Controllers
         public async Task<ActionResult<String>> RegisterTherapist(RegisterDTO model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
-            IdentityUser user = new IdentityUser { UserName = model.Username };
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "Therapist");
             if (result.Succeeded)
@@ -123,7 +124,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the multimed user details</param>
         /// <returns></returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("registerMultimed")]
         public async Task<ActionResult<String>> RegisterMultimed(RegisterDTO model)
         {

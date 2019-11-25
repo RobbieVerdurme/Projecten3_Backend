@@ -10,7 +10,7 @@ using Projecten3_Backend.Models;
 namespace Projecten3_Backend.Migrations
 {
     [DbContext(typeof(Projecten3_BackendContext))]
-    [Migration("20191106223734_Initial")]
+    [Migration("20191120150245_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,6 +230,8 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("City");
 
+                    b.Property<DateTime>("Contract");
+
                     b.Property<string>("Country");
 
                     b.Property<int>("HouseNumber");
@@ -361,6 +363,8 @@ namespace Projecten3_Backend.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CompanyId");
+
+                    b.Property<DateTime>("Contract");
 
                     b.Property<string>("Email");
 

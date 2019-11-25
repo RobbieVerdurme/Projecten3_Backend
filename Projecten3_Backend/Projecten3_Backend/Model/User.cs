@@ -25,6 +25,8 @@ namespace Projecten3_Backend.Model
 
         public DateTime Contract { get; set; }
 
+        public int ExperiencePoints { get; set; }
+
         #endregion
 
         #region Collections

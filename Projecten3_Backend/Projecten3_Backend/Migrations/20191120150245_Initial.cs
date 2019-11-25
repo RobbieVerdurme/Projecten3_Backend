@@ -61,7 +61,8 @@ namespace Projecten3_Backend.Migrations
                     City = table.Column<string>(nullable: true),
                     PostalCode = table.Column<int>(nullable: false),
                     Country = table.Column<string>(nullable: true),
-                    Site = table.Column<string>(nullable: true)
+                    Site = table.Column<string>(nullable: true),
+                    Contract = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,7 +198,8 @@ namespace Projecten3_Backend.Migrations
                     FamilyName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
-                    CompanyId = table.Column<int>(nullable: true)
+                    CompanyId = table.Column<int>(nullable: true),
+                    Contract = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

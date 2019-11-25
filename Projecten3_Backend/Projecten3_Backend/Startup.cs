@@ -126,7 +126,7 @@ namespace Projecten3_Backend
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin()));
+            services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -149,7 +149,7 @@ namespace Projecten3_Backend
             app.UseSwaggerUi3();
             app.UseOpenApi();
 
-            multimedDataInitializer.InitializeData().Wait();
+            //multimedDataInitializer.InitializeData().Wait();
         }
     }
 }

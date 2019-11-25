@@ -10,8 +10,8 @@ using Projecten3_Backend.Models;
 namespace Projecten3_Backend.Migrations
 {
     [DbContext(typeof(Projecten3_BackendContext))]
-    [Migration("20191113111828_contract")]
-    partial class contract
+    [Migration("20191125115341_AddExp")]
+    partial class AddExp
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -367,6 +367,8 @@ namespace Projecten3_Backend.Migrations
                     b.Property<DateTime>("Contract");
 
                     b.Property<string>("Email");
+
+                    b.Property<int>("ExperiencePoints");
 
                     b.Property<string>("FamilyName");
 

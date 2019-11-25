@@ -366,6 +366,8 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("Email");
 
+                    b.Property<int>("ExperiencePoints");
+
                     b.Property<string>("FamilyName");
 
                     b.Property<string>("FirstName");
