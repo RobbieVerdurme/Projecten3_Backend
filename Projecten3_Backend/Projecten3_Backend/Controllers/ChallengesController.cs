@@ -147,6 +147,19 @@ namespace Projecten3_Backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// For a given user, get the challenges that have a category which in itself is contained in the user's categories.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/challenge/category/user/{id:int}")]
+        [HttpGet]
+        public IActionResult GetChallengesForUserCategories(int id) {
+            User user = _userRepo.GetById(id);
+            if (user == null) return BadRequest();
+            IList<int> categories = user.Categories.Select(c => c.CategoryId).ToList();
+            return Ok(_repo.GetChallenges().Where(challenge => categories.Contains(challenge.Category.CategoryId)).ToList());
+        }
 
 
 
