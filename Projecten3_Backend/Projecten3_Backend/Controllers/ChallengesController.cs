@@ -126,7 +126,8 @@ namespace Projecten3_Backend.Controllers
         [Route("api/challenge/complete")]
         [HttpPost]
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
-            if (complete == null || _userRepo.GetById(complete.UserID) == null) return BadRequest();
+            User usr = _userRepo.GetById(complete.UserID);
+            if (complete == null || usr == null) return BadRequest();
 
             ChallengeUser challenge = _repo.GetUserChallenge(complete.UserID,complete.ChallengeID);
             if (challenge == null) return BadRequest();
@@ -135,6 +136,7 @@ namespace Projecten3_Backend.Controllers
 
             try
             {
+                _userRepo.AddExp(usr);
                 _repo.CompleteChallenge(challenge);
                 _repo.SaveChanges();
             }

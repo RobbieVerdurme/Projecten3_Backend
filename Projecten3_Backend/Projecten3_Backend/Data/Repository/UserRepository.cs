@@ -82,6 +82,13 @@ namespace Projecten3_Backend.Data.Repository
             }
             return true;
         }
+
+        public void AddExp(User user)
+        {
+            User usr = _users.FirstOrDefault(u => u.UserId == user.UserId);
+            usr.ExperiencePoints += 1;
+            _users.Update(usr);
+        }
         #endregion
     }
 }
