@@ -93,17 +93,17 @@ namespace Projecten3_Backend.Data.Repository
 
         public IEnumerable<Challenge> GetChallenges()
         {
-            return _challenges.ToList();
+            return _challenges.Include(c => c.Category).ToList();
         }
 
         public ChallengeUser GetUserChallenge(int userId, int challengeId)
         {
-            return _dbContext.ChallengeUser.Where(c => c.ChallengeId == challengeId && c.UserId == userId).FirstOrDefault();
+            return _dbContext.ChallengeUser.Where(c => c.ChallengeId == challengeId && c.UserId == userId).Include(c => c.Challenge).ThenInclude(cha => cha.Category).FirstOrDefault();
         }
 
         public IEnumerable<ChallengeUser> GetUserChallenges(int userId)
         {
-            return _dbContext.ChallengeUser.Where(c => c.UserId == userId).Include( c => c.Challenge).Include(c => c.User).ToList();
+            return _dbContext.ChallengeUser.Where(c => c.UserId == userId).Include( c => c.Challenge).ThenInclude(cha => cha.Category).Include(c => c.User).ToList();
         }
 
         public void SaveChanges()

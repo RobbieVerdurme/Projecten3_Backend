@@ -41,7 +41,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public User GetById(int id)
         {
-            return _users.FirstOrDefault(u => u.UserId == id);
+            return _users.Include(u => u.Categories).FirstOrDefault(u => u.UserId == id);
         }
 
         public IEnumerable<User> GetUsers()
