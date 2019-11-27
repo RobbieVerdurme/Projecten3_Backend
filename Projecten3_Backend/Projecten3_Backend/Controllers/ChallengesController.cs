@@ -96,14 +96,14 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 400 if the user doesn't exist.
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("api/challenge/user/{id:int}")]
+        [Route("api/challenge/user/{id}")]
         [HttpGet]
-        public IActionResult GetUserChallenges(int userId) {
-            User user = _userRepo.GetById(userId);
+        public IActionResult GetUserChallenges(int id) {
+            User user = _userRepo.GetById(id);
 
             if (user == null) return BadRequest();
 
-            return Ok(_repo.GetUserChallenges(userId).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
+            return Ok(_repo.GetUserChallenges(id).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
         }
 
         [Route("api/challenge")]
