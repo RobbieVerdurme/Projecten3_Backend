@@ -10,6 +10,8 @@ namespace Projecten3_Backend.DTO
     {
         public string Title { get; set; }
 
+        public string ChallengeImage { get; set; }
+
         public string Description { get; set; }
 
         public Category Category { get; set; }

@@ -49,6 +49,7 @@ namespace Projecten3_Backend.Controllers
             if (user == null || !_repo.ChallengesExist(challenges)) return BadRequest();
             try {
                 _repo.AddChallengesToUser(payload.UserId, challenges);
+                _repo.SaveChanges();
             } catch (Exception)
             {
                 return StatusCode(500);
@@ -75,6 +76,7 @@ namespace Projecten3_Backend.Controllers
             Challenge challenge = new Challenge() {
                 Title = dto.Title,
                 Description = dto.Description,
+                ChallengeImage = dto.ChallengeImage,
                 Category = dto.Category
             };
             //Already exists -> return a 303 See Other StatusCode
