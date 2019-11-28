@@ -49,12 +49,14 @@ namespace Projecten3_Backend.Model
             if(usr != null) {
                 UserDTO user = new UserDTO()
                 {
+                    UserId = usr.UserId,
                     FirstName = usr.FirstName,
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
                     Phone = usr.Phone,
                     Categories = usr.Categories,
-                    Contract = usr.Contract
+                    Contract = usr.Contract,
+                    ExperiencePoints = usr.ExperiencePoints
                 };
 
                 return user;

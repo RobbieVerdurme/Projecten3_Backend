@@ -71,18 +71,20 @@ namespace Projecten3_Backend.Controllers
         [Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
         [HttpPost]
         public IActionResult AddChallenge(AddChallengeDTO dto) {
-            if (dto == null || dto.Title == null || dto.Description == null || dto.Category == null) return BadRequest();
-            if(!_categoryRepository.CategoryExists(dto.Category)) return BadRequest();
+            if (dto == null || dto.Title == null || dto.Description == null) return BadRequest();
+            Category category = _categoryRepository.GetById(dto.CategoryId);
+            if (category == null) return BadRequest();
             Challenge challenge = new Challenge() {
                 Title = dto.Title,
                 Description = dto.Description,
                 ChallengeImage = dto.ChallengeImage,
-                Category = dto.Category
+                Category = category
             };
             //Already exists -> return a 303 See Other StatusCode
             if (_repo.ChallengeExists(challenge)) return StatusCode(303);
             try {
                 _repo.AddChallenge(challenge);
+                _repo.SaveChanges();
                 return Ok();
             }
             catch (Exception) {

@@ -35,19 +35,26 @@ namespace Projecten3_Backend.Data.Repository
         public void AddChallengesToUser(int userid, IList<int> challengeids)
         {
             User usr =_users.FirstOrDefault(u => u.UserId == userid);
+
             //Feth the challenges that might be added
             List<Challenge> challenges =_challenges.Where(c => challengeids.Contains(c.ChallengeId)).ToList();
+
             //Fetch the existing challenges for the user
             List<int> existing = _dbContext.ChallengeUser.Where(cu => cu.UserId == userid).Select( cu => cu.ChallengeId).ToList();
+
             //Add the not already existing challenges
-            usr.AddChallenges(challenges.Where(c => !existing.Contains(c.ChallengeId)).Select(c =>
+            List<ChallengeUser> challengesToAdd = challenges.Where(c => !existing.Contains(c.ChallengeId)).Select(c =>
                 new ChallengeUser() {
                     ChallengeId = c.ChallengeId,
                     Challenge = c,
                     User = usr,
                     UserId = usr.UserId
                 }
-            ).ToList());
+            ).ToList();
+
+            usr.AddChallenges(challengesToAdd);
+
+            _dbContext.ChallengeUser.AddRange(challengesToAdd);
             _dbContext.SaveChanges();
         }
 
