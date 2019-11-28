@@ -139,6 +139,7 @@ namespace Projecten3_Backend.Controllers
             try
             {
                 _userRepo.AddExp(usr);
+                _userRepo.SaveChanges();
                 _repo.CompleteChallenge(challenge);
                 _repo.SaveChanges();
             }
