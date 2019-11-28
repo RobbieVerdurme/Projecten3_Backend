@@ -1,4 +1,5 @@
-﻿using Projecten3_Backend.Model.ManyToMany;
+﻿using Projecten3_Backend.DTO;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,6 +81,18 @@ namespace Projecten3_Backend.Model
                 if (time == null || !regex.IsMatch(time)) return true;
             }
             return false;
+        }
+
+        public static TherapistDTO MapTherapistToTherapistDTO(Therapist therapist)
+        {
+            TherapistDTO thDTO = new TherapistDTO()
+            {
+                Email = therapist.Email,
+                Firstname = therapist.FirstName,
+                Lastname = therapist.LastName,
+                TherapistId = therapist.TherapistId
+            };
+            return thDTO;
         }
         #endregion
     }

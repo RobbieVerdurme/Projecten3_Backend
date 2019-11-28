@@ -53,6 +53,7 @@ namespace Projecten3_Backend.Data
 
                 //user
                 User usr = new User() { FirstName = "Boeferrob", Company = cmp, Email = "Boeferrob@live.be" };
+                usr.AddTherapist(th);
                 await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
                 _dbContext.Add(usr);
                 

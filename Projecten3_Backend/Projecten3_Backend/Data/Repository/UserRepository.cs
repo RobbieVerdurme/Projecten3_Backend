@@ -89,6 +89,11 @@ namespace Projecten3_Backend.Data.Repository
             usr.ExperiencePoints += 1;
             _users.Update(usr);
         }
+
+        public IEnumerable<Therapist> GetUserTherapists(int id)
+        {
+            return _dbContext.TherapistUser.Where(c => c.UserId == id).Include(th => th.Therapist).ThenInclude(u => u.TherapistType).Include(u => u.User).Select(t => t.Therapist).ToList();
+        }
         #endregion
     }
 }

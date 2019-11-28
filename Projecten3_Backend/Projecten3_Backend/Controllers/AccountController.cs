@@ -49,7 +49,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the login details</param>
         [HttpPost]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public async Task<ActionResult<String>> CreateToken(LoginDTO model)
         {
             if(model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();

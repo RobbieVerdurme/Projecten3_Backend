@@ -188,5 +188,32 @@ namespace Projecten3_Backend.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// get the therapist list from user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// a list of therapists
+        /// </returns>
+        [Route("api/users/therapist/{id}")]
+        [HttpGet]
+        public IActionResult GetTherapistUser(int id)
+        {
+            var user = _userRepo.GetById(id);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                IEnumerable<Therapist> th = _userRepo.GetUserTherapists(id);
+                return Ok(th.Select(t => Therapist.MapTherapistToTherapistDTO(t)));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }

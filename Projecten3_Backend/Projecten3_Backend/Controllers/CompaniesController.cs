@@ -31,7 +31,6 @@ namespace Projecten3_Backend.Controllers
         #endregion
 
         #region methodes
-        [Route("api/companies")]
         [HttpGet]
         public IActionResult GetCompany()
         {
