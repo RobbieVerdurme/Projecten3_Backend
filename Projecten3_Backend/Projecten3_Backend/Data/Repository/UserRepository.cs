@@ -36,7 +36,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public User GetByEmail(string email)
         {
-            return _users.FirstOrDefault(u => u.Email == email);
+            return _users.Include(u => u.Categories).FirstOrDefault(u => u.Email == email);
         }
 
         public User GetById(int id)
