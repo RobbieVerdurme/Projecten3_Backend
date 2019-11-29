@@ -149,7 +149,8 @@ namespace Projecten3_Backend
             app.UseSwaggerUi3();
             app.UseOpenApi();
 
-            multimedDataInitializer.InitializeData().Wait();
+            //Enable when working local, disable when pushing/merging to master 
+            //multimedDataInitializer.InitializeData().Wait();
         }
     }
 }
