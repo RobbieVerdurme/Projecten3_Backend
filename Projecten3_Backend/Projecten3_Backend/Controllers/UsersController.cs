@@ -63,28 +63,6 @@ namespace Projecten3_Backend.Controllers
         }
 
         /// <summary>
-        /// Get a specific user
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>
-        /// HTTP 404 if not found.
-        /// HTTP 200 otherwise.
-        /// </returns>
-        [Route("api/users/details/{id:int}")]
-        [HttpGet]
-        public IActionResult GetUserWithChallenges(int id)
-        {
-            var user = _userRepo.GetByIdWithChallenges(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(Model.User.MapUserToUserWithChallengesDTO(user));
-        }
-
-        /// <summary>
         /// Edit a user's personal details
         /// </summary>
         /// <param name="user"></param>
