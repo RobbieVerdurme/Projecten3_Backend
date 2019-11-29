@@ -35,7 +35,9 @@ namespace Projecten3_Backend.Model
 
         public virtual ICollection<TherapistUser> Therapists { get; set; } = new List<TherapistUser>();
 
-        public  ICollection<Category> Categories { get; set; } = new List<Category>();
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
+
+        public ICollection<Challenge> ChallengesList => Challenges.Select(ch => ch.Challenge).ToList();
 
         #endregion
 
@@ -57,6 +59,32 @@ namespace Projecten3_Backend.Model
                     Categories = usr.Categories,
                     Contract = usr.Contract,
                     ExperiencePoints = usr.ExperiencePoints
+                };
+
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public static UserWithChallengesDTO MapUserToUserWithChallengesDTO(User usr)
+        {
+            if (usr != null)
+            {
+                UserWithChallengesDTO user = new UserWithChallengesDTO()
+                {
+                    UserId = usr.UserId,
+                    FirstName = usr.FirstName,
+                    FamilyName = usr.FamilyName,
+                    Email = usr.Email,
+                    Phone = usr.Phone,
+                    Categories = usr.Categories,
+                    Contract = usr.Contract,
+                    ExperiencePoints = usr.ExperiencePoints,
+                    Challenges = usr.ChallengesList
                 };
 
                 return user;

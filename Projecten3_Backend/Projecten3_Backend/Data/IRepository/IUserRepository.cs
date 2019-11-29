@@ -13,6 +13,8 @@ namespace Projecten3_Backend.Data.IRepository
 
         User GetById(int id);
 
+        User GetByIdWithChallenges(int id);
+
         User GetByEmail(string email);
 
         void AddUser(User user);
