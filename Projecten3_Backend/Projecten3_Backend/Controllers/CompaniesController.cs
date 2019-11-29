@@ -123,26 +123,29 @@ namespace Projecten3_Backend.Controllers
             if (company.PostalCode < 1000 || 9999 < company.PostalCode) return BadRequest();//Belgian postal codes
             if (company.HouseNumber < 1 || 999 < company.HouseNumber) return BadRequest();//House numbers
 
-            Company c = new Company
-            {
-                City = company.City,
-                CompanyMembers = company.CompanyMembers,
-                Contract = company.Contract,
-                Country = company.Country,
-                HouseNumber = company.HouseNumber,
-                Mail = company.Mail,
-                Name = company.Name,
-                Phone = company.Phone,
-                PostalCode = company.PostalCode,
-                Site = company.Site,
-                Street = company.Street
-                
-            };
+            Company companyFromDatabase = _companyRepo.GetById(company.CompanyId);
 
-            if (_companyRepo.CompanyExists(c)) return StatusCode(303);
-            _companyRepo.AddCompany(c);
+            if(companyFromDatabase == null)
+            {
+                return StatusCode(404);
+            }            
+                companyFromDatabase.CompanyId = company.CompanyId;
+                companyFromDatabase.City = company.City;
+                companyFromDatabase.CompanyMembers = company.CompanyMembers;
+                companyFromDatabase.Contract = company.Contract;
+                companyFromDatabase.Country = company.Country;
+                companyFromDatabase.HouseNumber = company.HouseNumber;
+                companyFromDatabase.Mail = company.Mail;
+                companyFromDatabase.Name = company.Name;
+                companyFromDatabase.Phone = company.Phone;
+                companyFromDatabase.PostalCode = company.PostalCode;
+                companyFromDatabase.Site = company.Site;
+                companyFromDatabase.Street = company.Street;
+
+            
             try
             {
+                _companyRepo.UpdateCompany(companyFromDatabase);
                 _companyRepo.SaveChanges();
             }
             catch (Exception)
