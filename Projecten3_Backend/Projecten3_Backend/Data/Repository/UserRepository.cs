@@ -44,6 +44,11 @@ namespace Projecten3_Backend.Data.Repository
             return _users.Include(u => u.Categories).FirstOrDefault(u => u.UserId == id);
         }
 
+        public User GetByIdWithChallenges(int id)
+        {
+            return _users.Include(u => u.Categories).Include(u => u.ChallengesList).FirstOrDefault(u => u.UserId == id);
+        }
+
         public IEnumerable<User> GetUsers()
         {
             return _users.ToList();
