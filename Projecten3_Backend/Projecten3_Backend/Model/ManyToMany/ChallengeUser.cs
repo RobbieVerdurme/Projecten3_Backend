@@ -37,5 +37,18 @@ namespace Projecten3_Backend.Model.ManyToMany
                 Challenge = challengeUser.Challenge
             };
         }
+
+        public static ChallengesOfUserDTO MapToChallengesOfUserDTO(ChallengeUser challengeUser)
+        {
+            return challengeUser == null || challengeUser.User == null || challengeUser.Challenge == null ? null : new ChallengesOfUserDTO
+            {
+                ChallengeId = challengeUser.Challenge.ChallengeId,
+                Category = challengeUser.Challenge.Category,
+                ChallengeImage = challengeUser.Challenge.ChallengeImage,
+                Description = challengeUser.Challenge.Description,
+                Title = challengeUser.Challenge.Title,
+                CompletedDate = challengeUser.CompletedDate
+            };
+        }
     }
 }

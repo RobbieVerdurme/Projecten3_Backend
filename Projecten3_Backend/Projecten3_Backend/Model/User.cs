@@ -69,6 +69,30 @@ namespace Projecten3_Backend.Model
             }
 
         }
+
+        public static UserWithChallengesDTO MapUserToUserWithChallengesDTO(User usr, List<ChallengesOfUserDTO> challenges)
+        {
+            if(usr != null)
+            {
+                UserWithChallengesDTO user = new UserWithChallengesDTO()
+                {
+                    UserId = usr.UserId,
+                    FirstName = usr.FirstName,
+                    FamilyName = usr.FamilyName,
+                    Email = usr.Email,
+                    Phone = usr.Phone,
+                    Categories = usr.Categories,
+                    Contract = usr.Contract,
+                    ExperiencePoints = usr.ExperiencePoints,
+                    Challenges = challenges
+                };
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+        }
         #endregion
     }
 }

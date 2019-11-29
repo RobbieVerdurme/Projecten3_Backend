@@ -6,6 +6,7 @@ using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +21,17 @@ namespace Projecten3_Backend.Controllers
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICompanyRepository _companyRepo;
         private readonly ITherapistRepository _therapistRepo;
+        private readonly IChallengeRepository _challengeRepo;
         #endregion
 
         #region ctor
-        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo)
+        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
         {
             _userRepo = userRepository;
             _categoryRepo = categoryRepository;
             _companyRepo = companyRepo;
             _therapistRepo = therapistRepo;
-            
+            _challengeRepo = challengeRepo;
         }
         #endregion
 
@@ -42,6 +44,29 @@ namespace Projecten3_Backend.Controllers
 
         /// <summary>
         /// Get a specific user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// HTTP 404 if not found.
+        /// HTTP 200 otherwise.
+        /// </returns>
+        [Route("api/users/details/{id:int}")]
+        [HttpGet]
+        public IActionResult GetUserWithChallenges(int id)
+        {
+            var user = _userRepo.GetById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            List<ChallengesOfUserDTO> challenges = _challengeRepo.GetUserChallenges(id).Select(c => ChallengeUser.MapToChallengesOfUserDTO(c)).ToList();
+
+            return Ok(Model.User.MapUserToUserWithChallengesDTO(user, challenges));
+        }
+
+        /// <summary>
+        /// Get a specific user with it's challenges
         /// </summary>
         /// <param name="id"></param>
         /// <returns>
