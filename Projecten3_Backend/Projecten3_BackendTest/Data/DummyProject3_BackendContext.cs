@@ -18,10 +18,12 @@ namespace Projecten3_BackendTest.Data
         public IEnumerable<Therapist> Therapists { get; }
         public IEnumerable<TherapistUser> TherapistUser { get; }
         public IEnumerable<Company> Companies { get; }
+        public IEnumerable<TherapistType> TherapistTypes { get; }
 
         //DTO's
         public AddUserDTO AddUserDTO { get; }
         public EditUserDTO EditUserDTO { get; }
+        public AddTherapistDTO AddTherapistDTO { get; }
         #endregion
 
         //Init used data
@@ -76,10 +78,13 @@ namespace Projecten3_BackendTest.Data
             Therapists = new[] { therapist1 };
             Users = new[] { user1, user2 };
             ChallengesUser = new[] { challengeUser1, challengeUser2 };
+            TherapistTypes = new[] { therapistType1 };
 
             // Create DTO's
             AddUserDTO = new AddUserDTO { Categories = new List<int>() { 1 }, Company = 1, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", Therapists = new List<int>() { 1 } };
             EditUserDTO = new EditUserDTO { Categories = new List<int>() { 1 }, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", UserId = 1, Contract = new DateTime()};
+            AddTherapistDTO = new AddTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 9000, Street = "test", TherapistTypeId = 0, Website = "test" };
+
         }
     }
 }

@@ -94,6 +94,23 @@ namespace Projecten3_Backend.Model
             };
             return thDTO;
         }
+
+        public static Therapist MapAddTherapistDTOToTherapist(AddTherapistDTO therapist, TherapistType type)
+        {
+            return new Therapist
+            {
+                City = therapist.City,
+                Email = therapist.Email,
+                FirstName = therapist.FirstName,
+                HouseNumber = therapist.HouseNumber,
+                LastName = therapist.LastName,
+                PhoneNumber = therapist.PhoneNumber,
+                PostalCode = therapist.PostalCode,
+                Street = therapist.Street,
+                TherapistType = type,
+                Website = therapist.Website
+            };
+        }
         #endregion
     }
 }

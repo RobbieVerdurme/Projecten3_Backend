@@ -25,6 +25,7 @@ namespace Projecten3_BackendTest.Controllers
         private readonly Mock<IChallengeRepository> _challengeRepository;
         private readonly DummyProject3_BackendContext _dummyData;
         #endregion
+
         #region Constructors
         public UserControllerTest()
         {
@@ -42,6 +43,7 @@ namespace Projecten3_BackendTest.Controllers
                 _challengeRepository.Object);
         }
         #endregion
+
         #region Get
         [Fact]
         public void GetUsers_ReturnsOk()
@@ -67,7 +69,7 @@ namespace Projecten3_BackendTest.Controllers
         {
             _userRepository.Setup(ur => ur.GetById(4));
             _challengeRepository.Setup(cr => cr.GetUserChallenges(4));
-            var okResult = _userController.GetUserWithChallenges(1) as IActionResult;
+            var okResult = _userController.GetUserWithChallenges(1) as NotFoundResult;
             Assert.IsType<NotFoundResult>(okResult);
         }
 
@@ -106,6 +108,7 @@ namespace Projecten3_BackendTest.Controllers
             Assert.IsType<NotFoundResult>(okResult);
         }
         #endregion
+
         #region Post
         [Fact]
         public void PostUser_ReturnsOk()
@@ -134,6 +137,7 @@ namespace Projecten3_BackendTest.Controllers
             Assert.IsType<BadRequestResult>(okResult);
         }
         #endregion
+
         #region Put
         [Fact]
         public void PutUser_ReturnsOk()
@@ -160,6 +164,7 @@ namespace Projecten3_BackendTest.Controllers
             Assert.IsType<BadRequestResult>(okResult);
         }
         #endregion
+
         #region Delete
         [Fact]
         public void DeleteUser_ReturnsOk()

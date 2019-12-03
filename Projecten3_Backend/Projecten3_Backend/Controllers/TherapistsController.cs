@@ -140,18 +140,7 @@ namespace Projecten3_Backend.Controllers
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
             if (!_repo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
 
-            Therapist t = new Therapist {
-                City = therapist.City,
-                Email = therapist.Email,
-                FirstName = therapist.FirstName,
-                HouseNumber = therapist.HouseNumber,
-                LastName = therapist.LastName,
-                PhoneNumber = therapist.PhoneNumber,
-                PostalCode = therapist.PostalCode,
-                Street = therapist.Street,
-                TherapistType = _repo.GetTherapistTypes().First(tt => tt.TherapistTypeId == therapist.TherapistTypeId),
-                Website = therapist.Website
-            };
+            Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _repo.GetTherapistTypes().First(tt => tt.TherapistTypeId == therapist.TherapistTypeId)); 
 
             if(_repo.TherapistExists(t)) return StatusCode(303);
             _repo.AddTherapist(t);
