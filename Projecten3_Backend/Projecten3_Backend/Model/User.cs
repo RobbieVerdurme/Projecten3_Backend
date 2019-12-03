@@ -34,12 +34,21 @@ namespace Projecten3_Backend.Model
 
         public  ICollection<Category> Categories { get; set; } = new List<Category>();
 
+        public ICollection<LeaderboardScore> LeaderboardScores { get; set; } = new List<LeaderboardScore>();
+
         #endregion
 
         #region Methods
         public void AddChallenges(List<ChallengeUser> challenges) => challenges.AddRange(challenges);
 
         public void AddTherapist(Therapist therapist) => Therapists.Add(new TherapistUser() { Therapist = therapist, TherapistId = therapist.TherapistId, User = this, UserId = this.UserId});
+
+        public void AddLeaderboardScores(List<LeaderboardScore> leaderboardScores) => leaderboardScores.AddRange(leaderboardScores);
+
+        public void RaiseScore()
+        {
+            
+        }
 
         public static UserDTO MapUserToUserDTO(User usr)
         {
