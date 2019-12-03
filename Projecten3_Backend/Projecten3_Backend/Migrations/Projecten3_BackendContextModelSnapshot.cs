@@ -15,7 +15,7 @@ namespace Projecten3_Backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -215,9 +215,13 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("UserId");
+
                     b.HasKey("ChallengeId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Challenges");
                 });
@@ -444,6 +448,10 @@ namespace Projecten3_Backend.Migrations
                     b.HasOne("Projecten3_Backend.Model.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("Projecten3_Backend.Model.User")
+                        .WithMany("ChallengesList")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Projecten3_Backend.Model.ManyToMany.ChallengeUser", b =>
