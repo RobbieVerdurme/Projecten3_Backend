@@ -156,8 +156,8 @@ namespace Projecten3_Backend.Controllers
 
             Company comp = _companyRepo.GetById(user.Company);
             if (comp == null) return BadRequest();
-            if (!_categoryRepo.CategoriesExist(user.Categories) || !_therapistRepo.TherapistsExist(user.Therapists)) return BadRequest();
-
+            if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
+            if (!_therapistRepo.TherapistsExist(user.Therapists)){ }
             User u = new User {
                 FirstName = user.FirstName,
                 FamilyName = user.FamilyName,

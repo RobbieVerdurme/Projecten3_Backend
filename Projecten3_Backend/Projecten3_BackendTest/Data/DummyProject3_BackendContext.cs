@@ -1,4 +1,5 @@
-﻿using Projecten3_Backend.Model;
+﻿using Projecten3_Backend.DTO;
+using Projecten3_Backend.Model;
 using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,20 @@ namespace Projecten3_BackendTest.Data
     public class DummyProject3_BackendContext
     {
         #region Properties
-        public Category Category { get; }
+        // Collections
+        public IEnumerable<Category> Categories { get; }
         public IEnumerable<User> Users { get; }
         public IEnumerable<Challenge> Challenges { get; }
+        public IEnumerable<ChallengeUser> ChallengesUser { get; }
         public IEnumerable<Therapist> Therapists { get; }
+        public IEnumerable<TherapistUser> TherapistUser { get; }
         public IEnumerable<Company> Companies { get; }
+
+        //DTO's
+        public AddUserDTO AddUserDTO { get; }
+        public EditUserDTO EditUserDTO { get; }
         #endregion
+
         //Init used data
         public DummyProject3_BackendContext()
         {
@@ -61,11 +70,16 @@ namespace Projecten3_BackendTest.Data
             user2.Therapists = new List<TherapistUser>() { therapistUser2 };
 
             // Init properties
-            Category = category1;
+            Categories = new[] { category1 };
             Companies = new[] { company1 };
             Challenges = new[] { challenge1, challenge2 };
             Therapists = new[] { therapist1 };
             Users = new[] { user1, user2 };
+            ChallengesUser = new[] { challengeUser1, challengeUser2 };
+
+            // Create DTO's
+            AddUserDTO = new AddUserDTO { Categories = new List<int>() { 1 }, Company = 1, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", Therapists = new List<int>() { 1 } };
+            EditUserDTO = new EditUserDTO { Categories = new List<int>() { 1 }, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", UserId = 1, Contract = new DateTime()};
         }
     }
 }
