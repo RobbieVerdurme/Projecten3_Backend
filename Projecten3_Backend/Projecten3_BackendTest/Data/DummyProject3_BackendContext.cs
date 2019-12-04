@@ -19,6 +19,7 @@ namespace Projecten3_BackendTest.Data
         public IEnumerable<TherapistUser> TherapistUser { get; }
         public IEnumerable<Company> Companies { get; }
         public IEnumerable<TherapistType> TherapistTypes { get; }
+        public IEnumerable<OpeningTimes> OpeningTimes { get; }
 
         //DTO's
         public AddUserDTO AddUserDTO { get; }
@@ -26,6 +27,7 @@ namespace Projecten3_BackendTest.Data
         public AddTherapistDTO AddTherapistDTO { get; }
         public AddTherapistTypeDTO AddTherapistTypeDTO { get; }
         public EditTherapistDTO EditTherapistDTO { get; }
+        public EditTherapistTypeDTO EditTherapistTypeDTO { get; }
         #endregion
 
         //Init used data
@@ -45,6 +47,7 @@ namespace Projecten3_BackendTest.Data
             Therapist therapist1 = new Therapist { TherapistId = 0, City = "stad", Email = "em@il.com", FirstName = "Thor", HouseNumber = 2, LastName = "Krets", PhoneNumber = "093661686", PostalCode = 9000, Street = "straat", Website = "www.test.be" };
 
             OpeningTimes openingTimes1 = new OpeningTimes { OpeningTimesId = 0, Interval = "09:00 - 18:30" };
+            OpeningTimes openingTimes2 = new OpeningTimes { OpeningTimesId = 1, Interval = "09:00 - 18:30" };
 
             TherapistType therapistType1 = new TherapistType { TherapistTypeId = 0, Type = "therapisttype" };
 
@@ -81,13 +84,15 @@ namespace Projecten3_BackendTest.Data
             Users = new[] { user1, user2 };
             ChallengesUser = new[] { challengeUser1, challengeUser2 };
             TherapistTypes = new[] { therapistType1 };
+            OpeningTimes = new[] { openingTimes1, openingTimes2, openingTimes2, openingTimes2, openingTimes2, openingTimes2, openingTimes2 };
 
             // Create DTO's
             AddUserDTO = new AddUserDTO { Categories = new List<int>() { 1 }, Company = 1, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", Therapists = new List<int>() { 1 } };
             EditUserDTO = new EditUserDTO { Categories = new List<int>() { 1 }, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", UserId = 1, Contract = new DateTime()};
             AddTherapistDTO = new AddTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 9000, Street = "test", TherapistTypeId = 0, Website = "test" };
             AddTherapistTypeDTO = new AddTherapistTypeDTO { Categories = new List<int>() { 1 }, Type = "test" };
-            EditTherapistDTO = new EditTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 5000, Street = "test", TherapistId = 0, Website = "test", TherapistTypeId = 0, Clients = new List<int>() { 1 }, OpeningTimes = new List<string>() { "test1" } };
+            EditTherapistDTO = new EditTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 5000, Street = "test", TherapistId = 0, Website = "test", TherapistTypeId = 0, Clients = new List<int>() { 1 }, OpeningTimes = new List<string>() { "test1", "test1", "test1", "test1", "test1", "test1", "test1" } };
+            EditTherapistTypeDTO = new EditTherapistTypeDTO { Id = 0, Categories = new List<int>() { 1 }, Type = "test" };
         }
     }
 }
