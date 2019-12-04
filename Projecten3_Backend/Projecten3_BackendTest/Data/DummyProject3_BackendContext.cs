@@ -33,6 +33,9 @@ namespace Projecten3_BackendTest.Data
         public AddChallengeDTO AddChallengeDTO { get; }
         public CompleteChallengeDTO CompleteChallengeDTO { get; }
         public ChallengesUserDTO ChallengesUserDTO { get; }
+
+        //Objects
+        public Category Category { get; }
         #endregion
 
         //Init used data
@@ -82,6 +85,7 @@ namespace Projecten3_BackendTest.Data
             user2.Therapists = new List<TherapistUser>() { therapistUser2 };
 
             // Init properties
+            Category = category1;
             Categories = new[] { category1 };
             Companies = new[] { company1 };
             Challenges = new[] { challenge1, challenge2 };
