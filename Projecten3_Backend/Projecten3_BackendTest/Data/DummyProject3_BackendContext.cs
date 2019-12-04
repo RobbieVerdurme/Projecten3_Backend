@@ -28,6 +28,8 @@ namespace Projecten3_BackendTest.Data
         public AddTherapistTypeDTO AddTherapistTypeDTO { get; }
         public EditTherapistDTO EditTherapistDTO { get; }
         public EditTherapistTypeDTO EditTherapistTypeDTO { get; }
+        public AddCompanyDTO AddCompanyDTO { get; }
+        public EditCompanyDTO EditCompanyDTO { get; }
         #endregion
 
         //Init used data
@@ -93,6 +95,8 @@ namespace Projecten3_BackendTest.Data
             AddTherapistTypeDTO = new AddTherapistTypeDTO { Categories = new List<int>() { 1 }, Type = "test" };
             EditTherapistDTO = new EditTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 5000, Street = "test", TherapistId = 0, Website = "test", TherapistTypeId = 0, Clients = new List<int>() { 1 }, OpeningTimes = new List<string>() { "test1", "test1", "test1", "test1", "test1", "test1", "test1" } };
             EditTherapistTypeDTO = new EditTherapistTypeDTO { Id = 0, Categories = new List<int>() { 1 }, Type = "test" };
+            AddCompanyDTO = new AddCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test" };
+            EditCompanyDTO = new EditCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test", CompanyId = 0, CompanyMembers = new List<User>() { user1, user2 } };
         }
     }
 }

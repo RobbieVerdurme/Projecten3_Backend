@@ -63,6 +63,40 @@ namespace Projecten3_Backend.Model
                 return null;
             };
         }
+
+        public static Company MapAddCompanyDTOToCompany(AddCompanyDTO addCompanyDTO)
+        {
+            return new Company
+            {
+                City = addCompanyDTO.City,
+                Country = addCompanyDTO.Country,
+                HouseNumber = addCompanyDTO.HouseNumber,
+                Mail = addCompanyDTO.Mail,
+                Name = addCompanyDTO.Name,
+                Phone = addCompanyDTO.Phone,
+                PostalCode = addCompanyDTO.PostalCode,
+                Site = addCompanyDTO.Site,
+                Street = addCompanyDTO.Street,
+                Contract = addCompanyDTO.Contract
+            };
+        }
+
+        public static Company MapEditCompanyDTOToCompany(EditCompanyDTO editCompanyDTO, Company company)
+        {
+            company.CompanyId = editCompanyDTO.CompanyId;
+            company.City = editCompanyDTO.City;
+            company.CompanyMembers = editCompanyDTO.CompanyMembers;
+            company.Contract = editCompanyDTO.Contract;
+            company.Country = editCompanyDTO.Country;
+            company.HouseNumber = editCompanyDTO.HouseNumber;
+            company.Mail = editCompanyDTO.Mail;
+            company.Name = editCompanyDTO.Name;
+            company.Phone = editCompanyDTO.Phone;
+            company.PostalCode = editCompanyDTO.PostalCode;
+            company.Site = editCompanyDTO.Site;
+            company.Street = editCompanyDTO.Street;
+            return company;
+        }
         #endregion
     }
 }

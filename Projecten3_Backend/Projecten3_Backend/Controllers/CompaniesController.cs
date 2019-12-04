@@ -76,18 +76,7 @@ namespace Projecten3_Backend.Controllers
                 || string.IsNullOrEmpty(addCompany.Site)) return BadRequest();
             if (addCompany.PostalCode < 1000 || 9999 < addCompany.PostalCode) return BadRequest();//Belgian postal codes
             if (addCompany.HouseNumber < 1 || 999 < addCompany.HouseNumber) return BadRequest();//House numbers
-            Company company = new Company {
-                City = addCompany.City,
-                Country = addCompany.Country,
-                HouseNumber = addCompany.HouseNumber,
-                Mail = addCompany.Mail,
-                Name = addCompany.Name,
-                Phone = addCompany.Phone,
-                PostalCode = addCompany.PostalCode,
-                Site = addCompany.Site,
-                Street = addCompany.Street,
-                Contract = addCompany.Contract
-            };
+            Company company = Company.MapAddCompanyDTOToCompany(addCompany);
 
             if (_companyRepo.CompanyExists(company)) return StatusCode(303);
             _companyRepo.AddCompany(company);
@@ -128,20 +117,8 @@ namespace Projecten3_Backend.Controllers
             if(companyFromDatabase == null)
             {
                 return StatusCode(404);
-            }            
-                companyFromDatabase.CompanyId = company.CompanyId;
-                companyFromDatabase.City = company.City;
-                companyFromDatabase.CompanyMembers = company.CompanyMembers;
-                companyFromDatabase.Contract = company.Contract;
-                companyFromDatabase.Country = company.Country;
-                companyFromDatabase.HouseNumber = company.HouseNumber;
-                companyFromDatabase.Mail = company.Mail;
-                companyFromDatabase.Name = company.Name;
-                companyFromDatabase.Phone = company.Phone;
-                companyFromDatabase.PostalCode = company.PostalCode;
-                companyFromDatabase.Site = company.Site;
-                companyFromDatabase.Street = company.Street;
-
+            }
+            companyFromDatabase = Company.MapEditCompanyDTOToCompany(company, companyFromDatabase);
             
             try
             {
