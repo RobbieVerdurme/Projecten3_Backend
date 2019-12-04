@@ -74,12 +74,8 @@ namespace Projecten3_Backend.Controllers
             if (dto == null || dto.Title == null || dto.Description == null) return BadRequest();
             Category category = _categoryRepository.GetById(dto.CategoryId);
             if (category == null) return BadRequest();
-            Challenge challenge = new Challenge() {
-                Title = dto.Title,
-                Description = dto.Description,
-                ChallengeImage = dto.ChallengeImage,
-                Category = category
-            };
+            Challenge challenge = Model.Challenge.MapAddChallengeDTOToChallenge(dto);
+            challenge.Category = category;
             //Already exists -> return a 303 See Other StatusCode
             if (_repo.ChallengeExists(challenge)) return StatusCode(303);
             try {

@@ -30,6 +30,9 @@ namespace Projecten3_BackendTest.Data
         public EditTherapistTypeDTO EditTherapistTypeDTO { get; }
         public AddCompanyDTO AddCompanyDTO { get; }
         public EditCompanyDTO EditCompanyDTO { get; }
+        public AddChallengeDTO AddChallengeDTO { get; }
+        public CompleteChallengeDTO CompleteChallengeDTO { get; }
+        public ChallengesUserDTO ChallengesUserDTO { get; }
         #endregion
 
         //Init used data
@@ -54,8 +57,8 @@ namespace Projecten3_BackendTest.Data
             TherapistType therapistType1 = new TherapistType { TherapistTypeId = 0, Type = "therapisttype" };
 
             // Create many to many objects
-            ChallengeUser challengeUser1 = new ChallengeUser { Challenge = challenge1, ChallengeId = challenge1.ChallengeId, ChallengeUserId = 0, CompletedDate = new DateTime(), User = user1, UserId = user1.UserId };
-            ChallengeUser challengeUser2 = new ChallengeUser { Challenge = challenge2, ChallengeId = challenge2.ChallengeId, ChallengeUserId = 1, CompletedDate = new DateTime(), User = user1, UserId = user1.UserId };
+            ChallengeUser challengeUser1 = new ChallengeUser { Challenge = challenge1, ChallengeId = challenge1.ChallengeId, ChallengeUserId = 0, User = user1, UserId = user1.UserId };
+            ChallengeUser challengeUser2 = new ChallengeUser { Challenge = challenge2, ChallengeId = challenge2.ChallengeId, ChallengeUserId = 1, User = user1, UserId = user1.UserId };
 
             TherapistUser therapistUser1 = new TherapistUser { TherapistUserId = 0, Therapist = therapist1, TherapistId = therapist1.TherapistId, User = user1, UserId = user1.UserId };
             TherapistUser therapistUser2 = new TherapistUser { TherapistUserId = 1, Therapist = therapist1, TherapistId = therapist1.TherapistId, User = user2, UserId = user2.UserId };
@@ -97,6 +100,9 @@ namespace Projecten3_BackendTest.Data
             EditTherapistTypeDTO = new EditTherapistTypeDTO { Id = 0, Categories = new List<int>() { 1 }, Type = "test" };
             AddCompanyDTO = new AddCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test" };
             EditCompanyDTO = new EditCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test", CompanyId = 0, CompanyMembers = new List<User>() { user1, user2 } };
+            AddChallengeDTO = new AddChallengeDTO { CategoryId = 0, ChallengeImage = "test", Description = "test", Title = "test" };
+            CompleteChallengeDTO = new CompleteChallengeDTO { ChallengeID = 0, UserID = 0 };
+            ChallengesUserDTO = new ChallengesUserDTO { ChallengeIds = new List<int>() { 0 }, UserId = 0 };
         }
     }
 }
