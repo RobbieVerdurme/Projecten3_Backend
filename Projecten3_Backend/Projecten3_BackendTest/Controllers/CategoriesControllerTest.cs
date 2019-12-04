@@ -12,7 +12,7 @@ using Projecten3_Backend.Model;
 
 namespace Projecten3_BackendTest.Controllers
 {
-    public class CategoriesControllerTest
+    public class CategoriesControllerTest : ControllerBase
     {
         #region Properties
         private readonly CategoriesController _categoriesController;

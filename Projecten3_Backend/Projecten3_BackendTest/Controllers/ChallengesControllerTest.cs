@@ -14,7 +14,7 @@ using Projecten3_Backend.Model.ManyToMany;
 
 namespace Projecten3_BackendTest.Controllers
 {
-    public class ChallengesControllerTest
+    public class ChallengesControllerTest : ControllerBase
     {
         #region Properties
         private readonly ChallengesController _challengesController;

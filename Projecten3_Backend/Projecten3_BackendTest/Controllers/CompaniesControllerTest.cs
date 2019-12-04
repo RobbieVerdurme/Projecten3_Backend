@@ -13,7 +13,7 @@ using Projecten3_Backend.DTO;
 
 namespace Projecten3_BackendTest.Controllers
 {
-    public class CompaniesControllerTest
+    public class CompaniesControllerTest : ControllerBase
     {
         #region Properties
         private readonly Mock<IUserRepository> _userRepository;

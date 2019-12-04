@@ -13,7 +13,7 @@ using Projecten3_Backend.DTO;
 
 namespace Projecten3_BackendTest.Controllers
 {
-    public class TherapistsControllerTest
+    public class TherapistsControllerTest : ControllerBase
     {
         #region Properties
         private readonly TherapistsController _therapistsController;
