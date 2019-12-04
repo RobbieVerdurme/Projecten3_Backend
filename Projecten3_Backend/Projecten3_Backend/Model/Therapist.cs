@@ -111,6 +111,22 @@ namespace Projecten3_Backend.Model
                 Website = therapist.Website
             };
         }
+
+        public static Therapist MapEditTherapistDTOToTherapist(EditTherapistDTO therapist, Therapist edited, List<OpeningTimes> openingTimes, ICollection<TherapistUser> therapistUsers)
+        {
+            edited.City = therapist.City;
+            edited.Clients = therapistUsers;
+            edited.Email = therapist.Email;
+            edited.FirstName = therapist.FirstName;
+            edited.HouseNumber = therapist.HouseNumber;
+            edited.LastName = therapist.LastName;
+            edited.OpeningTimes = openingTimes;
+            edited.PhoneNumber = therapist.PhoneNumber;
+            edited.PostalCode = therapist.PostalCode;
+            edited.Street = therapist.Street;
+            edited.Website = therapist.Website;
+            return edited;
+        }
         #endregion
     }
 }
