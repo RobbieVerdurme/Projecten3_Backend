@@ -149,7 +149,7 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
 
-            return Ok();
+            return Ok(challenge);
         }
 
         /// <summary>
