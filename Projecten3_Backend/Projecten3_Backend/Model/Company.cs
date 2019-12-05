@@ -35,7 +35,7 @@ namespace Projecten3_Backend.Model
         #region Collections
         public IEnumerable<User> CompanyMembers { get; set; } = new List<User>();
         #endregion
-
+          
         #region methods
         public static CompanyDTO MapCompanyToCompanyDTO(Company cmp)
         {

@@ -44,7 +44,6 @@ namespace Projecten3_Backend.Data
                 //TherapistType
                 TherapistType thType = new TherapistType() { Type = "", Categories = new List<Category> { c } };
                 _dbContext.Add(thType);
-
                 //Therapist
                 Therapist th = new Therapist() {FirstName = "Test",LastName = "Th", HouseNumber = 1, PhoneNumber = "", PostalCode = 9000, Street = "", Website = "", City = "Gent", Email = "TestTh@gmail.com", TherapistType = thType};
                 await CreateUser("TestTh",th.Email, "P@ssword123", UserRole.THERAPIST);

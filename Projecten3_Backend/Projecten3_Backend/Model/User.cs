@@ -39,12 +39,42 @@ namespace Projecten3_Backend.Model
 
         public ICollection<Challenge> ChallengesList => Challenges.Select(ch => ch.Challenge).ToList();
 
+        public ICollection<LeaderboardScore> LeaderboardScores { get; set; } = new List<LeaderboardScore>();
+
         #endregion
 
         #region Methods
         public void AddChallenges(List<ChallengeUser> challenges) => challenges.AddRange(challenges);
 
         public void AddTherapist(Therapist therapist) => Therapists.Add(new TherapistUser() { Therapist = therapist, TherapistId = therapist.TherapistId, User = this, UserId = this.UserId});
+
+        public void AddLeaderboardScores(List<LeaderboardScore> leaderboardScores) => leaderboardScores.AddRange(leaderboardScores);
+
+        public void RaiseLeaderboardScore()
+        {
+            DateTime currentDate = DateTime.Now;
+            if(LeaderboardScores.Where(c => c.Date.Year==currentDate.Year && c.Date.Month==currentDate.Month).FirstOrDefault() != null)
+            {
+                LeaderboardScores.Where(c => c.Date.Year == currentDate.Year && c.Date.Month == currentDate.Month).FirstOrDefault().RaiseScore();
+            }
+            else
+            {
+                LeaderboardScores.Add(new LeaderboardScore(DateTime.Now, 1));
+            }
+        }
+
+        public int GetCurrentLeaderboardScore()
+        {
+            DateTime currentDate = DateTime.Now;
+            if (LeaderboardScores.Where(c => c.Date.Year == currentDate.Year && c.Date.Month == currentDate.Month).FirstOrDefault() != null)
+            {
+                return LeaderboardScores.Where(c => c.Date.Year == currentDate.Year && c.Date.Month == currentDate.Month).FirstOrDefault().Score;
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         public static UserDTO MapUserToUserDTO(User usr)
         {
@@ -93,6 +123,16 @@ namespace Projecten3_Backend.Model
                 return null;
             }
         }
+  
+          public static LeaderboardDTO MapUserToLeaderboardDTO(User usr)
+        {
+            if (usr != null)
+            {
+                LeaderboardDTO leaderboardEntry = new LeaderboardDTO()
+                                      Score = usr.GetCurrentLeaderboardScore()
+                };
+                return leaderboardEntry;
+          }
         #endregion
     }
 }

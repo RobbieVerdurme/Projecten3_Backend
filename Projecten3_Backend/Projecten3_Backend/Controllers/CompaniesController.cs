@@ -147,7 +147,6 @@ namespace Projecten3_Backend.Controllers
         public IActionResult DeleteCompany(int id)
         {
             if (_companyRepo.GetById(id) == null) return NotFound();
-
             try
             {
                 _companyRepo.DeleteCompany(id);
@@ -158,6 +157,29 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
             return Ok();
+        }
+        
+                //leaderboard
+        /// <summary>
+        /// Get leaderboard
+        /// </summary>
+        /// <param CompanyId="id"></param>
+        /// <returns>
+        /// HTTP 404 if the company was not found.
+        /// HTTP 500.
+        /// HTTP 200.
+        /// </returns>
+        [Route("api/company/leaderboard/{id:int}")]
+        [HttpGet]
+        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        public IActionResult GetLeaderboard(int id)
+        {
+            var company = _companyRepo.GetById(id);
+            if (company == null)
+            {
+                return NotFound();
+            }
+            return Ok(_userRepo.GetUsers().Where(u => u.Company.CompanyId == id).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));
         }
         #endregion
     }
