@@ -164,7 +164,7 @@ namespace Projecten3_BackendTest.Controllers
             _categoryRepository.Setup(cr => cr.CategoriesExist(editTherapistTypeDTO.Categories)).Returns(true);
             _therapistRepository.Setup(tr => tr.GetTherapistType(editTherapistTypeDTO.Id)).Returns(_dummyData.TherapistTypes.First);
             _categoryRepository.Setup(cr => cr.GetCategoriesById(editTherapistTypeDTO.Categories)).Returns(_dummyData.Categories);
-            _therapistRepository.Setup(tr => tr.TherapistTypeExists(new TherapistType { TherapistTypeId = 0, Type = "therapisttype" })).Returns(true);
+            _therapistRepository.Setup(tr => tr.TherapistTypeExists(It.IsAny<TherapistType>())).Returns(true);
             _therapistRepository.Setup(tr => tr.EditTherapistType(It.IsAny<TherapistType>()));
             var okResult = _therapistsController.EditTherapistType(editTherapistTypeDTO) as OkResult;
             Assert.NotNull(okResult);
@@ -176,9 +176,12 @@ namespace Projecten3_BackendTest.Controllers
         public void EditTherapistType_ReturnsBadRequest()
         {
             EditTherapistTypeDTO editTherapistTypeDTO = _dummyData.EditTherapistTypeDTO;
+            _therapistRepository.Setup(tr => tr.GetTherapistType(0)).Returns(_dummyData.TherapistTypes.First);
             _categoryRepository.Setup(cr => cr.CategoriesExist(editTherapistTypeDTO.Categories)).Returns(false);
-            var okResult = _therapistsController.EditTherapistType(editTherapistTypeDTO) as BadRequestResult;
-            Assert.IsType<BadRequestResult>(okResult);
+            _categoryRepository.Setup(cr => cr.GetCategoriesById(editTherapistTypeDTO.Categories)).Returns(_dummyData.Categories);
+            var okResult = _therapistsController.EditTherapistType(editTherapistTypeDTO) as StatusCodeResult;
+            Assert.NotNull(okResult);
+            Assert.Equal(303, okResult.StatusCode);
         }
         #endregion
     }

@@ -57,7 +57,7 @@ namespace Projecten3_BackendTest.Data
             OpeningTimes openingTimes1 = new OpeningTimes { OpeningTimesId = 0, Interval = "09:00 - 18:30" };
             OpeningTimes openingTimes2 = new OpeningTimes { OpeningTimesId = 1, Interval = "09:00 - 18:30" };
 
-            TherapistType therapistType1 = new TherapistType { TherapistTypeId = 0, Type = "therapisttype" };
+            TherapistType therapistType1 = new TherapistType { TherapistTypeId = 0, Type = "therapisttype",  };
 
             // Create many to many objects
             ChallengeUser challengeUser1 = new ChallengeUser { Challenge = challenge1, ChallengeId = challenge1.ChallengeId, ChallengeUserId = 0, User = user1, UserId = user1.UserId };
@@ -101,7 +101,7 @@ namespace Projecten3_BackendTest.Data
             AddTherapistDTO = new AddTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 9000, Street = "test", TherapistTypeId = 0, Website = "test" };
             AddTherapistTypeDTO = new AddTherapistTypeDTO { Categories = new List<int>() { 1 }, Type = "test" };
             EditTherapistDTO = new EditTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 5000, Street = "test", TherapistId = 0, Website = "test", TherapistTypeId = 0, Clients = new List<int>() { 1 }, OpeningTimes = new List<string>() { "test1", "test1", "test1", "test1", "test1", "test1", "test1" } };
-            EditTherapistTypeDTO = new EditTherapistTypeDTO { Id = 0, Categories = new List<int>() { 1 }, Type = "test" };
+            EditTherapistTypeDTO = new EditTherapistTypeDTO { Id = 0, Categories = new List<int>() { 0 }, Type = "therapisttype" };
             AddCompanyDTO = new AddCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test" };
             EditCompanyDTO = new EditCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test", CompanyId = 0, CompanyMembers = new List<User>() { user1, user2 } };
             AddChallengeDTO = new AddChallengeDTO { CategoryId = 0, ChallengeImage = "test", Description = "test", Title = "test" };

@@ -198,13 +198,13 @@ namespace Projecten3_Backend.Controllers
         [Route("api/therapist/type/edit")]
         [HttpPut]
         public IActionResult EditTherapistType(EditTherapistTypeDTO edit) {
-            if (edit == null || string.IsNullOrEmpty(edit.Type) || _categoryRepository.CategoriesExist(edit.Categories)) return BadRequest();
+            if (edit == null || string.IsNullOrEmpty(edit.Type)) return BadRequest();
 
             TherapistType therapistType = _repo.GetTherapistType(edit.Id);
             therapistType.Categories = new List<Category>(_categoryRepository.GetCategoriesById(edit.Categories));
             therapistType.Type = edit.Type;
 
-            if (_repo.TherapistTypeExists(therapistType)) return StatusCode(303);
+            if (!_repo.TherapistTypeExists(therapistType)) return StatusCode(303);
             _repo.EditTherapistType(therapistType);
             try
             {
