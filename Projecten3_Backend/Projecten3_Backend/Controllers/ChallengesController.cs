@@ -128,6 +128,7 @@ namespace Projecten3_Backend.Controllers
             try
             {
                 _repo.CompleteChallenge(challenge);
+                _userRepo.RaiseScore(complete.UserID);
                 _repo.SaveChanges();
             }
             catch (Exception) {

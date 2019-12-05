@@ -44,6 +44,11 @@ namespace Projecten3_Backend.Data.Repository
             return _users.FirstOrDefault(u => u.UserId == id);
         }
 
+        public void RaiseScore(int id)
+        {
+            _users.FirstOrDefault(u => u.UserId == id).RaiseScore();
+        }
+
         public IEnumerable<User> GetUsers()
         {
             return _users.ToList();

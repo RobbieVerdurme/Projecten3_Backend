@@ -185,5 +185,27 @@ namespace Projecten3_Backend.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Get leaderboard
+        /// </summary>
+        /// <param CompanyId="id"></param>
+        /// <returns>
+        /// HTTP 404 if the company was not found.
+        /// HTTP 500.
+        /// HTTP 200.
+        /// </returns>
+        [Route("api/users/leaderboard/{id:int}")]
+        [HttpGet]
+        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        public IActionResult GetLeaderboard(int id)
+        {
+            var company = _companyRepo.GetById(id);
+            if (company == null)
+            {
+                return NotFound();
+            }
+                return Ok(_userRepo.GetUsers().Where(u => u.Company.CompanyId == id).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));           
+        }
     }
 }

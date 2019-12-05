@@ -47,7 +47,28 @@ namespace Projecten3_Backend.Model
 
         public void RaiseScore()
         {
-            
+            DateTime currentDate = DateTime.Now;
+            if(LeaderboardScores.Where(c => c.Date.Year==currentDate.Year && c.Date.Month==currentDate.Month).FirstOrDefault() != null)
+            {
+                LeaderboardScores.Where(c => c.Date.Year == currentDate.Year && c.Date.Month == currentDate.Month).FirstOrDefault().RaiseScore();
+            }
+            else
+            {
+                LeaderboardScores.Add(new LeaderboardScore(DateTime.Now, 1));
+            }
+        }
+
+        public int GetCurrentScore()
+        {
+            DateTime currentDate = DateTime.Now;
+            if (LeaderboardScores.Where(c => c.Date.Year == currentDate.Year && c.Date.Month == currentDate.Month).FirstOrDefault() != null)
+            {
+                return LeaderboardScores.Where(c => c.Date.Year == currentDate.Year && c.Date.Month == currentDate.Month).FirstOrDefault().Score;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public static UserDTO MapUserToUserDTO(User usr)
@@ -62,6 +83,26 @@ namespace Projecten3_Backend.Model
                 };
 
                 return user;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public static LeaderboardDTO MapUserToLeaderboardDTO(User usr)
+        {
+            if (usr != null)
+            {
+                LeaderboardDTO leaderboardEntry = new LeaderboardDTO()
+                {
+                    UserId = usr.UserId,
+                    FirstName = usr.FirstName,
+                    FamilyName = usr.FamilyName,
+                    Score = usr.GetCurrentScore()
+                };
+                return leaderboardEntry;
             }
             else
             {
