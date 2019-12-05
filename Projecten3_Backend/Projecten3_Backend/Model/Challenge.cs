@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projecten3_Backend.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,18 @@ namespace Projecten3_Backend.Model
             return HashCode.Combine(Title, Description, Category);
         }
 
+        #endregion
+
+        #region Methodes
+        public static Challenge MapAddChallengeDTOToChallenge(AddChallengeDTO addChallengeDTO)
+        {
+            return new Challenge()
+            {
+                Title = addChallengeDTO.Title,
+                Description = addChallengeDTO.Description,
+                ChallengeImage = addChallengeDTO.ChallengeImage
+            };
+        }
         #endregion
     }
 }

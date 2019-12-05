@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Projecten3_Backend.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -199,7 +199,8 @@ namespace Projecten3_Backend.Migrations
                     Email = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     CompanyId = table.Column<int>(nullable: true),
-                    Contract = table.Column<DateTime>(nullable: false)
+                    Contract = table.Column<DateTime>(nullable: false),
+                    ExperiencePoints = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -320,8 +321,10 @@ namespace Projecten3_Backend.Migrations
                     ChallengeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
+                    ChallengeImage = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true)
+                    CategoryId = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -331,6 +334,12 @@ namespace Projecten3_Backend.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Challenges_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -414,6 +423,11 @@ namespace Projecten3_Backend.Migrations
                 name: "IX_Challenges_CategoryId",
                 table: "Challenges",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Challenges_UserId",
+                table: "Challenges",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChallengeUser_ChallengeId",
