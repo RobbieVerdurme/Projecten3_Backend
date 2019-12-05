@@ -124,14 +124,20 @@ namespace Projecten3_Backend.Model
             }
         }
   
-          public static LeaderboardDTO MapUserToLeaderboardDTO(User usr)
+        public static LeaderboardDTO MapUserToLeaderboardDTO(User usr)
         {
             if (usr != null)
             {
                 LeaderboardDTO leaderboardEntry = new LeaderboardDTO()
-                                      Score = usr.GetCurrentLeaderboardScore()
+                {
+                    UserId = usr.UserId,
+                    FamilyName = usr.FamilyName,
+                    FirstName = usr.FirstName,
+                    Score = usr.GetCurrentLeaderboardScore()
                 };
                 return leaderboardEntry;
+            }
+            return null;
           }
         #endregion
     }
