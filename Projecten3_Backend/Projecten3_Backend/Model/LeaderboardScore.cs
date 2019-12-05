@@ -9,11 +9,13 @@ namespace Projecten3_Backend.Model
     public class LeaderboardScore
     {        
         #region Properties
+        public int LeaderboardScoreId { get; set; }
         public DateTime Date { get; set; }
         public int Score { get; set; } = 0;
         #endregion
 
         #region Constructor
+        public LeaderboardScore() { }
         public LeaderboardScore(DateTime now, int score)
         {
             this.Date = now;

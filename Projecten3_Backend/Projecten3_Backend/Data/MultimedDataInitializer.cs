@@ -30,12 +30,18 @@ namespace Projecten3_Backend.Data
             {
                 await CreateRoles();
 
+                
+
                 #region Users
                 //Multimeduser
                 await CreateUser("SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
 
                 //therapist
+                User usr = new User() { FamilyName = "test", Email = "test@teest" };
+                _dbContext.User.Add(usr);
 
+                Company c = new Company { Name = "textC", CompanyMembers = new List<User> {usr } };
+                _dbContext.Company.Add(c);
                 #endregion
 
                 #region Save changes

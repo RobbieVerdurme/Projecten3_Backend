@@ -128,7 +128,8 @@ namespace Projecten3_Backend.Controllers
             try
             {
                 _repo.CompleteChallenge(challenge);
-                _userRepo.RaiseScore(complete.UserID);
+                _userRepo.RaiseLeaderboardScore(complete.UserID);
+                _userRepo.SaveChanges();
                 _repo.SaveChanges();
             }
             catch (Exception) {
@@ -137,9 +138,6 @@ namespace Projecten3_Backend.Controllers
 
             return Ok();
         }
-
-
-
 
         //Edit
 
