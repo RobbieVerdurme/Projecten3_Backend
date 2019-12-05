@@ -10,8 +10,8 @@ using Projecten3_Backend.Models;
 namespace Projecten3_Backend.Migrations
 {
     [DbContext(typeof(Projecten3_BackendContext))]
-    [Migration("20191103164915_Initial")]
-    partial class Initial
+    [Migration("20191203112912_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -211,13 +211,19 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<int?>("CategoryId");
 
+                    b.Property<string>("ChallengeImage");
+
                     b.Property<string>("Description");
 
                     b.Property<string>("Title");
 
+                    b.Property<int?>("UserId");
+
                     b.HasKey("ChallengeId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Challenges");
                 });
@@ -230,9 +236,11 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("City");
 
+                    b.Property<DateTime>("Contract");
+
                     b.Property<string>("Country");
 
-                    b.Property<string>("HouseNumber");
+                    b.Property<int>("HouseNumber");
 
                     b.Property<string>("Mail");
 
@@ -240,7 +248,7 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("Phone");
 
-                    b.Property<string>("PostalCode");
+                    b.Property<int>("PostalCode");
 
                     b.Property<string>("Site");
 
@@ -291,29 +299,21 @@ namespace Projecten3_Backend.Migrations
                     b.ToTable("TherapistUser");
                 });
 
-            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTime", b =>
+            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTimes", b =>
                 {
-                    b.Property<int>("OpeningTimeId")
+                    b.Property<int>("OpeningTimesId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClosingHourAfternoon");
-
-                    b.Property<string>("ClosingHourMorning");
-
-                    b.Property<int>("Day");
-
-                    b.Property<string>("OpeningHourAfternoon");
-
-                    b.Property<string>("OpeningHourMorning");
+                    b.Property<string>("Interval");
 
                     b.Property<int?>("TherapistId");
 
-                    b.HasKey("OpeningTimeId");
+                    b.HasKey("OpeningTimesId");
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("OpeningTime");
+                    b.ToTable("OpeningTimes");
                 });
 
             modelBuilder.Entity("Projecten3_Backend.Model.Therapist", b =>
@@ -328,13 +328,13 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<string>("FirstName");
 
-                    b.Property<string>("HouseNumber");
+                    b.Property<int>("HouseNumber");
 
                     b.Property<string>("LastName");
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<string>("PostalCode");
+                    b.Property<int>("PostalCode");
 
                     b.Property<string>("Street");
 
@@ -370,7 +370,11 @@ namespace Projecten3_Backend.Migrations
 
                     b.Property<int?>("CompanyId");
 
+                    b.Property<DateTime>("Contract");
+
                     b.Property<string>("Email");
+
+                    b.Property<int>("ExperiencePoints");
 
                     b.Property<string>("FamilyName");
 
@@ -446,6 +450,10 @@ namespace Projecten3_Backend.Migrations
                     b.HasOne("Projecten3_Backend.Model.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("Projecten3_Backend.Model.User")
+                        .WithMany("ChallengesList")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Projecten3_Backend.Model.ManyToMany.ChallengeUser", b =>
@@ -474,7 +482,7 @@ namespace Projecten3_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTime", b =>
+            modelBuilder.Entity("Projecten3_Backend.Model.OpeningTimes", b =>
                 {
                     b.HasOne("Projecten3_Backend.Model.Therapist")
                         .WithMany("OpeningTimes")

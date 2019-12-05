@@ -26,5 +26,9 @@ namespace Projecten3_Backend.Data.IRepository
         bool UserExists(User u);
 
         bool UsersExist(IList<int> ids);
+
+        void AddExp(User usr);
+
+        IEnumerable<Therapist> GetUserTherapists(int id);
     }
 }

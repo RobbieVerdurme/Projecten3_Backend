@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Projecten3_Backend.Controllers
-{
+{    
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -19,16 +21,17 @@ namespace Projecten3_Backend.Controllers
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICompanyRepository _companyRepo;
         private readonly ITherapistRepository _therapistRepo;
+        private readonly IChallengeRepository _challengeRepo;
         #endregion
 
         #region ctor
-        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo)
+        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
         {
             _userRepo = userRepository;
             _categoryRepo = categoryRepository;
             _companyRepo = companyRepo;
             _therapistRepo = therapistRepo;
-            
+            _challengeRepo = challengeRepo;
         }
         #endregion
 
@@ -41,6 +44,29 @@ namespace Projecten3_Backend.Controllers
 
         /// <summary>
         /// Get a specific user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// HTTP 404 if not found.
+        /// HTTP 200 otherwise.
+        /// </returns>
+        [Route("api/users/details/{id:int}")]
+        [HttpGet]
+        public IActionResult GetUserWithChallenges(int id)
+        {
+            var user = _userRepo.GetById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            List<ChallengesOfUserDTO> challenges = _challengeRepo.GetUserChallenges(id).Select(c => ChallengeUser.MapToChallengesOfUserDTO(c)).ToList();
+
+            return Ok(Model.User.MapUserToUserWithChallengesDTO(user, challenges));
+        }
+
+        /// <summary>
+        /// Get a specific user with it's challenges
         /// </summary>
         /// <param name="id"></param>
         /// <returns>
@@ -93,6 +119,7 @@ namespace Projecten3_Backend.Controllers
             u.Email = user.Email;
             u.Phone = user.Phone;
             u.Categories = categories;
+            u.Contract = user.Contract;
             
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
@@ -129,15 +156,16 @@ namespace Projecten3_Backend.Controllers
 
             Company comp = _companyRepo.GetById(user.Company);
             if (comp == null) return BadRequest();
-            if (!_categoryRepo.CategoriesExist(user.Categories) || !_therapistRepo.TherapistsExist(user.Therapists)) return BadRequest();
-
+            if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
+            if (!_therapistRepo.TherapistsExist(user.Therapists)){ }
             User u = new User {
                 FirstName = user.FirstName,
                 FamilyName = user.FamilyName,
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories))
+                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories)),
+                Contract = comp.Contract
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
@@ -184,6 +212,33 @@ namespace Projecten3_Backend.Controllers
             }
 
             return Ok();
+        }
+
+        /// <summary>
+        /// get the therapist list from user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// a list of therapists
+        /// </returns>
+        [Route("api/users/therapist/{id}")]
+        [HttpGet]
+        public IActionResult GetTherapistUser(int id)
+        {
+            var user = _userRepo.GetById(id);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                IEnumerable<Therapist> th = _userRepo.GetUserTherapists(id);
+                return Ok(th.Select(t => Therapist.MapTherapistToTherapistDTO(t)));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

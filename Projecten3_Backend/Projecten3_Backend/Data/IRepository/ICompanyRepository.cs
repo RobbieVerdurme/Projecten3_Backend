@@ -18,7 +18,7 @@ namespace Projecten3_Backend.Data.IRepository
 
         void UpdateCompany(Company company);
 
-        void DeleteCompany(Company company);
+        void DeleteCompany(int id);
 
         void SaveChanges();
         void AddEmployees(Company company, IList<int> employees);

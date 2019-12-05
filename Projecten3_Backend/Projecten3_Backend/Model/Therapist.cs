@@ -1,4 +1,5 @@
-﻿using Projecten3_Backend.Model.ManyToMany;
+﻿using Projecten3_Backend.DTO;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,56 +83,50 @@ namespace Projecten3_Backend.Model
             return false;
         }
 
-        //public override bool Equals(object obj)
-        //{
-        //    var therapist = obj as Therapist;
-        //    return therapist != null &&
-        //           FirstName == therapist.FirstName &&
-        //           LastName == therapist.LastName &&
-        //           Email == therapist.Email &&
-        //           PhoneNumber == therapist.PhoneNumber &&
-        //           Website == therapist.Website &&
-        //           Street == therapist.Street &&
-        //           HouseNumber == therapist.HouseNumber &&
-        //           PostalCode == therapist.PostalCode &&
-        //           City == therapist.City &&
-        //           EqualityComparer<TherapistType>.Default.Equals(TherapistType, therapist.TherapistType);
-        //}
+        public static TherapistDTO MapTherapistToTherapistDTO(Therapist therapist)
+        {
+            TherapistDTO thDTO = new TherapistDTO()
+            {
+                Email = therapist.Email,
+                Firstname = therapist.FirstName,
+                Lastname = therapist.LastName,
+                TherapistId = therapist.TherapistId
+            };
+            return thDTO;
+        }
 
-        //public override int GetHashCode()
-        //{
-        //    var hash = new HashCode();
-        //    hash.Add(FirstName);
-        //    hash.Add(LastName);
-        //    hash.Add(Email);
-        //    hash.Add(PhoneNumber);
-        //    hash.Add(Website);
-        //    hash.Add(Street);
-        //    hash.Add(HouseNumber);
-        //    hash.Add(PostalCode);
-        //    hash.Add(City);
-        //    hash.Add(TherapistType);
-        //    return hash.ToHashCode();
-        //}
+        public static Therapist MapAddTherapistDTOToTherapist(AddTherapistDTO therapist, TherapistType type)
+        {
+            return new Therapist
+            {
+                City = therapist.City,
+                Email = therapist.Email,
+                FirstName = therapist.FirstName,
+                HouseNumber = therapist.HouseNumber,
+                LastName = therapist.LastName,
+                PhoneNumber = therapist.PhoneNumber,
+                PostalCode = therapist.PostalCode,
+                Street = therapist.Street,
+                TherapistType = type,
+                Website = therapist.Website
+            };
+        }
 
-        //public static bool operator ==(Therapist t1, Therapist t2) {
-        //    if (t1 == null && t2 == null) return true;
-        //    if (t1 != null && t2 == null || t1 == null && t2 != null) return false;
-
-        //    return t1.City == t2.City && t1.Email == t2.Email && t1.FirstName == t2.FirstName && t1.HouseNumber == t2.HouseNumber && t1.LastName == t2.LastName
-        //        && t1.PhoneNumber == t2.PhoneNumber && t1.PostalCode == t2.PostalCode && t1.Street == t2.Street
-        //        && t1.TherapistType == t2.TherapistType && t1.Website == t2.Website;
-        //}
-
-        //public static bool operator !=(Therapist t1, Therapist t2)
-        //{
-        //    if (t1 == null && t2 == null) return false;
-        //    if (t1 != null && t2 == null || t1 == null && t2 != null) return true;
-
-        //    return t1.City != t2.City && t1.Email != t2.Email && t1.FirstName != t2.FirstName && t1.HouseNumber != t2.HouseNumber && t1.LastName != t2.LastName
-        //        && t1.PhoneNumber != t2.PhoneNumber && t1.PostalCode != t2.PostalCode && t1.Street != t2.Street
-        //        && t1.TherapistType != t2.TherapistType && t1.Website != t2.Website;
-        //}
+        public static Therapist MapEditTherapistDTOToTherapist(EditTherapistDTO therapist, Therapist edited, List<OpeningTimes> openingTimes, ICollection<TherapistUser> therapistUsers)
+        {
+            edited.City = therapist.City;
+            edited.Clients = therapistUsers;
+            edited.Email = therapist.Email;
+            edited.FirstName = therapist.FirstName;
+            edited.HouseNumber = therapist.HouseNumber;
+            edited.LastName = therapist.LastName;
+            edited.OpeningTimes = openingTimes;
+            edited.PhoneNumber = therapist.PhoneNumber;
+            edited.PostalCode = therapist.PostalCode;
+            edited.Street = therapist.Street;
+            edited.Website = therapist.Website;
+            return edited;
+        }
         #endregion
     }
 }

@@ -23,7 +23,11 @@ namespace Projecten3_Backend.DTO
 
         public string Phone { get; set; }
 
+        public DateTime Contract { get; set; }
+
         public ICollection<Category> Categories { get; set; }
+
+        public int ExperiencePoints { get; set; }
         #endregion
 
         #region methods
@@ -35,7 +39,8 @@ namespace Projecten3_Backend.DTO
                     FirstName = user.FirstName,
                     FamilyName = user.FamilyName,
                     Email = user.Email,
-                    Categories = user.Categories
+                    Categories = user.Categories,
+                    Contract = user.Contract
                 };
 
                 return usr;

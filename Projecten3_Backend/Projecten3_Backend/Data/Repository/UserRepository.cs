@@ -36,12 +36,12 @@ namespace Projecten3_Backend.Data.Repository
 
         public User GetByEmail(string email)
         {
-            return _users.FirstOrDefault(u => u.Email == email);
+            return _users.Include(u => u.Categories).FirstOrDefault(u => u.Email == email);
         }
 
         public User GetById(int id)
         {
-            return _users.FirstOrDefault(u => u.UserId == id);
+            return _users.Include(u => u.Categories).FirstOrDefault(u => u.UserId == id);
         }
 
         public void RaiseLeaderboardScore(int id)
@@ -63,6 +63,7 @@ namespace Projecten3_Backend.Data.Repository
             usr.Phone = user.Phone;
             usr.Email = user.Email;
             usr.Categories = user.Categories;
+            usr.Contract = user.Contract;
 
             _users.Update(usr);
         }
@@ -85,6 +86,18 @@ namespace Projecten3_Backend.Data.Repository
                 if (!existingClients.Contains(id)) return false;
             }
             return true;
+        }
+
+        public void AddExp(User user)
+        {
+            User usr = _users.FirstOrDefault(u => u.UserId == user.UserId);
+            usr.ExperiencePoints += 1;
+            _users.Update(usr);
+        }
+
+        public IEnumerable<Therapist> GetUserTherapists(int id)
+        {
+            return _dbContext.TherapistUser.Where(c => c.UserId == id).Include(th => th.Therapist).ThenInclude(u => u.TherapistType).Include(u => u.User).Select(t => t.Therapist).ToList();
         }
         #endregion
     }

@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.Data.Repository;
@@ -29,7 +32,9 @@ namespace Projecten3_Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            }); ;
 
             services.AddScoped<MultimedDataInitializer>();
 
@@ -38,25 +43,24 @@ namespace Projecten3_Backend
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IChallengeRepository, ChallengeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-           
 
             services.AddDbContext<Projecten3_BackendContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Projecten3_BackendContext")));
-
             services.AddOpenApiDocument(c => {
                 c.DocumentName = "apidocs";
                 c.Title = "Post API";
                 c.Version = "v1";
                 c.Description = "The Post API documentation description.";
-                /*
-                c.DocumentProcessors.Add(new SecurityDefinitionAppender("JWT Token", new SwaggerSecurityScheme
+                
+                c.DocumentProcessors.Add(new SecurityDefinitionAppender("JWT Token", new OpenApiSecurityScheme
                 {
-                    Type = SwaggerSecuritySchemeType.ApiKey,
+                    Type = OpenApiSecuritySchemeType.ApiKey,
                     Name = "Authorization",
-                    In = SwaggerSecurityApiKeyLocation.Header,
+                    In = OpenApiSecurityApiKeyLocation.Header,
                     Description = "Copy 'Bearer' + valid JWT token into field"
                 }));
+                
                 c.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT Token"));
-                */
+                
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>(cfg => cfg.User.RequireUniqueEmail = true).AddEntityFrameworkStores<Projecten3_BackendContext>();
@@ -79,6 +83,7 @@ namespace Projecten3_Backend
                     policy.RequireRole("User");
                     policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
                 });
+            });
 
             services.AddAuthentication(x =>
             {
@@ -99,7 +104,7 @@ namespace Projecten3_Backend
                     RequireExpirationTime = true
                 };
             });
-            });
+            
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -121,7 +126,7 @@ namespace Projecten3_Backend
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin()));
+            services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -144,6 +149,7 @@ namespace Projecten3_Backend
             app.UseSwaggerUi3();
             app.UseOpenApi();
 
+            //Enable when working local, disable when pushing/merging to master 
             multimedDataInitializer.InitializeData().Wait();
         }
     }

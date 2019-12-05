@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,10 +14,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Projecten3_Backend.Data;
 using Projecten3_Backend.Data.IRepository;
+using Projecten3_Backend.Model;
 
 namespace Projecten3_Backend.Controllers
 {
     [Route("api/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -46,6 +49,7 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the login details</param>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<String>> CreateToken(LoginDTO model)
         {
             if(model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
@@ -59,7 +63,12 @@ namespace Projecten3_Backend.Controllers
                  if (result.Succeeded)
                 {
                     var role = await _userManager.GetRolesAsync(user);
-                    var token = GetToken(user, role.First());
+                    var userid = getUserid(user, role.First());
+                    if(userid == null)
+                    {
+                        return StatusCode(401);
+                    }
+                    var token = GetToken(user, role.First(), userid);
                     //returns json object                   
                     return Ok(token); 
                 }
@@ -72,13 +81,13 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the user details</param>
         /// <returns></returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        [Authorize( Roles = UserRole.MULTIMED)]
         [HttpPost("register")]
         public async Task<ActionResult<String>> Register(RegisterDTO model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
 
-            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Username };
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "User");
             if (result.Succeeded)
@@ -86,7 +95,7 @@ namespace Projecten3_Backend.Controllers
                 //return ok so the user knows the account has been created
                 return Ok();
             }
-            return StatusCode(500);
+            return StatusCode(303);
         }
 
         /// <summary>
@@ -99,7 +108,7 @@ namespace Projecten3_Backend.Controllers
         public async Task<ActionResult<String>> RegisterTherapist(RegisterDTO model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
-            IdentityUser user = new IdentityUser { UserName = model.Username };
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "Therapist");
             if (result.Succeeded)
@@ -115,12 +124,12 @@ namespace Projecten3_Backend.Controllers
         /// </summary>
         /// <param name="model">the multimed user details</param>
         /// <returns></returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [HttpPost("registerMultimed")]
         public async Task<ActionResult<String>> RegisterMultimed(RegisterDTO model)
         {
             if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
-            IdentityUser user = new IdentityUser { UserName = model.Username};
+            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email};
             var result = await _userManager.CreateAsync(user, model.Password);
             await _userManager.AddToRoleAsync(user, "Multimed");
             if (result.Succeeded)
@@ -144,22 +153,16 @@ namespace Projecten3_Backend.Controllers
             return user == null;
         }
 
-        private String GetToken(IdentityUser user, string role)
-        {
-            //getuserid from correct table
-            var userid = role.Equals("Multimed")
-                ?""
-                :role.Equals("Therapist")
-                    ? _therapistRepo.GetByEmail(user.Email).TherapistId.ToString()
-                    : _userRepo.GetByEmail(user.Email).UserId.ToString();
-            
+        private String GetToken(IdentityUser user, string role, string userid)
+        {          
 
             // Create the token
             var claims = new[]
             {
+              new Claim(JwtRegisteredClaimNames.Sub, user.Email),
               new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
               new Claim("Id", userid),
-              new Claim("Role", role)
+              new Claim("roles", role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
@@ -173,6 +176,32 @@ namespace Projecten3_Backend.Controllers
               signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string getUserid(IdentityUser user, string role)
+        {
+            //getuserid from correct table
+
+            if (role.Equals("Multimed"))
+            {
+                return "";
+            }
+            else if (role.Equals("Therapist"))
+            {
+                return _therapistRepo.GetByEmail(user.Email).TherapistId.ToString();
+            }
+            else
+            {
+                User usr = _userRepo.GetByEmail(user.Email);
+                if (usr.Contract <= DateTime.Now)
+                {
+                    return null;
+                }
+                else
+                {
+                    return usr.UserId.ToString();
+                }
+            }
         }
     }
 }

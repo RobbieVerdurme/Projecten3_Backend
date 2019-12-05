@@ -20,11 +20,13 @@ namespace Projecten3_Backend.Controllers
     {
         private readonly IChallengeRepository _repo;
         private readonly IUserRepository _userRepo;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ChallengesController(IChallengeRepository repo, IUserRepository userRepo)
+        public ChallengesController(IChallengeRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository)
         {
             _repo = repo;
             _userRepo = userRepo;
+            _categoryRepository = categoryRepository;
         }
 
         /// <summary>
@@ -47,6 +49,7 @@ namespace Projecten3_Backend.Controllers
             if (user == null || !_repo.ChallengesExist(challenges)) return BadRequest();
             try {
                 _repo.AddChallengesToUser(payload.UserId, challenges);
+                _repo.SaveChanges();
             } catch (Exception)
             {
                 return StatusCode(500);
@@ -67,12 +70,17 @@ namespace Projecten3_Backend.Controllers
         [Route("api/challenge/add")]
         [Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
         [HttpPost]
-        public IActionResult AddChallenge(Challenge challenge) {
-            if (challenge == null || challenge.Title == null || challenge.Description == null || challenge.Category == null) return BadRequest();
+        public IActionResult AddChallenge(AddChallengeDTO dto) {
+            if (dto == null || dto.Title == null || dto.Description == null) return BadRequest();
+            Category category = _categoryRepository.GetById(dto.CategoryId);
+            if (category == null) return BadRequest();
+            Challenge challenge = Model.Challenge.MapAddChallengeDTOToChallenge(dto);
+            challenge.Category = category;
             //Already exists -> return a 303 See Other StatusCode
             if (_repo.ChallengeExists(challenge)) return StatusCode(303);
             try {
                 _repo.AddChallenge(challenge);
+                _repo.SaveChanges();
                 return Ok();
             }
             catch (Exception) {
@@ -88,14 +96,14 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 400 if the user doesn't exist.
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("api/challenge/user/{id:int}")]
+        [Route("api/challenge/user/{id}")]
         [HttpGet]
-        public IActionResult GetUserChallenges(int userId) {
-            User user = _userRepo.GetById(userId);
+        public IActionResult GetUserChallenges(int id) {
+            User user = _userRepo.GetById(id);
 
             if (user == null) return BadRequest();
 
-            return Ok(_repo.GetUserChallenges(userId).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
+            return Ok(_repo.GetUserChallenges(id).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
         }
 
         [Route("api/challenge")]
@@ -118,7 +126,8 @@ namespace Projecten3_Backend.Controllers
         [Route("api/challenge/complete")]
         [HttpPost]
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
-            if (complete == null || _userRepo.GetById(complete.UserID) == null) return BadRequest();
+            User usr = _userRepo.GetById(complete.UserID);
+            if (complete == null || usr == null) return BadRequest();
 
             ChallengeUser challenge = _repo.GetUserChallenge(complete.UserID,complete.ChallengeID);
             if (challenge == null) return BadRequest();
@@ -127,6 +136,8 @@ namespace Projecten3_Backend.Controllers
 
             try
             {
+                _userRepo.AddExp(usr);
+                _userRepo.SaveChanges();
                 _repo.CompleteChallenge(challenge);
                 _userRepo.RaiseLeaderboardScore(complete.UserID);
                 _userRepo.SaveChanges();
@@ -136,9 +147,22 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
 
-            return Ok();
+            return Ok(challenge);
         }
 
+        /// <summary>
+        /// For a given user, get the challenges that have a category which in itself is contained in the user's categories.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/challenge/category/user/{id:int}")]
+        [HttpGet]
+        public IActionResult GetChallengesForUserCategories(int id) {
+            User user = _userRepo.GetById(id);
+            if (user == null) return BadRequest();
+            IList<int> categories = user.Categories.Select(c => c.CategoryId).ToList();
+            return Ok(_repo.GetChallenges().Where(challenge => categories.Contains(challenge.Category.CategoryId)).ToList());
+        }
         //Edit
 
         //Delete

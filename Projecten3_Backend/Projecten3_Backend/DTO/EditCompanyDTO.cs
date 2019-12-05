@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Projecten3_Backend.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Projecten3_Backend.DTO
 {
-    public class AddCompanyDTO
+    public class EditCompanyDTO
     {
+        public int CompanyId { get; set; }
+
         public string Name { get; set; }
 
         public string Phone { get; set; }
@@ -26,5 +29,7 @@ namespace Projecten3_Backend.DTO
         public string Site { get; set; }
 
         public DateTime Contract { get; set; }
+
+        public IList<User> CompanyMembers { get; set; }
     }
 }

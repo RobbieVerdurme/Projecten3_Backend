@@ -23,6 +23,9 @@ namespace Projecten3_Backend.Model
 
         public virtual Company Company { get; set; }
 
+        public DateTime Contract { get; set; }
+
+        public int ExperiencePoints { get; set; }
 
         #endregion
 
@@ -32,7 +35,9 @@ namespace Projecten3_Backend.Model
 
         public virtual ICollection<TherapistUser> Therapists { get; set; } = new List<TherapistUser>();
 
-        public  ICollection<Category> Categories { get; set; } = new List<Category>();
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
+
+        public ICollection<Challenge> ChallengesList => Challenges.Select(ch => ch.Challenge).ToList();
 
         public ICollection<LeaderboardScore> LeaderboardScores { get; set; } = new List<LeaderboardScore>();
 
@@ -76,10 +81,14 @@ namespace Projecten3_Backend.Model
             if(usr != null) {
                 UserDTO user = new UserDTO()
                 {
+                    UserId = usr.UserId,
                     FirstName = usr.FirstName,
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
-                    Categories = usr.Categories
+                    Phone = usr.Phone,
+                    Categories = usr.Categories,
+                    Contract = usr.Contract,
+                    ExperiencePoints = usr.ExperiencePoints
                 };
 
                 return user;
@@ -91,25 +100,39 @@ namespace Projecten3_Backend.Model
 
         }
 
-        public static LeaderboardDTO MapUserToLeaderboardDTO(User usr)
+        public static UserWithChallengesDTO MapUserToUserWithChallengesDTO(User usr, List<ChallengesOfUserDTO> challenges)
         {
-            if (usr != null)
+            if(usr != null)
             {
-                LeaderboardDTO leaderboardEntry = new LeaderboardDTO()
+                UserWithChallengesDTO user = new UserWithChallengesDTO()
                 {
                     UserId = usr.UserId,
                     FirstName = usr.FirstName,
                     FamilyName = usr.FamilyName,
-                    Score = usr.GetCurrentLeaderboardScore()
+                    Email = usr.Email,
+                    Phone = usr.Phone,
+                    Categories = usr.Categories,
+                    Contract = usr.Contract,
+                    ExperiencePoints = usr.ExperiencePoints,
+                    Challenges = challenges
                 };
-                return leaderboardEntry;
+                return user;
             }
             else
             {
                 return null;
             }
-
         }
+  
+          public static LeaderboardDTO MapUserToLeaderboardDTO(User usr)
+        {
+            if (usr != null)
+            {
+                LeaderboardDTO leaderboardEntry = new LeaderboardDTO()
+                                      Score = usr.GetCurrentLeaderboardScore()
+                };
+                return leaderboardEntry;
+          }
         #endregion
     }
 }

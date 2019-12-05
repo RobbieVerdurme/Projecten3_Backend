@@ -20,6 +20,8 @@ namespace Projecten3_Backend.DTO
 
         public string Phone { get; set; }
 
+        public DateTime Contract { get; set; }
+
         public IList<int> Categories { get; set; }
     }
 }

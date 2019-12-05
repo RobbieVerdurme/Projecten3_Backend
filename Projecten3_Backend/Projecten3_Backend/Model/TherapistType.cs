@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projecten3_Backend.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,30 +26,14 @@ namespace Projecten3_Backend.Model
 
         public void AddCategory(Category category) => Categories.Add(category);
 
-        //public override bool Equals(object obj)
-        //{
-        //    var type = obj as TherapistType;
-        //    return type != null &&
-        //           Type == type.Type;
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    return HashCode.Combine(Type);
-        //}
-
-        //public static bool operator ==(TherapistType t1, TherapistType t2) {
-        //    if (t1 == null && t2 == null) return true;
-        //    if (t1 != null && t2 == null || t1 == null && t2 != null) return false;
-        //    return t1.Type == t2.Type;
-        //}
-
-        //public static bool operator !=(TherapistType t1, TherapistType t2)
-        //{
-        //    if (t1 == null && t2 == null) return false;
-        //    if (t1 != null && t2 == null || t1 == null && t2 != null) return true;
-        //    return t1.Type != t2.Type;
-        //}
+        public static TherapistType MapAddTherapistTypeDTOToTherapistType(AddTherapistTypeDTO addTherapistType, IEnumerable<Category> categories)
+        {
+            return new TherapistType
+            {
+                Categories = new List<Category>(categories),
+                Type = addTherapistType.Type
+            };
+        }
 
         #endregion
     }
