@@ -42,27 +42,30 @@ namespace Projecten3_Backend.Data
                 await CreateUser("SofieV","SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
 
                 //TherapistType
-                TherapistType thType = new TherapistType() { Type = "", Categories = new List<Category> { c } };
+                TherapistType thType = new TherapistType() { Type = "Diëtist", Categories = new List<Category> { c } };
                 _dbContext.Add(thType);
                 //Therapist
-                Therapist th = new Therapist() {FirstName = "Test",LastName = "Th", HouseNumber = 1, PhoneNumber = "", PostalCode = 9000, Street = "", Website = "", City = "Gent", Email = "TestTh@gmail.com", TherapistType = thType};
+                Therapist th = new Therapist() {FirstName = "Therapist",LastName = "De Peape", HouseNumber = 1, PhoneNumber = "", PostalCode = 9000, Street = "", Website = "", City = "Gent", Email = "TherapistDePeape@multimed.com", TherapistType = thType};
                 await CreateUser("TestTh",th.Email, "P@ssword123", UserRole.THERAPIST);
                 _dbContext.Add(th);
 
                 //company
-                Company cmp = new Company() { Name = "Multimed", Street = "Multimedstraat", City = "Gent", Contract = DateTime.Now, Country = "Belgie", Mail = "Multimed@gmail.com", Phone = "", PostalCode = 9000, HouseNumber = 1, Site = "multimed.be" };
+                Company cmp = new Company() { Name = "Multimed", Street = "Multimedstraat", City = "Gent", Contract = DateTime.Now.AddYears(30), Country = "Belgie", Mail = "Multimed@gmail.com", Phone = "", PostalCode = 9000, HouseNumber = 1, Site = "multimed.be"};
                 _dbContext.Add(cmp);
 
                 //user
-                User usr = new User() { FirstName = "Boeferrob", Company = cmp, Email = "Boeferrob@live.be" };
+                User usr = new User() { FirstName = "Boefer",FamilyName = "rob", Categories = new List<Category>{ c },Phone = "0478995888",ExperiencePoints = 16, Company = cmp, Email = "Boeferrob@live.be", };
                 usr.AddTherapist(th);
                 ChallengeUser chUsr = new ChallengeUser() { ChallengeUserId = usr.UserId, User = usr, ChallengeId = ch.ChallengeId, Challenge = ch };
                 usr.AddChallenges(new List<ChallengeUser> {
                     chUsr
                 });
+
                 await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
                 _dbContext.Add(usr);
                 _dbContext.ChallengeUser.Add(chUsr);
+
+
                 #endregion
 
 
