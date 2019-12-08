@@ -20,6 +20,7 @@ namespace Projecten3_Backend.Data.IRepository
         void DeleteUser(int id);
 
         void UpdateUser(User user);
+        void RaiseLeaderboardScore(int id);
 
         void SaveChanges();
         bool UserExists(User u);

@@ -139,13 +139,15 @@ namespace Projecten3_Backend.Controllers
                 _userRepo.AddExp(usr);
                 _userRepo.SaveChanges();
                 _repo.CompleteChallenge(challenge);
+                _userRepo.RaiseLeaderboardScore(complete.UserID);
+                _userRepo.SaveChanges();
                 _repo.SaveChanges();
             }
             catch (Exception) {
                 return StatusCode(500);
             }
 
-            return Ok();
+            return Ok(challenge);
         }
 
         /// <summary>
@@ -161,9 +163,6 @@ namespace Projecten3_Backend.Controllers
             IList<int> categories = user.Categories.Select(c => c.CategoryId).ToList();
             return Ok(_repo.GetChallenges().Where(challenge => categories.Contains(challenge.Category.CategoryId)).ToList());
         }
-
-
-
         //Edit
 
         //Delete
