@@ -56,6 +56,8 @@ namespace Projecten3_Backend.Data
                 usr.AddTherapist(th);
                 await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
                 _dbContext.Add(usr);
+
+                th.AddClient(usr);
                 
                 #endregion
 

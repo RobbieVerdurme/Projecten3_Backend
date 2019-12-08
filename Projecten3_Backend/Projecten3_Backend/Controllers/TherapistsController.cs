@@ -55,7 +55,29 @@ namespace Projecten3_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(t);
+            return Ok(Therapist.MapTherapistToGetTherapistDetailsDTO(t));
+        }
+
+        /// <summary>
+        /// Get the clients of a therapist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// HTTP 404 if not found.
+        /// HTTP 200 otherwise.
+        /// </returns>
+        [Route("api/therapist/clients/{id:int}")]
+        [HttpGet]
+        public IActionResult GetTherapistClients(int id)
+        {
+            Therapist t = _repo.GetById(id);
+
+            if (t == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new List<UserDTO>(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client)).ToList()));
         }
 
         /// <summary>
