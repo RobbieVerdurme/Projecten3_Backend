@@ -2,6 +2,7 @@
 using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -66,6 +67,7 @@ namespace Projecten3_Backend.Model
         public ICollection<OpeningTimes> OpeningTimes { get; set; } = new List<OpeningTimes>();
 
         public virtual ICollection<TherapistUser> Clients { get; set; } = new List<TherapistUser>();
+        public ICollection<User> ClientList => Clients.Select(cl => cl.User).ToList();
 
         #endregion
 
@@ -126,6 +128,27 @@ namespace Projecten3_Backend.Model
             edited.Street = therapist.Street;
             edited.Website = therapist.Website;
             return edited;
+        }
+
+        public static GetTherapistDetailsDTO MapTherapistToGetTherapistDetailsDTO(Therapist therapist)
+        {
+
+            return new GetTherapistDetailsDTO
+            {
+                City = therapist.City,
+                Clients = new List<UserDTO>(therapist.ClientList.Select(client => User.MapUserToUserDTO(client)).ToList()),
+                Email = therapist.Email,
+                FirstName = therapist.FirstName,
+                HouseNumber = therapist.HouseNumber,
+                LastName = therapist.LastName,
+                OpeningTimes = therapist.OpeningTimes,
+                PhoneNumber = therapist.PhoneNumber,
+                PostalCode = therapist.PostalCode,
+                Street = therapist.Street,
+                TherapistId = therapist.TherapistId,
+                TherapistType = therapist.TherapistType,
+                Website = therapist.Website
+            };
         }
         #endregion
     }

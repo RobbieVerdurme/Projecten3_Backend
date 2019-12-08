@@ -65,6 +65,23 @@ namespace Projecten3_BackendTest.Controllers
         }
 
         [Fact]
+        public void GetTherapistClients_ReturnsOk()
+        {
+            _therapistRepository.Setup(tr => tr.GetById(1)).Returns(_dummyData.Therapists.First);
+            var okResult = _therapistsController.GetTherapist(1) as OkObjectResult;
+            Assert.NotNull(okResult);
+            Assert.Equal(200, okResult.StatusCode);
+        }
+
+        [Fact]
+        public void GetTherapistClients_ReturnsNotFound()
+        {
+            _therapistRepository.Setup(tr => tr.GetById(1));
+            var okResult = _therapistsController.GetTherapist(1) as NotFoundResult;
+            Assert.IsType<NotFoundResult>(okResult);
+        }
+
+        [Fact]
         public void GetTherapistTypes_ReturnsOk()
         {
             _therapistRepository.Setup(tr => tr.GetTherapistTypes()).Returns(_dummyData.TherapistTypes);
