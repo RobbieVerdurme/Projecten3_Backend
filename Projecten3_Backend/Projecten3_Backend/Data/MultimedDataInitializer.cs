@@ -53,11 +53,11 @@ namespace Projecten3_Backend.Data
                 _dbContext.Add(th);
 
                 //company
-                Company cmp = new Company() { Name = "Multimed", Street = "Multimedstraat", City = "Gent", Contract = DateTime.Now.AddYears(30), Country = "Belgie", Mail = "Multimed@gmail.com", Phone = "", PostalCode = 9000, HouseNumber = 1, Site = "multimed.be"};
+                Company cmp = new Company() { Name = "Multimed", Street = "Multimedstraat", City = "Gent", Contract = DateTime.Now.AddYears(30), Country = "Belgie", Mail = "Multimed@gmail.com", Phone = "04785889764", PostalCode = 9000, HouseNumber = 1, Site = "multimed.be"};
                 _dbContext.Add(cmp);
 
                 //user
-                User usr = new User() { FirstName = "Boefer",FamilyName = "rob", Categories = new List<Category>{ c },Phone = "0478995888",ExperiencePoints = 16, Company = cmp, Email = "Boeferrob@live.be", };
+                User usr = new User() { FirstName = "Boefer",FamilyName = "rob", Categories = new List<Category>{ c },Phone = "0478995888",ExperiencePoints = 16, Company = cmp, Email = "Boeferrob@live.be", Contract = cmp.Contract};
                 usr.AddTherapist(th);
                 ChallengeUser chUsr = new ChallengeUser() { ChallengeUserId = usr.UserId, User = usr, ChallengeId = ch.ChallengeId, Challenge = ch };
                 usr.AddChallenges(new List<ChallengeUser> {
