@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using Projecten3_Backend.Models;
 using System;
 using System.Collections.Generic;
@@ -31,12 +32,16 @@ namespace Projecten3_Backend.Data
                 await CreateRoles();
 
                 #region Users
+               
                 //Multimeduser
                 await CreateUser("SofieV","SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
 
                 //categories
                 Category c = new Category() { Name = "Ondergewicht" };
                 _dbContext.Add(c);
+
+                //challenges
+                Challenge ch = new Challenge() { ChallengeImage = "", Description = "Loop 2 km", Title = "Lopen", Category = c };
 
                 //TherapistType
                 TherapistType thType = new TherapistType() { Type = "Diëtist", Categories = new List<Category> { c } };
@@ -59,16 +64,15 @@ namespace Projecten3_Backend.Data
                     chUsr
                 });
 
+                //account user
                 await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
                 _dbContext.Add(usr);
                 _dbContext.ChallengeUser.Add(chUsr);
 
 
+                th.AddClient(usr);
                 #endregion
 
-                th.AddClient(usr);
-                
-                #endregion
 
                 #region Save changes
                 _dbContext.SaveChanges();
