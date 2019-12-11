@@ -105,7 +105,7 @@ namespace Projecten3_BackendTest.Data
             AddCompanyDTO = new AddCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test" };
             EditCompanyDTO = new EditCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test", CompanyId = 0, CompanyMembers = new List<User>() { user1, user2 } };
             AddChallengeDTO = new AddChallengeDTO { CategoryId = 0, ChallengeImage = "test", Description = "test", Title = "test" };
-            CompleteChallengeDTO = new CompleteChallengeDTO { ChallengeID = 0, UserID = 0 };
+            CompleteChallengeDTO = new CompleteChallengeDTO { ChallengeID = 0, UserID = 0, Rating = 3, Feedback = "test" };
             ChallengesUserDTO = new ChallengesUserDTO { ChallengeIds = new List<int>() { 0 }, UserId = 0 };
         }
     }

@@ -134,7 +134,7 @@ namespace Projecten3_BackendTest.Controllers
             _challengeRepository.Setup(cr => cr.GetUserChallenge(completeChallengeDTO.UserID, completeChallengeDTO.ChallengeID)).Returns(_dummyData.ChallengesUser.First);
             _userRepository.Setup(ur => ur.AddExp(It.IsAny<User>()));
             _challengeRepository.Setup(cr => cr.CompleteChallenge(It.IsAny<ChallengeUser>()));
-            var okResult = _challengesController.CompleteChallenge(completeChallengeDTO) as OkResult;
+            var okResult = _challengesController.CompleteChallenge(completeChallengeDTO) as OkObjectResult;
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
         }
