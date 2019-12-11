@@ -13,5 +13,9 @@ namespace Projecten3_Backend.DTO
         public int ChallengeID { get; set; }
 
         public int UserID { get; set; }
+
+        public int Rating { get; set; }
+
+        public string Feedback { get; set; }
     }
 }

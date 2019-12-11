@@ -20,5 +20,10 @@ namespace Projecten3_Backend.DTO
         public Challenge Challenge { get; set; }
 
         public DateTime? CompletedDate { get; set; }
+
+        //stars in the android app
+        public int Rating { get; set; }
+
+        public string Feedback { get; set; }
     }
 }

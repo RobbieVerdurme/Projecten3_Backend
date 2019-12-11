@@ -136,6 +136,9 @@ namespace Projecten3_Backend.Controllers
 
             try
             {
+                challenge.Feedback = complete.Feedback;
+                challenge.Rating = complete.Rating;
+
                 _userRepo.AddExp(usr);
                 _userRepo.SaveChanges();
                 _repo.CompleteChallenge(challenge);

@@ -18,6 +18,10 @@ namespace Projecten3_Backend.Model.ManyToMany
 
         public DateTime? CompletedDate { get; set; }
 
+        //stars in the android app
+        public int Rating { get; set; }
+
+        public string Feedback { get; set; }
         #endregion
 
         #region Navigational properties
@@ -34,7 +38,9 @@ namespace Projecten3_Backend.Model.ManyToMany
                 UserFirstName = challengeUser.User.FirstName,
                 UserFamilyName = challengeUser.User.FamilyName,
                 CompletedDate = challengeUser.CompletedDate,
-                Challenge = challengeUser.Challenge
+                Challenge = challengeUser.Challenge,
+                Rating = challengeUser.Rating,
+                Feedback = challengeUser.Feedback
             };
         }
 
@@ -47,7 +53,9 @@ namespace Projecten3_Backend.Model.ManyToMany
                 ChallengeImage = challengeUser.Challenge.ChallengeImage,
                 Description = challengeUser.Challenge.Description,
                 Title = challengeUser.Challenge.Title,
-                CompletedDate = challengeUser.CompletedDate
+                CompletedDate = challengeUser.CompletedDate,
+                Rating = challengeUser.Rating,
+                Feedback = challengeUser.Feedback
             };
         }
     }
