@@ -150,7 +150,7 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
 
-            return Ok(challenge);
+            return Ok(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"));
         }
 
         /// <summary>
