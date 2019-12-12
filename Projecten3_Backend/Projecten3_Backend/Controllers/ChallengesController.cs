@@ -133,6 +133,7 @@ namespace Projecten3_Backend.Controllers
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
+            CompleteChallengeDateDTO completedChallenge = new CompleteChallengeDateDTO();
 
             try
             {
@@ -145,12 +146,15 @@ namespace Projecten3_Backend.Controllers
                 _userRepo.RaiseLeaderboardScore(complete.UserID);
                 _userRepo.SaveChanges();
                 _repo.SaveChanges();
+                string date = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                
+                completedChallenge.CompletedDate = date;
             }
             catch (Exception) {
                 return StatusCode(500);
             }
 
-            return Ok(DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            return Ok(completedChallenge);
         }
 
         /// <summary>
