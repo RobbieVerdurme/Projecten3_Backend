@@ -146,8 +146,8 @@ namespace Projecten3_Backend.Controllers
                 _userRepo.RaiseLeaderboardScore(complete.UserID);
                 _userRepo.SaveChanges();
                 _repo.SaveChanges();
-
-                completedChallenge.CompletedDate = challenge.CompletedDate?.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                
+                completedChallenge.CompletedDate = challenge.CompletedDate.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             }
             catch (Exception) {
                 return StatusCode(500);
