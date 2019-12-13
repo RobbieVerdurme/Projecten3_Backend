@@ -122,7 +122,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
-        [Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
+        //[Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
         [Route("api/challenge/complete")]
         [HttpPost]
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
@@ -133,6 +133,7 @@ namespace Projecten3_Backend.Controllers
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
+            CompleteChallengeDateDTO completedChallenge = new CompleteChallengeDateDTO();
 
             try
             {
@@ -145,12 +146,14 @@ namespace Projecten3_Backend.Controllers
                 _userRepo.RaiseLeaderboardScore(complete.UserID);
                 _userRepo.SaveChanges();
                 _repo.SaveChanges();
+                
+                completedChallenge.CompletedDate = challenge.CompletedDate.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             }
             catch (Exception) {
                 return StatusCode(500);
             }
 
-            return Ok(challenge);
+            return Ok(completedChallenge);
         }
 
         /// <summary>
