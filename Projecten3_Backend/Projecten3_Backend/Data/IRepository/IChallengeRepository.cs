@@ -28,9 +28,11 @@ namespace Projecten3_Backend.Data.IRepository
 
         IEnumerable<ChallengeUser> GetUserChallenges(int userId);
 
-        void CompleteChallenge(ChallengeUser challenge);
+        void CompleteChallenge(ChallengeUser challenge, DateTime date);
 
         void AddChallengesToUser(int userid, IList<int> challengeids);
+
+        bool UserHasCompletedDailyChallengeOfCategory(int userId, int categoryId, int day, int month, int year);
 
         void SaveChanges();
     }

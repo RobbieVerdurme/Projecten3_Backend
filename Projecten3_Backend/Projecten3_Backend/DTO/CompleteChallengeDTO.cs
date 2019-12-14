@@ -17,5 +17,7 @@ namespace Projecten3_Backend.DTO
         public int Rating { get; set; }
 
         public string Feedback { get; set; }
+
+        public DateTime CompletedOn { get; set; }
     }
 }
