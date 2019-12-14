@@ -133,7 +133,21 @@ namespace Projecten3_Backend.Controllers
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
-
+            //Timestamp, DO NOT CHANGE VALUE! Needed to check the daily completed challenges.
+            DateTime timeStamp = DateTime.Now;
+            //Fetch all the user's challenges
+            IList<ChallengeUser> userChallenges = _repo.GetUserChallenges(complete.UserID).ToList();
+            //Select the challenges that have the same category as the challenge that needs to be completed AND are already completed.
+            userChallenges = userChallenges.Where(c => c.ChallengeId != challenge.ChallengeId && c.Challenge.Category.CategoryId == challenge.Challenge.Category.CategoryId
+            && challenge.CompletedDate != null).ToList();
+            //Map to their completed dates.
+            IList<DateTime> completedDates = userChallenges.Select(uc => uc.CompletedDate.Value).ToList();
+            //Select the ones that are on the same day as now.
+            completedDates = completedDates.Where(date => date.Year == timeStamp.Year && date.Month == timeStamp.Month && date.Day == timeStamp.Day).ToList();
+            //If this list is not empty, then there is a challenge in the same category that has been completed on the same day.
+            if (completedDates.Count != 0) {
+                return StatusCode(303);
+            }
             try
             {
                 challenge.Feedback = complete.Feedback;
