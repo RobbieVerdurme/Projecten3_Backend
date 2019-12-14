@@ -122,7 +122,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
-        [Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
+        //[Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
         [Route("api/challenge/complete")]
         [HttpPost]
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
