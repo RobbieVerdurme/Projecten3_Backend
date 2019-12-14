@@ -7,6 +7,6 @@ namespace Projecten3_Backend.DTO
 {
     public class CompleteChallengeDateDTO
     {
-        public string CompletedDate { get; set; }
+        public DateTime CompletedDate { get; set; }
     }
 }
