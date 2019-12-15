@@ -119,21 +119,26 @@ namespace Projecten3_Backend.Controllers
         /// <returns>
         /// HTTP 400 if the user and or challenge is invalid.
         /// HTTP 304 if said challenge was already completed.
+        /// HTTP 303 if the daily challenge was completed.
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
-        //[Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
+        [Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
         [Route("api/challenge/complete")]
         [HttpPost]
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
+            if (complete == null || complete.Feedback == null || complete.CompletedOn == null) return BadRequest();
             User usr = _userRepo.GetById(complete.UserID);
-            if (complete == null || usr == null) return BadRequest();
+            if (usr == null) return BadRequest();
 
             ChallengeUser challenge = _repo.GetUserChallenge(complete.UserID,complete.ChallengeID);
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
-
+            if (_repo.UserHasCompletedDailyChallengeOfCategory(complete.UserID, challenge.Challenge.Category.CategoryId, complete.CompletedOn.Day, complete.CompletedOn.Month, complete.CompletedOn.Year))
+            {
+                return StatusCode(303);
+            }
             try
             {
                 challenge.Feedback = complete.Feedback;
@@ -141,7 +146,7 @@ namespace Projecten3_Backend.Controllers
 
                 _userRepo.AddExp(usr);
                 _userRepo.SaveChanges();
-                _repo.CompleteChallenge(challenge);
+                _repo.CompleteChallenge(challenge,complete.CompletedOn);
                 _userRepo.RaiseLeaderboardScore(complete.UserID);
                 _userRepo.SaveChanges();
                 _repo.SaveChanges();
@@ -153,6 +158,36 @@ namespace Projecten3_Backend.Controllers
             return Ok(new CompleteChallengeDateDTO() {
                 CompletedDate = challenge.CompletedDate.Value
             });
+        }
+
+        /// <summary>
+        /// Check if the daily challenge for a category is completed for a user.
+        /// Returns HTTP 200 with a timestamp for the completedDate, if no challenge was completed on the same day.
+        /// The timestamp will be sent to <see cref="CompleteChallenge(CompleteChallengeDTO)"/>
+        /// Retruns HTTP 400 if the payload is malformed.
+        /// Returns HTTP 304 if the challenge was already complete.
+        /// Returns HTTP 303 if the daily challenge was complete.
+        /// </summary>
+        /// <param name="complete"></param>
+        /// <returns></returns>
+        [Route("api/challenge/checkdaily")]
+        [HttpGet]
+        public IActionResult IsDailyChallengeCompleted(CheckDailyChallengeDTO checkDaily) {
+            if(checkDaily == null) return BadRequest();
+            User usr = _userRepo.GetById(checkDaily.UserID);
+            if (usr == null) return BadRequest();
+
+            ChallengeUser challenge = _repo.GetUserChallenge(checkDaily.UserID, checkDaily.ChallengeID);
+            if (challenge == null) return BadRequest();
+
+            if (challenge.CompletedDate != null) return StatusCode(304);
+            //Timestamp, DO NOT CHANGE VALUE! Needed to check the daily completed challenges.
+            DateTime timeStamp = DateTime.Now;
+            if (_repo.UserHasCompletedDailyChallengeOfCategory(checkDaily.UserID, challenge.Challenge.Category.CategoryId, timeStamp.Day, timeStamp.Month, timeStamp.Year))
+            {
+                return StatusCode(303);
+            }
+            return Ok(new CheckDailyChallengeResponseDTO(timeStamp));
         }
 
         /// <summary>

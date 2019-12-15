@@ -82,9 +82,9 @@ namespace Projecten3_Backend.Data.Repository
             return true;
         }
 
-        public void CompleteChallenge(ChallengeUser challenge)
+        public void CompleteChallenge(ChallengeUser challenge, DateTime date)
         {
-            challenge.CompletedDate = DateTime.Now;
+            challenge.CompletedDate = date;
         }
 
         public void DeleteChallenge(int id)
@@ -101,6 +101,29 @@ namespace Projecten3_Backend.Data.Repository
         public IEnumerable<Challenge> GetChallenges()
         {
             return _challenges.Include(c => c.Category).ToList();
+        }
+
+        /// <summary>
+        /// Check if a user with the given <paramref name="userId"/> has completed a challenge on the given <paramref name="day"/>,<paramref name="month"/> and <paramref name="year"/>.
+        /// If there is such a challenge and it also matches the category of <paramref name="categoryId"/>, then the user already did his challenge of the day for that category.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="categoryId"></param>
+        /// <param name="day"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public bool UserHasCompletedDailyChallengeOfCategory(int userId, int categoryId, int day, int month, int year)
+        {
+            //Fetch the challenges
+            return _dbContext.ChallengeUser.Include(c => c.Challenge).ThenInclude(cha => cha.Category)
+                //of a user and have a given category
+                .Where(c => c.UserId == userId && c.Challenge.Category.CategoryId == categoryId
+                //and the value is present and matches the arguments
+                && c.CompletedDate.HasValue
+                && c.CompletedDate.Value.Year == year
+                && c.CompletedDate.Value.Month == month
+                && c.CompletedDate.Value.Day == day).ToList().Count != 0;
         }
 
         public ChallengeUser GetUserChallenge(int userId, int challengeId)
