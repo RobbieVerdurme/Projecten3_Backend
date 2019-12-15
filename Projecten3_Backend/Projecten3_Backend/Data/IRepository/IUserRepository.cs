@@ -30,5 +30,6 @@ namespace Projecten3_Backend.Data.IRepository
         void AddExp(User usr);
 
         IEnumerable<Therapist> GetUserTherapists(int id);
+        IEnumerable<Category> GetUserCategories(int id);
     }
 }

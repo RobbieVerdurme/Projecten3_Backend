@@ -122,7 +122,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
-        //[Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
+        [Authorize(Policy = UserRole.USER,Roles = UserRole.USER)]
         [Route("api/challenge/complete")]
         [HttpPost]
         public IActionResult CompleteChallenge(CompleteChallengeDTO complete) {
@@ -147,7 +147,7 @@ namespace Projecten3_Backend.Controllers
                 _userRepo.SaveChanges();
                 _repo.SaveChanges();
                 
-                completedChallenge.CompletedDate = challenge.CompletedDate.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
+                completedChallenge.CompletedDate = challenge.CompletedDate.Value.ToString("yyyy-MM-ddThh:mm:ss.FFFFF");
             }
             catch (Exception) {
                 return StatusCode(500);

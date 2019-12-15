@@ -54,7 +54,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUserWithChallenges(int id)
         {
-            var user = _userRepo.GetById(id);
+            User user = _userRepo.GetById(id);
 
             if (user == null)
             {
@@ -77,7 +77,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUser(int id)
         {
-            var user = _userRepo.GetById(id);
+            User user = _userRepo.GetById(id);
 
             if (user == null)
             {
@@ -112,13 +112,13 @@ namespace Projecten3_Backend.Controllers
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
-            IList<Category> categories = _categoryRepo.GetCategories().Where(c => categoryIds.Contains(c.CategoryId)).ToList();
+            //IList<Category> categories = _categoryRepo.GetCategories().Where(c => categoryIds.Contains(c.CategoryId)).ToList();
 
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
-            u.Categories = categories;
+            //u.Categories = categories;
             u.Contract = user.Contract;
             
 
@@ -158,14 +158,14 @@ namespace Projecten3_Backend.Controllers
             if (comp == null) return BadRequest();
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
             if (!_therapistRepo.TherapistsExist(user.Therapists)){ }
+
             User u = new User {
                 FirstName = user.FirstName,
                 FamilyName = user.FamilyName,
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories)),
-                Contract = comp.Contract
+                Contract = comp.Contract,
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
@@ -234,6 +234,33 @@ namespace Projecten3_Backend.Controllers
             {
                 IEnumerable<Therapist> th = _userRepo.GetUserTherapists(id);
                 return Ok(th.Select(t => Therapist.MapTherapistToTherapistDTO(t)));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// get the therapist list from user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// a list of therapists
+        /// </returns>
+        [Route("api/users/Category/{id}")]
+        [HttpGet]
+        public IActionResult GetCategoryUser(int id)
+        {
+            var user = _userRepo.GetById(id);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                IEnumerable<Category> th = _userRepo.GetUserCategories(id);
+                return Ok(th);
             }
             catch (Exception)
             {

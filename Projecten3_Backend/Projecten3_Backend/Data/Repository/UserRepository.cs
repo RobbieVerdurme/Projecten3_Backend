@@ -51,7 +51,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public IEnumerable<User> GetUsers()
         {
-            return _users.ToList();
+            return _users.Include(u => u.Categories).ToList();
         }
 
         public void UpdateUser(User user)
@@ -98,6 +98,11 @@ namespace Projecten3_Backend.Data.Repository
         public IEnumerable<Therapist> GetUserTherapists(int id)
         {
             return _dbContext.TherapistUser.Where(c => c.UserId == id).Include(th => th.Therapist).ThenInclude(u => u.TherapistType).Include(u => u.User).Select(t => t.Therapist).ToList();
+        }
+
+        public IEnumerable<Category> GetUserCategories(int id)
+        {
+            return _dbContext.CategoryUser.Where(c => c.UserId == id).Include(c => c.Category).Select(c=> c.Category).ToList();
         }
         #endregion
     }
