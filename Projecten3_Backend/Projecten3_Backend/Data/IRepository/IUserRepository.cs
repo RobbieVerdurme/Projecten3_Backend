@@ -11,6 +11,10 @@ namespace Projecten3_Backend.Data.IRepository
     {
         IEnumerable<User> GetUsers();
 
+        IEnumerable<User> GetClientsOfTherapist(IList<int> clients);
+
+        IEnumerable<User> GetUsersOfCompany(int companyId);
+
         User GetById(int id);
 
         User GetByEmail(string email);

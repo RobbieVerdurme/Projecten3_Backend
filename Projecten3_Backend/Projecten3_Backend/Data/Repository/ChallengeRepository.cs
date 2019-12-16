@@ -145,5 +145,10 @@ namespace Projecten3_Backend.Data.Repository
         {
             _challenges.Update(challenge);
         }
+
+        public IEnumerable<Challenge> GetChallengesOfCategories(IList<int> categoryIds)
+        {
+            return _challenges.Include(c => c.Category).Where(challenge => categoryIds.Contains(challenge.Category.CategoryId));
+        }
     }
 }

@@ -34,6 +34,8 @@ namespace Projecten3_Backend.Data.IRepository
 
         bool UserHasCompletedDailyChallengeOfCategory(int userId, int categoryId, int day, int month, int year);
 
+        IEnumerable<Challenge> GetChallengesOfCategories(IList<int> categoryIds);
+
         void SaveChanges();
     }
 }

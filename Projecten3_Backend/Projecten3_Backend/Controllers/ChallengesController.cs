@@ -201,7 +201,7 @@ namespace Projecten3_Backend.Controllers
             User user = _userRepo.GetById(id);
             if (user == null) return BadRequest();
             IList<int> categories = user.Categories.Select(c => c.CategoryId).ToList();
-            return Ok(_repo.GetChallenges().Where(challenge => categories.Contains(challenge.Category.CategoryId)).ToList());
+            return Ok(_repo.GetChallengesOfCategories(categories));
         }
         //Edit
 
