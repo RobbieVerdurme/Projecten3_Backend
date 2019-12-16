@@ -65,7 +65,7 @@ namespace Projecten3_Backend.Data.Repository
         /// <returns></returns>
         public bool ChallengeExists(Challenge challenge)
         {
-            return _dbContext.Challenges.Where(c => c.Title == challenge.Title).FirstOrDefault() != null;
+            return _dbContext.Challenges.Where(c => c.Title == challenge.Title && c.Description == challenge.Description && c.Category.CategoryId == challenge.Category.CategoryId).FirstOrDefault() != null;
         }
 
         /// <summary>
