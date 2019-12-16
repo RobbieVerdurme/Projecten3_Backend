@@ -171,7 +171,8 @@ namespace Projecten3_Backend.Controllers
         /// <param name="complete"></param>
         /// <returns></returns>
         [Route("api/challenge/checkdaily")]
-        [HttpGet]
+        [Authorize(Policy = UserRole.USER, Roles = UserRole.USER)]
+        [HttpPost]
         public IActionResult IsDailyChallengeCompleted(CheckDailyChallengeDTO checkDaily) {
             if(checkDaily == null) return BadRequest();
             User usr = _userRepo.GetById(checkDaily.UserID);

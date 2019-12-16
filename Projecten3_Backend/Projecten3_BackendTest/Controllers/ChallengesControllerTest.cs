@@ -133,7 +133,7 @@ namespace Projecten3_BackendTest.Controllers
             _userRepository.Setup(ur => ur.GetById(0)).Returns(_dummyData.Users.First);
             _challengeRepository.Setup(cr => cr.GetUserChallenge(completeChallengeDTO.UserID, completeChallengeDTO.ChallengeID)).Returns(_dummyData.ChallengesUser.First);
             _userRepository.Setup(ur => ur.AddExp(It.IsAny<User>()));
-            _challengeRepository.Setup(cr => cr.CompleteChallenge(It.IsAny<ChallengeUser>()));
+            _challengeRepository.Setup(cr => cr.CompleteChallenge(It.IsAny<ChallengeUser>(),DummyProject3_BackendContext.CompleteChallengeDate));
             var okResult = _challengesController.CompleteChallenge(completeChallengeDTO) as OkObjectResult;
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
