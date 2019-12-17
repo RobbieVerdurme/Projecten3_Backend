@@ -131,9 +131,16 @@ namespace Projecten3_BackendTest.Controllers
         {
             CompleteChallengeDTO completeChallengeDTO = _dummyData.CompleteChallengeDTO;
             _userRepository.Setup(ur => ur.GetById(0)).Returns(_dummyData.Users.First);
+
+
             _challengeRepository.Setup(cr => cr.GetUserChallenge(completeChallengeDTO.UserID, completeChallengeDTO.ChallengeID)).Returns(_dummyData.ChallengesUser.First);
             _userRepository.Setup(ur => ur.AddExp(It.IsAny<User>()));
-            _challengeRepository.Setup(cr => cr.CompleteChallenge(It.IsAny<ChallengeUser>(),DummyProject3_BackendContext.CompleteChallengeDate));
+            _challengeRepository.Setup(repo => repo.UserHasCompletedDailyChallengeOfCategory(completeChallengeDTO.UserID,
+               _dummyData.ChallengesUser.First().Challenge.Category.CategoryId, DummyProject3_BackendContext.CompleteChallengeDate.Day,
+               DummyProject3_BackendContext.CompleteChallengeDate.Month, DummyProject3_BackendContext.CompleteChallengeDate.Year)).Returns(false);
+            _challengeRepository.Setup(repo => repo.CompleteChallenge(_dummyData.ChallengesUser.First(), DummyProject3_BackendContext.CompleteChallengeDate)).Callback(() => {
+                _dummyData.ChallengesUser.First().CompletedDate = DummyProject3_BackendContext.CompleteChallengeDate;
+            });
             var okResult = _challengesController.CompleteChallenge(completeChallengeDTO) as OkObjectResult;
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
