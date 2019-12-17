@@ -36,6 +36,8 @@ namespace Projecten3_Backend.Data.IRepository
 
         IEnumerable<Challenge> GetChallengesOfCategories(IList<int> categoryIds);
 
+        DateTime GetTimeStamp();
+
         void SaveChanges();
     }
 }

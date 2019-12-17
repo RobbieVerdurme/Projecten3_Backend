@@ -150,5 +150,9 @@ namespace Projecten3_Backend.Data.Repository
         {
             return _challenges.Include(c => c.Category).Where(challenge => categoryIds.Contains(challenge.Category.CategoryId));
         }
+
+        public DateTime GetTimeStamp() {
+            return DateTime.Now;
+        }
     }
 }
