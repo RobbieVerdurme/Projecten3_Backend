@@ -151,6 +151,13 @@ namespace Projecten3_Backend.Data.Repository
             return _challenges.Include(c => c.Category).Where(challenge => categoryIds.Contains(challenge.Category.CategoryId));
         }
 
+
+        IEnumerable<Challenge> GetChallengesOfCategoryAndLevel(int categoryId, int level)
+        {
+            return _challenges.Include(c => c.Category).Where(c => c.Category.CategoryId == categoryId && c.Level == level).ToList();
+        }
+
+
         public DateTime GetTimeStamp() {
             return DateTime.Now;
         }
