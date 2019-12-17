@@ -113,15 +113,22 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 400 if there are no challenges
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("api/challenge/category)"]
+        [Route("api/challenge/category)")]
         [HttpGet]
         public IActionResult GetChallengesForCategoryAndLevel(int categoryId, int level)
         {
             IEnumerable<Challenge> challenges = _challengeRepo.GetChallengesOfCategoryAndLevel(categoryId, level);
 
             if (challenges.Count() == 0) return BadRequest();
-
-            return Ok();
+            else
+            {
+                ICollection<ChallengeDTO> challengeDTOs = new List<ChallengeDTO>(); 
+                foreach(Challenge c in challenges)
+                {
+                    challengeDTOs.Add(new ChallengeDTO(c));
+                }
+                return Ok(challengeDTOs);
+            }
         }
 
         [Route("api/challenge")]

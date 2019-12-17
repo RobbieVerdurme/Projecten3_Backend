@@ -152,7 +152,7 @@ namespace Projecten3_Backend.Data.Repository
         }
 
 
-        IEnumerable<Challenge> GetChallengesOfCategoryAndLevel(int categoryId, int level)
+        public IEnumerable<Challenge> GetChallengesOfCategoryAndLevel(int categoryId, int level)
         {
             return _challenges.Include(c => c.Category).Where(c => c.Category.CategoryId == categoryId && c.Level == level).ToList();
         }
