@@ -18,13 +18,13 @@ namespace Projecten3_Backend.Controllers
     [ApiController]
     public class ChallengesController : ControllerBase
     {
-        private readonly IChallengeRepository _repo;
+        private readonly IChallengeRepository _challengeRepo;
         private readonly IUserRepository _userRepo;
         private readonly ICategoryRepository _categoryRepository;
 
-        public ChallengesController(IChallengeRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository)
+        public ChallengesController(IChallengeRepository challengeRepo, IUserRepository userRepo, ICategoryRepository categoryRepository)
         {
-            _repo = repo;
+            _challengeRepo = challengeRepo;
             _userRepo = userRepo;
             _categoryRepository = categoryRepository;
         }
@@ -46,10 +46,10 @@ namespace Projecten3_Backend.Controllers
             if(payload == null || payload.ChallengeIds == null) return BadRequest();
             User user = _userRepo.GetById(payload.UserId);
             List<int> challenges = new List<int>(payload.ChallengeIds);
-            if (user == null || !_repo.ChallengesExist(challenges)) return BadRequest();
+            if (user == null || !_challengeRepo.ChallengesExist(challenges)) return BadRequest();
             try {
-                _repo.AddChallengesToUser(payload.UserId, challenges);
-                _repo.SaveChanges();
+                _challengeRepo.AddChallengesToUser(payload.UserId, challenges);
+                _challengeRepo.SaveChanges();
             } catch (Exception)
             {
                 return StatusCode(500);
@@ -77,10 +77,10 @@ namespace Projecten3_Backend.Controllers
             Challenge challenge = Model.Challenge.MapAddChallengeDTOToChallenge(dto);
             challenge.Category = category;
             //Already exists -> return a 303 See Other StatusCode
-            if (_repo.ChallengeExists(challenge)) return StatusCode(303);
+            if (_challengeRepo.ChallengeExists(challenge)) return StatusCode(303);
             try {
-                _repo.AddChallenge(challenge);
-                _repo.SaveChanges();
+                _challengeRepo.AddChallenge(challenge);
+                _challengeRepo.SaveChanges();
                 return Ok();
             }
             catch (Exception) {
@@ -103,13 +103,31 @@ namespace Projecten3_Backend.Controllers
 
             if (user == null) return BadRequest();
 
-            return Ok(_repo.GetUserChallenges(id).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
+            return Ok(_challengeRepo.GetUserChallenges(id).Select(c => ChallengeUser.MapToUserChallengeDTO(c)).ToList());
+        }
+
+        /// <summary>
+        /// Get the challenges for a category and a level
+        /// </summary>
+        /// <returns>
+        /// HTTP 400 if there are no challenges
+        /// HTTP 200 otherwise.
+        /// </returns>
+        [Route("api/challenge/category)"]
+        [HttpGet]
+        public IActionResult GetChallengesForCategoryAndLevel(int categoryId, int level)
+        {
+            IEnumerable<Challenge> challenges = _challengeRepo.GetChallengesOfCategoryAndLevel(categoryId, level);
+
+            if (challenges.Count() == 0) return BadRequest();
+
+            return Ok();
         }
 
         [Route("api/challenge")]
         [HttpGet]
         public IActionResult GetChallenges() {
-            return Ok(_repo.GetChallenges().ToList());
+            return Ok(_challengeRepo.GetChallenges().ToList());
         }
 
         /// <summary>
@@ -131,11 +149,11 @@ namespace Projecten3_Backend.Controllers
             User usr = _userRepo.GetById(complete.UserID);
             if (usr == null) return BadRequest();
 
-            ChallengeUser challenge = _repo.GetUserChallenge(complete.UserID,complete.ChallengeID);
+            ChallengeUser challenge = _challengeRepo.GetUserChallenge(complete.UserID,complete.ChallengeID);
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
-            if (_repo.UserHasCompletedDailyChallengeOfCategory(complete.UserID, challenge.Challenge.Category.CategoryId, complete.CompletedOn.Day, complete.CompletedOn.Month, complete.CompletedOn.Year))
+            if (_challengeRepo.UserHasCompletedDailyChallengeOfCategory(complete.UserID, challenge.Challenge.Category.CategoryId, complete.CompletedOn.Day, complete.CompletedOn.Month, complete.CompletedOn.Year))
             {
                 return StatusCode(303);
             }
@@ -146,10 +164,10 @@ namespace Projecten3_Backend.Controllers
 
                 _userRepo.AddExp(usr);
                 _userRepo.SaveChanges();
-                _repo.CompleteChallenge(challenge,complete.CompletedOn);
+                _challengeRepo.CompleteChallenge(challenge,complete.CompletedOn);
                 _userRepo.RaiseLeaderboardScore(complete.UserID);
                 _userRepo.SaveChanges();
-                _repo.SaveChanges();
+                _challengeRepo.SaveChanges();
             }
             catch (Exception) {
                 return StatusCode(500);
@@ -178,13 +196,13 @@ namespace Projecten3_Backend.Controllers
             User usr = _userRepo.GetById(checkDaily.UserID);
             if (usr == null) return BadRequest();
 
-            ChallengeUser challenge = _repo.GetUserChallenge(checkDaily.UserID, checkDaily.ChallengeID);
+            ChallengeUser challenge = _challengeRepo.GetUserChallenge(checkDaily.UserID, checkDaily.ChallengeID);
             if (challenge == null) return BadRequest();
 
             if (challenge.CompletedDate != null) return StatusCode(304);
             //Timestamp, DO NOT CHANGE VALUE! Needed to check the daily completed challenges.
-            DateTime timeStamp = _repo.GetTimeStamp();
-            if (_repo.UserHasCompletedDailyChallengeOfCategory(checkDaily.UserID, challenge.Challenge.Category.CategoryId, timeStamp.Day, timeStamp.Month, timeStamp.Year))
+            DateTime timeStamp = _challengeRepo.GetTimeStamp();
+            if (_challengeRepo.UserHasCompletedDailyChallengeOfCategory(checkDaily.UserID, challenge.Challenge.Category.CategoryId, timeStamp.Day, timeStamp.Month, timeStamp.Year))
             {
                 return StatusCode(303);
             }
@@ -202,7 +220,7 @@ namespace Projecten3_Backend.Controllers
             User user = _userRepo.GetById(id);
             if (user == null) return BadRequest();
             IList<int> categories = user.Categories.Select(c => c.CategoryId).ToList();
-            return Ok(_repo.GetChallengesOfCategories(categories));
+            return Ok(_challengeRepo.GetChallengesOfCategories(categories));
         }
         //Edit
 
