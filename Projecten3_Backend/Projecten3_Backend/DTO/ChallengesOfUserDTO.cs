@@ -20,6 +20,8 @@ namespace Projecten3_Backend.DTO
 
         public DateTime? CompletedDate { get; set; }
 
+        public int Level { get; set; }
+
         //stars in the android app
         public int Rating { get; set; }
 
