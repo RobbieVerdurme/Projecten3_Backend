@@ -183,7 +183,7 @@ namespace Projecten3_Backend.Controllers
 
             if (challenge.CompletedDate != null) return StatusCode(304);
             //Timestamp, DO NOT CHANGE VALUE! Needed to check the daily completed challenges.
-            DateTime timeStamp = DateTime.Now;
+            DateTime timeStamp = _repo.GetTimeStamp();
             if (_repo.UserHasCompletedDailyChallengeOfCategory(checkDaily.UserID, challenge.Challenge.Category.CategoryId, timeStamp.Day, timeStamp.Month, timeStamp.Year))
             {
                 return StatusCode(303);
