@@ -107,18 +107,16 @@ namespace Projecten3_Backend.Controllers
                 return BadRequest();
             }
 
-            IList<int> categoryIds = new List<int>(user.Categories);
-            if (!_categoryRepo.CategoriesExist(categoryIds)) return BadRequest();
+            if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
-            IList<Category> categories = _categoryRepo.GetCategories().Where(c => categoryIds.Contains(c.CategoryId)).ToList();
-
+            
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
-            u.Categories = categories;
+            u.Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
             u.Contract = user.Contract;
             
 
@@ -157,14 +155,14 @@ namespace Projecten3_Backend.Controllers
             Company comp = _companyRepo.GetById(user.Company);
             if (comp == null) return BadRequest();
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
-            if (!_therapistRepo.TherapistsExist(user.Therapists)){ }
+            if (!_therapistRepo.TherapistsExist(user.Therapists)) return BadRequest();
             User u = new User {
                 FirstName = user.FirstName,
                 FamilyName = user.FamilyName,
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-                Categories = new List<Category>(_categoryRepo.GetCategoriesById(user.Categories)),
+                Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList(),
                 Contract = comp.Contract
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
@@ -232,8 +230,7 @@ namespace Projecten3_Backend.Controllers
             }
             try
             {
-                IEnumerable<Therapist> th = _userRepo.GetUserTherapists(id);
-                return Ok(th.Select(t => Therapist.MapTherapistToTherapistDTO(t)));
+                return Ok(_userRepo.GetUserTherapists(id).Select(t => Therapist.MapTherapistToTherapistDTO(t)));
             }
             catch (Exception)
             {

@@ -179,7 +179,7 @@ namespace Projecten3_Backend.Controllers
             {
                 return NotFound();
             }
-            return Ok(_userRepo.GetUsers().Where(u => u.Company.CompanyId == id).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));
+            return Ok(_userRepo.GetUsersOfCompany(id).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));
         }
         #endregion
     }

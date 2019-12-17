@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data.IRepository;
+using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
 using Projecten3_Backend.Models;
 using System.Collections.Generic;
@@ -98,6 +99,16 @@ namespace Projecten3_Backend.Data.Repository
         public IEnumerable<Therapist> GetUserTherapists(int id)
         {
             return _dbContext.TherapistUser.Where(c => c.UserId == id).Include(th => th.Therapist).ThenInclude(u => u.TherapistType).Include(u => u.User).Select(t => t.Therapist).ToList();
+        }
+
+        public IEnumerable<User> GetUsersOfCompany(int companyId)
+        {
+            return _users.Where(u => u.Company.CompanyId == companyId);
+        }
+
+        public IEnumerable<User> GetClientsOfTherapist(IList<int> clients)
+        {
+            return _users.Where(u => clients.Contains(u.UserId));
         }
         #endregion
     }

@@ -171,7 +171,8 @@ namespace Projecten3_Backend.Controllers
         /// <param name="complete"></param>
         /// <returns></returns>
         [Route("api/challenge/checkdaily")]
-        [HttpGet]
+        [Authorize(Policy = UserRole.USER, Roles = UserRole.USER)]
+        [HttpPost]
         public IActionResult IsDailyChallengeCompleted(CheckDailyChallengeDTO checkDaily) {
             if(checkDaily == null) return BadRequest();
             User usr = _userRepo.GetById(checkDaily.UserID);
@@ -201,7 +202,7 @@ namespace Projecten3_Backend.Controllers
             User user = _userRepo.GetById(id);
             if (user == null) return BadRequest();
             IList<int> categories = user.Categories.Select(c => c.CategoryId).ToList();
-            return Ok(_repo.GetChallenges().Where(challenge => categories.Contains(challenge.Category.CategoryId)).ToList());
+            return Ok(_repo.GetChallengesOfCategories(categories));
         }
         //Edit
 

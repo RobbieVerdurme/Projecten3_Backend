@@ -77,7 +77,7 @@ namespace Projecten3_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(new List<UserDTO>(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client)).ToList()));
+            return Ok(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client)));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Projecten3_Backend.Controllers
             for (int i = 0; i < 7; i++) {
                 openingTimes[i].Interval = therapist.OpeningTimes[i];
             }
-            ICollection<TherapistUser> therapistUsers = _userRepo.GetUsers().Where(u => therapist.Clients.Contains(u.UserId)).Select(u => new TherapistUser
+            ICollection<TherapistUser> therapistUsers = _userRepo.GetClientsOfTherapist(therapist.Clients).Select(u => new TherapistUser
             {
                 UserId = u.UserId,
                 User = u,
@@ -156,7 +156,7 @@ namespace Projecten3_Backend.Controllers
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
             if (!_repo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
 
-            Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _repo.GetTherapistTypes().First(tt => tt.TherapistTypeId == therapist.TherapistTypeId)); 
+            Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _repo.GetTherapistType(therapist.TherapistTypeId)); 
 
             if(_repo.TherapistExists(t)) return StatusCode(303);
             _repo.AddTherapist(t);
@@ -223,10 +223,11 @@ namespace Projecten3_Backend.Controllers
             if (edit == null || string.IsNullOrEmpty(edit.Type)) return BadRequest();
 
             TherapistType therapistType = _repo.GetTherapistType(edit.Id);
-            therapistType.Categories = new List<Category>(_categoryRepository.GetCategoriesById(edit.Categories));
+            if (therapistType == null || !_categoryRepository.CategoriesExist(edit.Categories)) return BadRequest();
+            therapistType.Categories = _categoryRepository.GetCategoriesById(edit.Categories).ToList();
             therapistType.Type = edit.Type;
 
-            if (!_repo.TherapistTypeExists(therapistType)) return StatusCode(303);
+            
             _repo.EditTherapistType(therapistType);
             try
             {

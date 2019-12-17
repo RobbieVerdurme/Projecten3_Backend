@@ -65,7 +65,7 @@ namespace Projecten3_Backend.Data.Repository
         /// <returns></returns>
         public bool ChallengeExists(Challenge challenge)
         {
-            return _dbContext.Challenges.Where(c => c.Title == challenge.Title).FirstOrDefault() != null;
+            return _dbContext.Challenges.Where(c => c.Title == challenge.Title && c.Description == challenge.Description && c.Category.CategoryId == challenge.Category.CategoryId).FirstOrDefault() != null;
         }
 
         /// <summary>
@@ -144,6 +144,11 @@ namespace Projecten3_Backend.Data.Repository
         public void UpdateChallenge(Challenge challenge)
         {
             _challenges.Update(challenge);
+        }
+
+        public IEnumerable<Challenge> GetChallengesOfCategories(IList<int> categoryIds)
+        {
+            return _challenges.Include(c => c.Category).Where(challenge => categoryIds.Contains(challenge.Category.CategoryId));
         }
     }
 }

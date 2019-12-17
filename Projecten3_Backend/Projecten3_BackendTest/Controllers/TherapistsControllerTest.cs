@@ -198,7 +198,7 @@ namespace Projecten3_BackendTest.Controllers
             _categoryRepository.Setup(cr => cr.GetCategoriesById(editTherapistTypeDTO.Categories)).Returns(_dummyData.Categories);
             var okResult = _therapistsController.EditTherapistType(editTherapistTypeDTO) as StatusCodeResult;
             Assert.NotNull(okResult);
-            Assert.Equal(303, okResult.StatusCode);
+            Assert.Equal(400, okResult.StatusCode);
         }
         #endregion
     }
