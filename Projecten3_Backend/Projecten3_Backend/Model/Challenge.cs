@@ -20,6 +20,8 @@ namespace Projecten3_Backend.Model
 
         public Category Category { get; set; }
 
+        public int Level { get; set; }
+
         public override bool Equals(object obj)
         {
             var challenge = obj as Challenge;

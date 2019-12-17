@@ -15,5 +15,7 @@ namespace Projecten3_Backend.DTO
         public string Description { get; set; }
 
         public int CategoryId { get; set; }
+
+        public int Level { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Projecten3_Backend.DTO
 {
-    public class ChallengesOfUserDTO
+    public class ChallengeDTO
     {
         public int ChallengeId { get; set; }
 
@@ -18,13 +18,17 @@ namespace Projecten3_Backend.DTO
 
         public Category Category { get; set; }
 
-        public DateTime? CompletedDate { get; set; }
-
         public int Level { get; set; }
 
-        //stars in the android app
-        public int Rating { get; set; }
 
-        public string Feedback { get; set; }
+        public ChallengeDTO(Challenge challenge)
+        {
+            ChallengeId = challenge.ChallengeId;
+            Title = challenge.Title;
+            ChallengeImage = challenge.ChallengeImage;
+            Description = challenge.Description;
+            Category = challenge.Category;
+            Level = challenge.Level;
+        }
     }
 }
