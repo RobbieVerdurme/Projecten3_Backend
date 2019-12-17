@@ -113,7 +113,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 400 if there are no challenges
         /// HTTP 200 otherwise.
         /// </returns>
-        [Route("api/challenge/category)")]
+        [Route("api/challenge/category")]
         [HttpGet]
         public IActionResult GetChallengesForCategoryAndLevel(int categoryId, int level)
         {

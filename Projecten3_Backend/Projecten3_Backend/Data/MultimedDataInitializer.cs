@@ -41,7 +41,7 @@ namespace Projecten3_Backend.Data
                 _dbContext.Add(c);
 
                 //challenges
-                Challenge ch = new Challenge() { ChallengeImage = "", Description = "Loop 2 km", Title = "Lopen", Category = c };
+                Challenge ch = new Challenge() { ChallengeImage = "", Description = "Loop 2 km", Title = "Lopen", Category = c, Level = 1 };
 
                 //TherapistType
                 TherapistType thType = new TherapistType() { Type = "Diëtist", Categories = new List<Category> { c } };

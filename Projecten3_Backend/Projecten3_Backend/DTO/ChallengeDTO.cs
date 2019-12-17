@@ -16,7 +16,7 @@ namespace Projecten3_Backend.DTO
 
         public string Description { get; set; }
 
-        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
         public int Level { get; set; }
 
@@ -27,7 +27,7 @@ namespace Projecten3_Backend.DTO
             Title = challenge.Title;
             ChallengeImage = challenge.ChallengeImage;
             Description = challenge.Description;
-            CategoryId = challenge.Category.CategoryId;
+            Category = challenge.Category;
             Level = challenge.Level;
         }
     }
