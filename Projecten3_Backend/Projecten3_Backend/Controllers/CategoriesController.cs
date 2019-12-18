@@ -38,7 +38,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPut]
         public IActionResult EditCategory(Category category) {
             if (category == null || string.IsNullOrEmpty(category.Name)) return BadRequest();
-            if (_repo.CategoryExists(category)) return StatusCode(303);
+            if (_repo.CategoryExists(category.Name)) return StatusCode(303);
 
             Category edited = _repo.GetById(category.CategoryId);
             if (edited == null) return BadRequest();
@@ -107,17 +107,19 @@ namespace Projecten3_Backend.Controllers
         [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         [Route("api/category/add")]
         [HttpPost]
-        public IActionResult AddCategory(Category category) {
-            if (category == null || string.IsNullOrEmpty(category.Name)) return BadRequest();
+        public IActionResult AddCategory(string category) {
+            if (string.IsNullOrEmpty(category)) return BadRequest();
             if (_repo.CategoryExists(category)) return StatusCode(303);
 
-            _repo.AddCategory(category);
+            _repo.AddCategory(new Category {
+                Name = category
+            });
 
             try
             {
                 _repo.SaveChanges();
             }
-            catch (Exception) {
+            catch (Exception e) {
                 return StatusCode(500);
             }
             return Ok();
