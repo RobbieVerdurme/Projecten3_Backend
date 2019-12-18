@@ -37,12 +37,12 @@ namespace Projecten3_Backend.Data.Repository
 
         public User GetByEmail(string email)
         {
-            return _users.Include(u => u.Categories).FirstOrDefault(u => u.Email == email);
+            return _users.Include(u => u.Categories).Include(u => u.Company).FirstOrDefault(u => u.Email == email);
         }
 
         public User GetById(int id)
         {
-            return _users.Include(u => u.Categories).FirstOrDefault(u => u.UserId == id);
+            return _users.Include(u => u.Categories).Include(u => u.Company).FirstOrDefault(u => u.UserId == id);
         }
 
         public void RaiseLeaderboardScore(int id)

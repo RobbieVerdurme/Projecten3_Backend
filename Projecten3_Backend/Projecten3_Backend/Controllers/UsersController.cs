@@ -258,10 +258,12 @@ namespace Projecten3_Backend.Controllers
             {
                 return NotFound();
             }
+
             if (user.Company == null)
             {
                 return NotFound();
             }
+
             return Ok(_userRepo.GetUsersOfCompany(user.Company.CompanyId).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));
         }
     }
