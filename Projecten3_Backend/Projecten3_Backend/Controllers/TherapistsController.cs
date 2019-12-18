@@ -77,7 +77,7 @@ namespace Projecten3_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(new List<UserDTO>(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client)).ToList()));
+            return Ok(new List<UserDTO>(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client, _userRepo.GetUserCategories(client.UserId).ToList())).ToList()));
         }
 
         /// <summary>

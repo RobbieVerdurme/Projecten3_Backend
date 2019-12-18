@@ -76,7 +76,7 @@ namespace Projecten3_Backend.Model
             }
         }
 
-        public static UserDTO MapUserToUserDTO(User usr)
+        public static UserDTO MapUserToUserDTO(User usr, List<Category> categories)
         {
             if(usr != null) {
                 UserDTO user = new UserDTO()
@@ -86,7 +86,7 @@ namespace Projecten3_Backend.Model
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
                     Phone = usr.Phone,
-                    Categories = usr.Categories.Select(c => c.Category),
+                    Categories = categories,
                     Contract = usr.Contract,
                     ExperiencePoints = usr.ExperiencePoints
                 };

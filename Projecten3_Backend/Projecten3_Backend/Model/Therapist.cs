@@ -136,7 +136,7 @@ namespace Projecten3_Backend.Model
             return new GetTherapistDetailsDTO
             {
                 City = therapist.City,
-                Clients = new List<UserDTO>(therapist.ClientList.Select(client => User.MapUserToUserDTO(client)).ToList()),
+                Clients = new List<UserDTO>(therapist.ClientList.Select(client => User.MapUserToUserDTO(client, client.Categories.Select(c => c.Category).ToList())).ToList()),
                 Email = therapist.Email,
                 FirstName = therapist.FirstName,
                 HouseNumber = therapist.HouseNumber,

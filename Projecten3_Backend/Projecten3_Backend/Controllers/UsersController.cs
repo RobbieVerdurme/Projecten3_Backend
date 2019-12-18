@@ -39,7 +39,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUser()
         {
-            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u)));
+            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u, _userRepo.GetUserCategories(u.UserId).ToList())));
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Projecten3_Backend.Controllers
                 return NotFound();
             }
 
-            return Ok(Model.User.MapUserToUserDTO(user));
+            return Ok(Model.User.MapUserToUserDTO(user, _userRepo.GetUserCategories(id).ToList()));
         }
 
         /// <summary>
