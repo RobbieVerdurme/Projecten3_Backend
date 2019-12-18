@@ -210,6 +210,7 @@ namespace Projecten3_BackendTest.Controllers
             _dummyData.ChallengesUser.Skip(1).First().CompletedDate = DummyProject3_BackendContext.CompleteChallengeDate;
             _userRepository.Setup(ur => ur.GetById(0)).Returns(_dummyData.Users.First());
             _challengeRepository.Setup(repo => repo.GetUserChallenge(input.UserID, input.ChallengeID)).Returns(_dummyData.ChallengesUser.First());
+            _challengeRepository.Setup(repo => repo.GetTimeStamp()).Returns(DummyProject3_BackendContext.CompleteChallengeDate);
             _challengeRepository.Setup(repo => repo.UserHasCompletedDailyChallengeOfCategory(input.UserID,
             _dummyData.ChallengesUser.First().Challenge.Category.CategoryId, DummyProject3_BackendContext.CompleteChallengeDate.Day,
             DummyProject3_BackendContext.CompleteChallengeDate.Month, DummyProject3_BackendContext.CompleteChallengeDate.Year)).Returns(true);
