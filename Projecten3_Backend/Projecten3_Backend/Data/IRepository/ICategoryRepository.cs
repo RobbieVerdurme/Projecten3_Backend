@@ -19,7 +19,7 @@ namespace Projecten3_Backend.Data.IRepository
         void AddCategory(Category category);
 
         void SaveChanges();
-        bool CategoryExists(Category category);
+        bool CategoryExists(string category);
 
         void Update(Category category);
         void DeleteCategory(int id);
