@@ -31,7 +31,6 @@ namespace Projecten3_Backend.Data
             {
                 await CreateRoles();
 
-                #region Users
                
                 //Multimeduser
                 await CreateUser("SofieV","SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
@@ -81,7 +80,7 @@ namespace Projecten3_Backend.Data
 
 
                 th.AddClient(usr);
-                #endregion
+                
 
 
                 #region Save changes

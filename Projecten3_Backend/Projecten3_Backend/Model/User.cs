@@ -139,6 +139,22 @@ namespace Projecten3_Backend.Model
             }
             return null;
           }
+
+        public static CategoryUser MapCategoryToCategoryUser(Category category, User user)
+        {
+            if(user != null)
+            {
+                CategoryUser cuser = new CategoryUser()
+                {
+                    Category = category,
+                    User = user,
+                    UserId = user.UserId,
+                    CategoryId = category.CategoryId
+                };
+                return cuser;
+            }
+            return null;
+        }
         #endregion
     }
 }

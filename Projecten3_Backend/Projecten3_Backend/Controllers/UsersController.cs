@@ -108,6 +108,7 @@ namespace Projecten3_Backend.Controllers
             }
 
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
+            List<Category> categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
@@ -115,17 +116,18 @@ namespace Projecten3_Backend.Controllers
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
-            //TODO
-            //u.Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
-            //u.Categories = categories;
             u.Contract = user.Contract;
             
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
-            _userRepo.UpdateUser(u);
+          
             try
             {
+                _userRepo.UpdateUser(u);
+                _userRepo.SaveChanges();
+
+                u.Categories = categories.Select(c => Model.User.MapCategoryToCategoryUser(c, u)).ToList();
                 _userRepo.SaveChanges();
             }
             catch (Exception)
@@ -157,22 +159,26 @@ namespace Projecten3_Backend.Controllers
             if (comp == null) return BadRequest();
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
             if (!_therapistRepo.TherapistsExist(user.Therapists)) return BadRequest();
+            List<Category> categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
+
             User u = new User {
                 FirstName = user.FirstName,
                 FamilyName = user.FamilyName,
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-//CHECK IF NEEDED
-                //Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList(),
                 Contract = comp.Contract
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
-
-
-            _userRepo.AddUser(u);
+            
             try
             {
+                _userRepo.AddUser(u);
+                _userRepo.SaveChanges();
+
+
+                User usr = _userRepo.GetByEmail(u.Email);
+                usr.AddCategories(categories.Select(c => Model.User.MapCategoryToCategoryUser(c, usr)).ToList());
                 _userRepo.SaveChanges();
             }
             catch (Exception) {
