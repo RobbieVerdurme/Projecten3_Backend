@@ -38,7 +38,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPut]
         public IActionResult EditCategory(Category category) {
             if (category == null || string.IsNullOrEmpty(category.Name)) return BadRequest();
-            if (_repo.CategoryExists(category)) return StatusCode(303);
+            if (_repo.CategoryExists(category.Name)) return StatusCode(303);
 
             Category edited = _repo.GetById(category.CategoryId);
             if (edited == null) return BadRequest();
