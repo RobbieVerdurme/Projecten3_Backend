@@ -44,9 +44,9 @@ namespace Projecten3_BackendTest.Controllers
         [Fact]
         public void AddCategory_ReturnsOk()
         {
-            _categoryRepository.Setup(cr => cr.CategoryExists(It.IsAny<Category>())).Returns(false);
-            _categoryRepository.Setup(cr => cr.AddCategory(It.IsAny<Category>()));
-            var okResult = _categoriesController.AddCategory(_dummyData.Category) as OkResult;
+            _categoryRepository.Setup(cr => cr.CategoryExists(_dummyData.Category.Name)).Returns(false);
+            _categoryRepository.Setup(cr => cr.AddCategory(_dummyData.Category));
+            var okResult = _categoriesController.AddCategory(_dummyData.Category.Name) as OkResult;
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
         }
@@ -54,8 +54,8 @@ namespace Projecten3_BackendTest.Controllers
         [Fact]
         public void AddCategory_ReturnsStatusCodeAndFail()
         {
-            _categoryRepository.Setup(cr => cr.CategoryExists(It.IsAny<Category>())).Returns(true);
-            var okResult = _categoriesController.AddCategory(_dummyData.Category) as StatusCodeResult;
+            _categoryRepository.Setup(cr => cr.CategoryExists(_dummyData.Category.Name)).Returns(true);
+            var okResult = _categoriesController.AddCategory(_dummyData.Category.Name) as StatusCodeResult;
             Assert.NotNull(okResult);
             Assert.Equal(303, okResult.StatusCode);
         }
@@ -66,10 +66,10 @@ namespace Projecten3_BackendTest.Controllers
         public void EditCategory_ReturnsOk()
         {
             Category cat = _dummyData.Category;
-            _categoryRepository.Setup(cr => cr.CategoryExists(It.IsAny<Category>())).Returns(false);
-            _categoryRepository.Setup(cr => cr.Update(It.IsAny<Category>()));
+            _categoryRepository.Setup(cr => cr.CategoryExists(_dummyData.Category.Name)).Returns(false);
+            _categoryRepository.Setup(cr => cr.Update(_dummyData.Category));
             _categoryRepository.Setup(cr => cr.GetById(0)).Returns(cat);
-            var okResult = _categoriesController.AddCategory(cat) as OkResult;
+            var okResult = _categoriesController.AddCategory(cat.Name) as OkResult;
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
         }
@@ -77,8 +77,8 @@ namespace Projecten3_BackendTest.Controllers
         [Fact]
         public void EditCategory_ReturnsStatusCodeAndFail()
         {
-            _categoryRepository.Setup(cr => cr.CategoryExists(It.IsAny<Category>())).Returns(true);
-            var okResult = _categoriesController.AddCategory(_dummyData.Category) as StatusCodeResult;
+            _categoryRepository.Setup(cr => cr.CategoryExists(_dummyData.Category.Name)).Returns(true);
+            var okResult = _categoriesController.AddCategory(_dummyData.Category.Name) as StatusCodeResult;
             Assert.NotNull(okResult);
             Assert.Equal(303, okResult.StatusCode);
         }
