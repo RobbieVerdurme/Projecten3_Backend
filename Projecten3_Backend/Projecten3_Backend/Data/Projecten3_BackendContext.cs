@@ -22,6 +22,7 @@ namespace Projecten3_Backend.Models
         public DbSet<Challenge> Challenges { get; set; }
         public DbSet<ChallengeUser> ChallengeUser { get; set; }
         public DbSet<TherapistUser> TherapistUser { get; set; }
+        public DbSet<CategoryUser> CategoryUser { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<TherapistType> TherapistType { get; set; }
         public DbSet<OpeningTimes> OpeningTimes { get; set; }

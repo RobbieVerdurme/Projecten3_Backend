@@ -77,8 +77,8 @@ namespace Projecten3_BackendTest.Data
             therapist1.TherapistType = therapistType1;
             therapistType1.Categories = new List<Category>() { category1 };
 
-            user1.Categories = new List<Category>() { category1 };
-            user2.Categories = new List<Category>() { category1 };
+            user1.Categories = new List<CategoryUser>() { new CategoryUser() { CategoryId = category1.CategoryId, Category = category1, User = user1, UserId = user1.UserId } };
+            user2.Categories = new List<CategoryUser>() { new CategoryUser() { CategoryId =  category1.CategoryId, Category = category1, User = user2, UserId = user2.UserId } };
             user1.Challenges = new List<ChallengeUser>() { challengeUser1, challengeUser2 };
             user2.Challenges = new List<ChallengeUser>();
             user1.Company = company1;

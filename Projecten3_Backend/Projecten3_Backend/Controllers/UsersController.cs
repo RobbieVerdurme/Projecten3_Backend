@@ -39,7 +39,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUser()
         {
-            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u)));
+            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u, _userRepo.GetUserCategories(u.UserId).ToList())));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUserWithChallenges(int id)
         {
-            var user = _userRepo.GetById(id);
+            User user = _userRepo.GetById(id);
 
             if (user == null)
             {
@@ -77,14 +77,14 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUser(int id)
         {
-            var user = _userRepo.GetById(id);
+            User user = _userRepo.GetById(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(Model.User.MapUserToUserDTO(user));
+            return Ok(Model.User.MapUserToUserDTO(user, _userRepo.GetUserCategories(id).ToList()));
         }
 
         /// <summary>
@@ -111,12 +111,13 @@ namespace Projecten3_Backend.Controllers
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
-            
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
-            u.Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
+            //TODO
+            //u.Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
+            //u.Categories = categories;
             u.Contract = user.Contract;
             
 
@@ -162,7 +163,8 @@ namespace Projecten3_Backend.Controllers
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-                Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList(),
+//CHECK IF NEEDED
+                //Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList(),
                 Contract = comp.Contract
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
@@ -237,8 +239,8 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
         }
-
-        /// leaderboard
+        
+                /// leaderboard
         /// <summary>
         /// Get leaderboard
         /// </summary>
@@ -258,13 +260,43 @@ namespace Projecten3_Backend.Controllers
             {
                 return NotFound();
             }
-
-            if (user.Company == null)
+            
+             if (user.Company == null)
             {
                 return NotFound();
             }
 
             return Ok(_userRepo.GetUsersOfCompany(user.Company.CompanyId).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));
+         }
+            
+            
+
+        /// <summary>
+        /// get the therapist list from user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// a list of therapists
+        /// </returns>
+        [Route("api/users/Category/{id}")]
+        [HttpGet]
+        public IActionResult GetCategoryUser(int id)
+        {
+            var user = _userRepo.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            try
+            {
+                IEnumerable<Category> th = _userRepo.GetUserCategories(id);
+                return Ok(th);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

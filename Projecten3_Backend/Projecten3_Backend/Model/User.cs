@@ -35,18 +35,18 @@ namespace Projecten3_Backend.Model
 
         public virtual ICollection<TherapistUser> Therapists { get; set; } = new List<TherapistUser>();
 
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
-
-        public ICollection<Challenge> ChallengesList => Challenges.Select(ch => ch.Challenge).ToList();
+        public virtual ICollection<CategoryUser> Categories { get; set; } = new List<CategoryUser>();
 
         public ICollection<LeaderboardScore> LeaderboardScores { get; set; } = new List<LeaderboardScore>();
 
         #endregion
 
         #region Methods
-        public void AddChallenges(List<ChallengeUser> challenges) => challenges.AddRange(challenges);
+        public void AddChallenges(List<ChallengeUser> challenges) => challenges.ForEach(ch => Challenges.Add(ch));
 
         public void AddTherapist(Therapist therapist) => Therapists.Add(new TherapistUser() { Therapist = therapist, TherapistId = therapist.TherapistId, User = this, UserId = this.UserId});
+
+        public void AddCategories(List<CategoryUser> categoryUsers) => categoryUsers.ForEach(c => Categories.Add(c));
 
         public void AddLeaderboardScores(List<LeaderboardScore> leaderboardScores) => leaderboardScores.AddRange(leaderboardScores);
 
@@ -76,7 +76,7 @@ namespace Projecten3_Backend.Model
             }
         }
 
-        public static UserDTO MapUserToUserDTO(User usr)
+        public static UserDTO MapUserToUserDTO(User usr, List<Category> categories)
         {
             if(usr != null) {
                 UserDTO user = new UserDTO()
@@ -86,7 +86,7 @@ namespace Projecten3_Backend.Model
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
                     Phone = usr.Phone,
-                    Categories = usr.Categories,
+                    Categories = categories,
                     Contract = usr.Contract,
                     ExperiencePoints = usr.ExperiencePoints
                 };
@@ -111,7 +111,7 @@ namespace Projecten3_Backend.Model
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
                     Phone = usr.Phone,
-                    Categories = usr.Categories,
+                    Categories = usr.Categories.Select(c => c.Category),
                     Contract = usr.Contract,
                     ExperiencePoints = usr.ExperiencePoints,
                     Challenges = challenges
