@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data;
@@ -10,6 +11,7 @@ using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Projecten3_Backend.Controllers
 {    
@@ -22,16 +24,18 @@ namespace Projecten3_Backend.Controllers
         private readonly ICompanyRepository _companyRepo;
         private readonly ITherapistRepository _therapistRepo;
         private readonly IChallengeRepository _challengeRepo;
+        private readonly UserManager<IdentityUser> _userManager;
         #endregion
 
         #region ctor
-        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
+        public UsersController(IUserRepository userRepository, UserManager<IdentityUser> userManager,, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
         {
             _userRepo = userRepository;
             _categoryRepo = categoryRepository;
             _companyRepo = companyRepo;
             _therapistRepo = therapistRepo;
             _challengeRepo = challengeRepo;
+            _userManager = userManager;
         }
         #endregion
 
@@ -100,32 +104,36 @@ namespace Projecten3_Backend.Controllers
         [Route("api/users/edit")]
         [HttpPut]
         [Authorize(Roles = UserRole.MULTIMED_AND_USER)]
-        public IActionResult PutUser(EditUserDTO user)
+        public async Task<ActionResult> PutUser(EditUserDTO user)
         {
             if (user == null || string.IsNullOrEmpty(user.FamilyName) || string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.Phone) || string.IsNullOrEmpty(user.Email) || user.Categories == null)
             {
                 return BadRequest();
             }
-
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
-            
+
+            IdentityUser identityUser = await _userManager.FindByNameAsync(u.Email);
+            if (identityUser == null) return BadRequest();
+            identityUser.UserName = user.Email;
+
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
             u.Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
             u.Contract = user.Contract;
-            
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
             _userRepo.UpdateUser(u);
+
             try
             {
                 _userRepo.SaveChanges();
+                await _userManager.UpdateAsync(identityUser);
             }
             catch (Exception)
             {
@@ -192,15 +200,17 @@ namespace Projecten3_Backend.Controllers
         [Route("api/users/delete/{id:int}")]
         [HttpDelete]
         [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
-        public IActionResult DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
             var user = _userRepo.GetById(id);
-            if (user == null)
+            var identityUser = await _userManager.FindByNameAsync(user.Email);
+            if (user == null || identityUser == null)
             {
                 return NotFound();
             }
             try
             {
+                await _userManager.DeleteAsync(identityUser);
                 _userRepo.DeleteUser(id);
                 _userRepo.SaveChanges();
             }
