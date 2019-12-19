@@ -45,6 +45,7 @@ namespace Projecten3_Backend.Model
         public void AddChallenges(List<ChallengeUser> challenges) => challenges.ForEach(ch => Challenges.Add(ch));
 
         public void AddTherapist(Therapist therapist) => Therapists.Add(new TherapistUser() { Therapist = therapist, TherapistId = therapist.TherapistId, User = this, UserId = this.UserId});
+        public void AddTherapists(List<TherapistUser> therapists) => therapists.ForEach(t=> Therapists.Add(t));
 
         public void AddCategories(List<CategoryUser> categoryUsers) => categoryUsers.ForEach(c => Categories.Add(c));
 

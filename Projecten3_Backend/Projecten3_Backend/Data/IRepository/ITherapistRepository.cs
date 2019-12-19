@@ -1,4 +1,5 @@
 ﻿using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,10 @@ namespace Projecten3_Backend.Data.IRepository
         void UpdateTherapist(Therapist therapist);
 
         void EditTherapistType(TherapistType therapistType);
+
+        IEnumerable<Therapist> GetTherapistsById(IList<int> ids);
+
+        void AddTherapistsUsers(List<TherapistUser> therapistUsers);
 
         void SaveChanges();
     }
