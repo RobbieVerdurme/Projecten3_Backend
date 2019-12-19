@@ -19,14 +19,12 @@ namespace Projecten3_Backend.Controllers
     public class UsersController : ControllerBase
     {
         #region prop
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepo;
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICompanyRepository _companyRepo;
         private readonly ITherapistRepository _therapistRepo;
         private readonly IChallengeRepository _challengeRepo;
-        private readonly UserManager<IdentityUser> _userManager;
         #endregion
 
         #region ctor
@@ -37,7 +35,6 @@ namespace Projecten3_Backend.Controllers
             _companyRepo = companyRepo;
             _therapistRepo = therapistRepo;
             _challengeRepo = challengeRepo;
-            _signInManager = signInManager;
             _userManager = userManager;
         }
         #endregion
@@ -123,6 +120,7 @@ namespace Projecten3_Backend.Controllers
             IdentityUser identityUser = await _userManager.FindByNameAsync(u.Email);
             if (identityUser == null) return BadRequest();
             identityUser.UserName = user.Email;
+            identityUser.Email = user.Email;
 
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
