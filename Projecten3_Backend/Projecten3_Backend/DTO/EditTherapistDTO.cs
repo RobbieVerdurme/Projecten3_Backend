@@ -34,8 +34,6 @@ namespace Projecten3_Backend.DTO
 
         public int TherapistTypeId { get; set; }
 
-        public IList<string> OpeningTimes { get; set; } = new List<string>();
-
-        public IList<int> Clients { get; set; }
+        public List<OpeningTimes> OpeningTimes { get; set; }
     }
 }
