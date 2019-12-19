@@ -150,7 +150,7 @@ namespace Projecten3_Backend
             app.UseOpenApi();
 
             //Enable when working local, disable when pushing/merging to master 
-            multimedDataInitializer.InitializeData().Wait();
+            //multimedDataInitializer.InitializeData().Wait();
         }
     }
 }

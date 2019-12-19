@@ -19,7 +19,6 @@ namespace Projecten3_Backend.Controllers
     public class UsersController : ControllerBase
     {
         #region prop
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepo;
         private readonly ICategoryRepository _categoryRepo;
@@ -29,15 +28,13 @@ namespace Projecten3_Backend.Controllers
         #endregion
 
         #region ctor
-        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo, SignInManager<IdentityUser> signInManager,
-        UserManager<IdentityUser> userManager)
+        public UsersController(IUserRepository userRepository, UserManager<IdentityUser> userManager, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
         {
             _userRepo = userRepository;
             _categoryRepo = categoryRepository;
             _companyRepo = companyRepo;
             _therapistRepo = therapistRepo;
             _challengeRepo = challengeRepo;
-            _signInManager = signInManager;
             _userManager = userManager;
         }
         #endregion
@@ -107,32 +104,36 @@ namespace Projecten3_Backend.Controllers
         [Route("api/users/edit")]
         [HttpPut]
         [Authorize(Roles = UserRole.MULTIMED_AND_USER)]
-        public IActionResult PutUser(EditUserDTO user)
+        public async Task<ActionResult> PutUser(EditUserDTO user)
         {
             if (user == null || string.IsNullOrEmpty(user.FamilyName) || string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.Phone) || string.IsNullOrEmpty(user.Email) || user.Categories == null)
             {
                 return BadRequest();
             }
-
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
             List<Category> categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
+
+
+            IdentityUser identityUser = await _userManager.FindByNameAsync(u.Email);
+            if (identityUser == null) return BadRequest();
+            identityUser.UserName = user.Email;
+            identityUser.Email = user.Email;
+
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
             u.Contract = user.Contract;
-            
+            u.Categories = categories.Select(c => Model.User.MapCategoryToCategoryUser(c, u)).ToList();
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
             try
             {
+                await _userManager.UpdateAsync(identityUser);
                 _userRepo.UpdateUser(u);
-                _userRepo.SaveChanges();
-
-                u.Categories = categories.Select(c => Model.User.MapCategoryToCategoryUser(c, u)).ToList();
                 _userRepo.SaveChanges();
             }
             catch (Exception)
@@ -217,15 +218,17 @@ namespace Projecten3_Backend.Controllers
         [Route("api/users/delete/{id:int}")]
         [HttpDelete]
         [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
-        public IActionResult DeleteUser(int id)
+        public async Task<ActionResult> DeleteUser(int id)
         {
             var user = _userRepo.GetById(id);
-            if (user == null)
+            var identityUser = await _userManager.FindByNameAsync(user.Email);
+            if (user == null || identityUser == null)
             {
                 return NotFound();
             }
             try
             {
+                await _userManager.DeleteAsync(identityUser);
                 _userRepo.DeleteUser(id);
                 _userRepo.SaveChanges();
             }
