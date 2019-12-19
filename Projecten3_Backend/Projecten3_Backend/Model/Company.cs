@@ -55,7 +55,7 @@ namespace Projecten3_Backend.Model
                     Site = cmp.Site,
                     Contract = cmp.Contract
                 };
-                newcmp.CompanyMembers = cmp.CompanyMembers.Select(u => User.MapUserToUserDTO(u));
+                newcmp.CompanyMembers = cmp.CompanyMembers.Select(u => User.MapUserToUserDTO(u, u.Categories.Select(c => c.Category).ToList()));
                 return newcmp;
             }
             else

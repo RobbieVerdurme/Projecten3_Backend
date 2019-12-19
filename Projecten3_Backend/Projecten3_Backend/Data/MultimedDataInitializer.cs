@@ -31,7 +31,6 @@ namespace Projecten3_Backend.Data
             {
                 await CreateRoles();
 
-                #region Users
                
                 //Multimeduser
                 await CreateUser("SofieV","SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
@@ -57,12 +56,22 @@ namespace Projecten3_Backend.Data
                 _dbContext.Add(cmp);
 
                 //user
-                User usr = new User() { FirstName = "Boefer",FamilyName = "rob", Categories = new List<Category>{ c },Phone = "0478995888",ExperiencePoints = 16, Company = cmp, Email = "Boeferrob@live.be", Contract = cmp.Contract};
+                User usr = new User() { FirstName = "Boefer",FamilyName = "rob",Phone = "0478995888",ExperiencePoints = 16, Company = cmp, Email = "Boeferrob@live.be", Contract = cmp.Contract};
                 usr.AddTherapist(th);
+                //many to many from user
+                List<CategoryUser> cusr = new List<CategoryUser> { 
+                    new CategoryUser() { Category = c, User = usr, UserId = usr.UserId, CategoryId = c.CategoryId }
+                };
+
                 ChallengeUser chUsr = new ChallengeUser() { ChallengeUserId = usr.UserId, User = usr, ChallengeId = ch.ChallengeId, Challenge = ch };
+
                 usr.AddChallenges(new List<ChallengeUser> {
                     chUsr
                 });
+
+                usr.AddCategories(cusr);
+
+                
 
                 //account user
                 await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
@@ -71,7 +80,7 @@ namespace Projecten3_Backend.Data
 
 
                 th.AddClient(usr);
-                #endregion
+                
 
 
                 #region Save changes

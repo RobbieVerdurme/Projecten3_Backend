@@ -201,5 +201,27 @@ namespace Projecten3_BackendTest.Controllers
             Assert.Equal(400, okResult.StatusCode);
         }
         #endregion
+
+        #region Delete
+        [Fact]
+        public void DeleteTherapist_ReturnsOk()
+        {
+            _therapistRepository.Setup(tr => tr.GetById(1)).Returns(_dummyData.Therapists.First());
+            _therapistRepository.Setup(tr => tr.DeleteTherapist(1));
+            var okResult = _therapistsController.DeleteTherapistById(1) as OkResult;
+            Assert.NotNull(okResult);
+            Assert.Equal(200, okResult.StatusCode);
+        }
+
+        [Fact]
+        public void DeleteTherapist_ReturnsBadRequest()
+        {
+            _therapistRepository.Setup(tr => tr.GetById(0));
+            _therapistRepository.Setup(tr => tr.DeleteTherapist(1));
+            var okResult = _therapistsController.DeleteTherapistById(1) as StatusCodeResult;
+            Assert.IsType<BadRequestResult>(okResult);
+            Assert.Equal(400, okResult.StatusCode);
+        }
+        #endregion
     }
 }

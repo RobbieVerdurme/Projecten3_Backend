@@ -77,49 +77,6 @@ namespace Projecten3_Backend.Controllers
         }
 
         /// <summary>
-        /// Register a user
-        /// </summary>
-        /// <param name="model">the user details</param>
-        /// <returns></returns>
-        [Authorize( Roles = UserRole.MULTIMED)]
-        [HttpPost("register")]
-        public async Task<ActionResult<String>> Register(RegisterDTO model)
-        {
-            if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
-
-            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddToRoleAsync(user, "User");
-            if (result.Succeeded)
-            {
-                //return ok so the user knows the account has been created
-                return Ok();
-            }
-            return StatusCode(303);
-        }
-
-        /// <summary>
-        /// Register a therapist
-        /// </summary>
-        /// <param name="model">the therapist details</param>
-        /// <returns></returns>
-        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
-        [HttpPost("registerTherapist")]
-        public async Task<ActionResult<String>> RegisterTherapist(RegisterDTO model)
-        {
-            if (model == null || string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password)) return BadRequest();
-            IdentityUser user = new IdentityUser { UserName = model.Username, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddToRoleAsync(user, "Therapist");
-            if (result.Succeeded)
-            {
-                //return ok so the user knows the account has been created
-                return Ok();
-            }
-            return StatusCode(500);
-        }
-
-        /// <summary>
         /// Register a multimed user
         /// </summary>
         /// <param name="model">the multimed user details</param>

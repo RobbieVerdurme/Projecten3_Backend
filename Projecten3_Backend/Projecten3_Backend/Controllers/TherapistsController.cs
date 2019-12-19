@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data;
@@ -18,22 +19,27 @@ namespace Projecten3_Backend.Controllers
     [ApiController]
     public class TherapistsController : ControllerBase
     {
-        private readonly ITherapistRepository _repo;
+        private readonly ITherapistRepository _therapistRepo;
         private readonly IUserRepository _userRepo;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TherapistsController(ITherapistRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository)
+        public TherapistsController(ITherapistRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository, SignInManager<IdentityUser> signInManager,
+        UserManager<IdentityUser> userManager)
         {
-            _repo = repo;
+            _therapistRepo = repo;
             _userRepo = userRepo;
             _categoryRepository = categoryRepository;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [Route("api/therapist")]
         [HttpGet]
         public IActionResult GetTherapist()
         {
-            return Ok(_repo.GetTherapists());
+            return Ok(_therapistRepo.GetTherapists());
         }
 
         /// <summary>
@@ -48,7 +54,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetTherapist(int id)
         {
-            Therapist t = _repo.GetById(id);
+            Therapist t = _therapistRepo.GetById(id);
 
             if (t == null)
             {
@@ -70,14 +76,13 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetTherapistClients(int id)
         {
-            Therapist t = _repo.GetById(id);
+            Therapist t = _therapistRepo.GetById(id);
 
             if (t == null)
             {
                 return NotFound();
             }
-
-            return Ok(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client)));
+            return Ok(t.ClientList.Select(client => Model.User.MapUserToUserDTO(client, _userRepo.GetUserCategories(client.UserId).ToList())).ToList());
         }
 
         /// <summary>
@@ -100,33 +105,21 @@ namespace Projecten3_Backend.Controllers
 
             if (therapist.PostalCode < 1000 || 9999 < therapist.PostalCode) return BadRequest();//Belgian postal codes
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
-            if (!_repo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
-            if (therapist.OpeningTimes == null || _repo.HasInvalidOpeningTimes(therapist.OpeningTimes)) return BadRequest(); //Opening times
-            if (!_userRepo.UsersExist(therapist.Clients)) return BadRequest();//Clients
+            TherapistType tt = _therapistRepo.GetTherapistType(therapist.TherapistId);
+            if (tt == null) return BadRequest();//Therapist type
 
-            Therapist edited = _repo.GetById(therapist.TherapistId);
-            List<OpeningTimes> openingTimes = new List<OpeningTimes>(_repo.GetOpeningTimesForTherapist(therapist.TherapistId));
-            for (int i = 0; i < 7; i++) {
-                openingTimes[i].Interval = therapist.OpeningTimes[i];
-            }
-            ICollection<TherapistUser> therapistUsers = _userRepo.GetClientsOfTherapist(therapist.Clients).Select(u => new TherapistUser
-            {
-                UserId = u.UserId,
-                User = u,
-                TherapistId = edited.TherapistId,
-                Therapist = edited
-            }).ToList();
+            Therapist edited = _therapistRepo.GetById(therapist.TherapistId);
 
             if (edited == null) return BadRequest();
 
-            edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited, openingTimes, therapistUsers);
+            edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited);
 
-            if (_repo.TherapistExists(edited)) return StatusCode(303);
+            if (!_therapistRepo.TherapistExists(edited)) return StatusCode(303);
 
-            _repo.UpdateTherapist(edited);
+            _therapistRepo.UpdateTherapist(edited);
             try
             {
-                _repo.SaveChanges();
+                _therapistRepo.SaveChanges();
             }
             catch (Exception) {
                 return StatusCode(500);
@@ -147,28 +140,38 @@ namespace Projecten3_Backend.Controllers
         //[Authorize(Roles = UserRole.MULTIMED)]
         [Route("api/therapist/add")]
         [HttpPost]
-        public IActionResult AddTherapist(AddTherapistDTO therapist) {
+        public async Task<IActionResult> AddTherapist(AddTherapistDTO therapist) {
             if (therapist == null || string.IsNullOrEmpty(therapist.City) || string.IsNullOrEmpty(therapist.Email) || string.IsNullOrEmpty(therapist.FirstName)
                 || string.IsNullOrEmpty(therapist.LastName) || string.IsNullOrEmpty(therapist.PhoneNumber) || string.IsNullOrEmpty(therapist.Street)
                 || string.IsNullOrEmpty(therapist.Website)) return BadRequest();
 
             if (therapist.PostalCode < 1000 || 9999 < therapist.PostalCode) return BadRequest();//Belgian postal codes
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
-            if (!_repo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
+            if (!_therapistRepo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
 
-            Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _repo.GetTherapistType(therapist.TherapistTypeId)); 
+            Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _therapistRepo.GetTherapistType(therapist.TherapistTypeId)); 
 
-            if(_repo.TherapistExists(t)) return StatusCode(303);
-            _repo.AddTherapist(t);
+            if(_therapistRepo.TherapistExists(t)) return StatusCode(303);
+            
             try
             {
-                _repo.SaveChanges();
+                IdentityUser user = new IdentityUser { UserName = therapist.Email, Email = therapist.Email };
+                var result = await _userManager.CreateAsync(user, "Multimed@" + therapist.FirstName + therapist.LastName + therapist.PhoneNumber);
+                await _userManager.AddToRoleAsync(user, UserRole.THERAPIST);
+                if (result.Succeeded)
+                {
+                    _therapistRepo.AddTherapist(t);
+                    _therapistRepo.SaveChanges();
+                    //return ok so the user knows the account has been created
+                    return Ok();
+                }
+               
             }
             catch (Exception)
             {
                 return StatusCode(500);
             }
-            return Ok();
+            return StatusCode(303);
         }
 
         /// <summary>
@@ -187,12 +190,12 @@ namespace Projecten3_Backend.Controllers
         public IActionResult AddTherapistType(AddTherapistTypeDTO addTherapistType) {
             if (addTherapistType == null || string.IsNullOrEmpty(addTherapistType.Type) || !_categoryRepository.CategoriesExist(addTherapistType.Categories)) return BadRequest();
 
-            if (_repo.TherapistTypeExists(addTherapistType.Type, addTherapistType.Categories)) return StatusCode(303);
+            if (_therapistRepo.TherapistTypeExists(addTherapistType.Type, addTherapistType.Categories)) return StatusCode(303);
             TherapistType type = TherapistType.MapAddTherapistTypeDTOToTherapistType(addTherapistType, _categoryRepository.GetCategoriesById(addTherapistType.Categories));
-            _repo.AddTherapistType(type);
+            _therapistRepo.AddTherapistType(type);
             try
             {
-                _repo.SaveChanges();
+                _therapistRepo.SaveChanges();
                 return Ok();
             }
             catch (Exception) {
@@ -203,7 +206,7 @@ namespace Projecten3_Backend.Controllers
         [Route("api/therapist/type")]
         [HttpGet]
         public IActionResult GetTherapistTypes() {
-            return Ok(_repo.GetTherapistTypes());
+            return Ok(_therapistRepo.GetTherapistTypes());
         }
 
         /// <summary>
@@ -222,30 +225,58 @@ namespace Projecten3_Backend.Controllers
         public IActionResult EditTherapistType(EditTherapistTypeDTO edit) {
             if (edit == null || string.IsNullOrEmpty(edit.Type)) return BadRequest();
 
-            TherapistType therapistType = _repo.GetTherapistType(edit.Id);
+            TherapistType therapistType = _therapistRepo.GetTherapistType(edit.Id);
             if (therapistType == null || !_categoryRepository.CategoriesExist(edit.Categories)) return BadRequest();
             therapistType.Categories = _categoryRepository.GetCategoriesById(edit.Categories).ToList();
             therapistType.Type = edit.Type;
 
             
-            _repo.EditTherapistType(therapistType);
+            _therapistRepo.EditTherapistType(therapistType);
             try
             {
-                _repo.SaveChanges();
+                _therapistRepo.SaveChanges();
                 return Ok();
             }
             catch (Exception) {
                 return StatusCode(500);
             }
         }
-        
+
 
         //Delete therapist type
 
+
         // DELETE therapist
-
-
-
-
+        /// <summary>
+        /// Delete a therapist.
+        /// </summary>
+        /// <param name="delete"></param>
+        /// <returns>
+        /// HTTP 400 if the payload is malformed.
+        /// HTTP 303 if a therapisttype with these values already exists.
+        /// HTTP 500 if saving failed.
+        /// HTTP 200 if successful.
+        /// </returns>
+        [Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
+        [Route("api/therapist/{id}")]
+        [HttpDelete]
+        public IActionResult DeleteTherapistById(int id)
+        {
+            Therapist therapist = _therapistRepo.GetById(id);
+            if(therapist == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _therapistRepo.DeleteTherapist(id);
+                _therapistRepo.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+        }
     }
 }

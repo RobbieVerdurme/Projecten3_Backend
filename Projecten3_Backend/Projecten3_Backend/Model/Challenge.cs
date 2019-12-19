@@ -45,7 +45,8 @@ namespace Projecten3_Backend.Model
             {
                 Title = addChallengeDTO.Title,
                 Description = addChallengeDTO.Description,
-                ChallengeImage = addChallengeDTO.ChallengeImage
+                ChallengeImage = addChallengeDTO.ChallengeImage,
+                Level = addChallengeDTO.Level
             };
         }
         #endregion

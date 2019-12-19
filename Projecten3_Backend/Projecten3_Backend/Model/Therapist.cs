@@ -99,7 +99,7 @@ namespace Projecten3_Backend.Model
 
         public static Therapist MapAddTherapistDTOToTherapist(AddTherapistDTO therapist, TherapistType type)
         {
-            return new Therapist
+            Therapist ther = new Therapist
             {
                 City = therapist.City,
                 Email = therapist.Email,
@@ -112,17 +112,18 @@ namespace Projecten3_Backend.Model
                 TherapistType = type,
                 Website = therapist.Website
             };
+            ther.OpeningTimes = therapist.OpeningTimes;
+            return ther;
         }
 
-        public static Therapist MapEditTherapistDTOToTherapist(EditTherapistDTO therapist, Therapist edited, List<OpeningTimes> openingTimes, ICollection<TherapistUser> therapistUsers)
+        public static Therapist MapEditTherapistDTOToTherapist(EditTherapistDTO therapist, Therapist edited)
         {
             edited.City = therapist.City;
-            edited.Clients = therapistUsers;
             edited.Email = therapist.Email;
             edited.FirstName = therapist.FirstName;
             edited.HouseNumber = therapist.HouseNumber;
             edited.LastName = therapist.LastName;
-            edited.OpeningTimes = openingTimes;
+            edited.OpeningTimes = therapist.OpeningTimes;
             edited.PhoneNumber = therapist.PhoneNumber;
             edited.PostalCode = therapist.PostalCode;
             edited.Street = therapist.Street;
@@ -136,7 +137,7 @@ namespace Projecten3_Backend.Model
             return new GetTherapistDetailsDTO
             {
                 City = therapist.City,
-                Clients = new List<UserDTO>(therapist.ClientList.Select(client => User.MapUserToUserDTO(client)).ToList()),
+                Clients = new List<UserDTO>(therapist.ClientList.Select(client => User.MapUserToUserDTO(client, client.Categories.Select(c => c.Category).ToList())).ToList()),
                 Email = therapist.Email,
                 FirstName = therapist.FirstName,
                 HouseNumber = therapist.HouseNumber,
