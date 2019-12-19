@@ -99,7 +99,8 @@ namespace Projecten3_Backend.Controllers
 
             if (therapist.PostalCode < 1000 || 9999 < therapist.PostalCode) return BadRequest();//Belgian postal codes
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
-            if (!_therapistRepo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
+            TherapistType tt = _therapistRepo.GetTherapistType(therapist.TherapistId);
+            if (tt == null) return BadRequest();//Therapist type
 
             Therapist edited = _therapistRepo.GetById(therapist.TherapistId);
 
