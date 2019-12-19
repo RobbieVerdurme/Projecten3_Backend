@@ -43,12 +43,12 @@ namespace Projecten3_Backend.Data.Repository
 
         public Therapist GetById(int id)
         {
-            return _therapists.Include(t => t.Clients).ThenInclude(cl => cl.User).Include(t => t.OpeningTimes).FirstOrDefault(t => t.TherapistId == id);
+            return _therapists.Include(t => t.Clients).ThenInclude(cl => cl.User).Include(t => t.OpeningTimes).Include(t => t.TherapistType).FirstOrDefault(t => t.TherapistId == id);
         }
 
         public IEnumerable<Therapist> GetTherapists()
         {
-            return _therapists.Include(t => t.Clients).Include(t => t.OpeningTimes).ToList();
+            return _therapists.Include(t => t.Clients).Include(t => t.OpeningTimes).Include(t => t.TherapistType).ToList();
         }
 
         /// <summary>
