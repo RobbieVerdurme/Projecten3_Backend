@@ -151,7 +151,7 @@ namespace Projecten3_Backend.Controllers
 
             Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _therapistRepo.GetTherapistType(therapist.TherapistTypeId)); 
 
-            if(_repo.TherapistExists(t)) return StatusCode(303);
+            if(_therapistRepo.TherapistExists(t)) return StatusCode(303);
             
             try
             {
@@ -160,8 +160,8 @@ namespace Projecten3_Backend.Controllers
                 await _userManager.AddToRoleAsync(user, UserRole.THERAPIST);
                 if (result.Succeeded)
                 {
-                    _repo.AddTherapist(t);
-                    _repo.SaveChanges();
+                    _therapistRepo.AddTherapist(t);
+                    _therapistRepo.SaveChanges();
                     //return ok so the user knows the account has been created
                     return Ok();
                 }
