@@ -100,7 +100,7 @@ namespace Projecten3_Backend.Model
 
         }
 
-        public static UserWithChallengesDTO MapUserToUserWithChallengesDTO(User usr, List<ChallengesOfUserDTO> challenges)
+        public static UserWithChallengesDTO MapUserToUserWithChallengesDTO(User usr, List<ChallengesOfUserDTO> challenges, List<Category> categories)
         {
             if(usr != null)
             {
@@ -111,7 +111,7 @@ namespace Projecten3_Backend.Model
                     FamilyName = usr.FamilyName,
                     Email = usr.Email,
                     Phone = usr.Phone,
-                    Categories = usr.Categories.Select(c => c.Category),
+                    Categories = categories,
                     Contract = usr.Contract,
                     ExperiencePoints = usr.ExperiencePoints,
                     Challenges = challenges

@@ -62,7 +62,7 @@ namespace Projecten3_Backend.Controllers
             }
             List<ChallengesOfUserDTO> challenges = _challengeRepo.GetUserChallenges(id).Select(c => ChallengeUser.MapToChallengesOfUserDTO(c)).ToList();
 
-            return Ok(Model.User.MapUserToUserWithChallengesDTO(user, challenges));
+            return Ok(Model.User.MapUserToUserWithChallengesDTO(user, challenges, _userRepo.GetUserCategories(user.UserId).ToList()));
         }
 
         /// <summary>
