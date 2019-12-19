@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data;
@@ -21,12 +22,17 @@ namespace Projecten3_Backend.Controllers
         private readonly ITherapistRepository _repo;
         private readonly IUserRepository _userRepo;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TherapistsController(ITherapistRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository)
+        public TherapistsController(ITherapistRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository, SignInManager<IdentityUser> signInManager,
+        UserManager<IdentityUser> userManager)
         {
             _repo = repo;
             _userRepo = userRepo;
             _categoryRepository = categoryRepository;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [Route("api/therapist")]
@@ -147,7 +153,7 @@ namespace Projecten3_Backend.Controllers
         //[Authorize(Roles = UserRole.MULTIMED)]
         [Route("api/therapist/add")]
         [HttpPost]
-        public IActionResult AddTherapist(AddTherapistDTO therapist) {
+        public async Task<IActionResult> AddTherapist(AddTherapistDTO therapist) {
             if (therapist == null || string.IsNullOrEmpty(therapist.City) || string.IsNullOrEmpty(therapist.Email) || string.IsNullOrEmpty(therapist.FirstName)
                 || string.IsNullOrEmpty(therapist.LastName) || string.IsNullOrEmpty(therapist.PhoneNumber) || string.IsNullOrEmpty(therapist.Street)
                 || string.IsNullOrEmpty(therapist.Website)) return BadRequest();
@@ -159,16 +165,26 @@ namespace Projecten3_Backend.Controllers
             Therapist t = Therapist.MapAddTherapistDTOToTherapist(therapist, _repo.GetTherapistType(therapist.TherapistTypeId)); 
 
             if(_repo.TherapistExists(t)) return StatusCode(303);
-            _repo.AddTherapist(t);
+            
             try
             {
-                _repo.SaveChanges();
+                IdentityUser user = new IdentityUser { UserName = therapist.Email, Email = therapist.Email };
+                var result = await _userManager.CreateAsync(user, "Multimed@" + therapist.FirstName + therapist.LastName + therapist.PhoneNumber);
+                await _userManager.AddToRoleAsync(user, UserRole.THERAPIST);
+                if (result.Succeeded)
+                {
+                    _repo.AddTherapist(t);
+                    _repo.SaveChanges();
+                    //return ok so the user knows the account has been created
+                    return Ok();
+                }
+               
             }
             catch (Exception)
             {
                 return StatusCode(500);
             }
-            return Ok();
+            return StatusCode(303);
         }
 
         /// <summary>

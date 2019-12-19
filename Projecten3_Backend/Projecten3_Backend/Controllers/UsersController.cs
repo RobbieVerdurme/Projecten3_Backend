@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data;
@@ -10,6 +11,7 @@ using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Projecten3_Backend.Controllers
 {    
@@ -17,6 +19,8 @@ namespace Projecten3_Backend.Controllers
     public class UsersController : ControllerBase
     {
         #region prop
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepo;
         private readonly ICategoryRepository _categoryRepo;
         private readonly ICompanyRepository _companyRepo;
@@ -25,13 +29,16 @@ namespace Projecten3_Backend.Controllers
         #endregion
 
         #region ctor
-        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
+        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo, SignInManager<IdentityUser> signInManager,
+        UserManager<IdentityUser> userManager)
         {
             _userRepo = userRepository;
             _categoryRepo = categoryRepository;
             _companyRepo = companyRepo;
             _therapistRepo = therapistRepo;
             _challengeRepo = challengeRepo;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
         #endregion
 
@@ -148,7 +155,7 @@ namespace Projecten3_Backend.Controllers
         [Route("api/users/add")]
         [HttpPost]
         [Authorize(Policy = UserRole.MULTIMED,Roles = UserRole.MULTIMED)]
-        public IActionResult PostUser(AddUserDTO user)
+        public async Task<IActionResult> PostUser(AddUserDTO user)
         {
             if (user == null || string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.FamilyName) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Phone)) return BadRequest();
 
@@ -167,17 +174,25 @@ namespace Projecten3_Backend.Controllers
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
+            
 
-            _userRepo.AddUser(u);
             try
             {
-                _userRepo.SaveChanges();
+                IdentityUser userLogin = new IdentityUser { UserName = user.Email, Email = user.Email };
+                var result = await _userManager.CreateAsync(userLogin, "Multimed@" + user.FirstName + user.FamilyName + user.Phone);
+                await _userManager.AddToRoleAsync(userLogin, "User");
+                if (result.Succeeded)
+                {
+                    //return ok so the user knows the account has been created
+                    _userRepo.AddUser(u);
+                    _userRepo.SaveChanges();
+                    return Ok();
+                }
             }
             catch (Exception) {
                 return StatusCode(500);
             }
-
-            return Ok();
+            return StatusCode(303);
         }
 
         /// <summary>
