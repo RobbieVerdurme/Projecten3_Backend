@@ -1,4 +1,5 @@
 ﻿using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace Projecten3_Backend.Data.IRepository
 
         void Update(Category category);
         void DeleteCategory(int id);
+        void AddCategoriesUsers(List<CategoryUser> categoryUsers);
     }
 }

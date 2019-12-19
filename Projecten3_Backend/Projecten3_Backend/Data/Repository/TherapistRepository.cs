@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using Projecten3_Backend.Models;
 using System;
 using System.Collections.Generic;
@@ -131,6 +132,16 @@ namespace Projecten3_Backend.Data.Repository
         public void AddTherapistType(TherapistType therapistType)
         {
             _dbContext.TherapistType.Add(therapistType);
+        }
+
+        public IEnumerable<Therapist> GetTherapistsById(IList<int> ids)
+        {
+            return _dbContext.Therapist.Where(t => ids.Contains(t.TherapistId)).ToList();
+        }
+
+        public void AddTherapistsUsers(List<TherapistUser> therapistUsers)
+        {
+            _dbContext.TherapistUser.AddRange(therapistUsers);
         }
     }
 }

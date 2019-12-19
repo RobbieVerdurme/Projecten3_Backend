@@ -1,5 +1,6 @@
 ﻿using Projecten3_Backend.Data.IRepository;
 using Projecten3_Backend.Model;
+using Projecten3_Backend.Model.ManyToMany;
 using Projecten3_Backend.Models;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,11 @@ namespace Projecten3_Backend.Data.Repository
         public void Update(Category category)
         {
             _dbContext.Update(category);
+        }
+
+        public void AddCategoriesUsers(List<CategoryUser> categoryUsers)
+        {
+            _dbContext.CategoryUser.AddRange(categoryUsers);
         }
     }
 }

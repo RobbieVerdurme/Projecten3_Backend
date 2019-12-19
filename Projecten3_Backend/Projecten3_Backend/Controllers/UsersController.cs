@@ -130,7 +130,6 @@ namespace Projecten3_Backend.Controllers
             u.Categories = categories.Select(c => Model.User.MapCategoryToCategoryUser(c, u)).ToList();
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
-
             try
             {
                 await _userManager.UpdateAsync(identityUser);
@@ -178,10 +177,12 @@ namespace Projecten3_Backend.Controllers
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
-            
-
             try
             {
+                List<CategoryUser> catUsers = _categoryRepo.GetCategoriesById(user.Categories).Select(c => new CategoryUser { Category = c, User = u }).ToList();
+                u.AddCategories(catUsers);
+                List<TherapistUser> tUser = _therapistRepo.GetTherapistsById(user.Therapists).Select(t => new TherapistUser { Therapist = t, User = u }).ToList();
+                u.AddTherapists(tUser);
                 IdentityUser userLogin = new IdentityUser { UserName = user.Email, Email = user.Email };
                 var result = await _userManager.CreateAsync(userLogin, "Multimed@" + user.FirstName + user.FamilyName + user.Phone);
                 await _userManager.AddToRoleAsync(userLogin, "User");
@@ -190,6 +191,7 @@ namespace Projecten3_Backend.Controllers
                     //return ok so the user knows the account has been created
                     _userRepo.AddUser(u);
                     _userRepo.SaveChanges();
+                    _categoryRepo.SaveChanges();
                     return Ok();
                 }
 
@@ -198,7 +200,7 @@ namespace Projecten3_Backend.Controllers
                 usr.AddCategories(categories.Select(c => Model.User.MapCategoryToCategoryUser(c, usr)).ToList());
                 _userRepo.SaveChanges();
             }
-            catch (Exception) {
+            catch (Exception e) {
                 return StatusCode(500);
             }
             return StatusCode(303);
