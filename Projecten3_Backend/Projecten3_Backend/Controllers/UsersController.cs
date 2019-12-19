@@ -46,7 +46,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUser()
         {
-            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u)));
+            return Ok(_userRepo.GetUsers().Select((u) => Model.User.MapUserToUserDTO(u, _userRepo.GetUserCategories(u.UserId).ToList())));
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUserWithChallenges(int id)
         {
-            var user = _userRepo.GetById(id);
+            User user = _userRepo.GetById(id);
 
             if (user == null)
             {
@@ -69,7 +69,7 @@ namespace Projecten3_Backend.Controllers
             }
             List<ChallengesOfUserDTO> challenges = _challengeRepo.GetUserChallenges(id).Select(c => ChallengeUser.MapToChallengesOfUserDTO(c)).ToList();
 
-            return Ok(Model.User.MapUserToUserWithChallengesDTO(user, challenges));
+            return Ok(Model.User.MapUserToUserWithChallengesDTO(user, challenges, _userRepo.GetUserCategories(user.UserId).ToList()));
         }
 
         /// <summary>
@@ -84,14 +84,14 @@ namespace Projecten3_Backend.Controllers
         [HttpGet]
         public IActionResult GetUser(int id)
         {
-            var user = _userRepo.GetById(id);
+            User user = _userRepo.GetById(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(Model.User.MapUserToUserDTO(user));
+            return Ok(Model.User.MapUserToUserDTO(user, _userRepo.GetUserCategories(id).ToList()));
         }
 
         /// <summary>
@@ -115,23 +115,26 @@ namespace Projecten3_Backend.Controllers
             }
 
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
+            List<Category> categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
 
             User u = _userRepo.GetById(user.UserId);
             if (u == null) return BadRequest();
-            
             u.FirstName = user.FirstName;
             u.FamilyName = user.FamilyName;
             u.Email = user.Email;
             u.Phone = user.Phone;
-            u.Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
             u.Contract = user.Contract;
             
 
             if (_userRepo.UserExists(u)) return StatusCode(303);
 
-            _userRepo.UpdateUser(u);
+          
             try
             {
+                _userRepo.UpdateUser(u);
+                _userRepo.SaveChanges();
+
+                u.Categories = categories.Select(c => Model.User.MapCategoryToCategoryUser(c, u)).ToList();
                 _userRepo.SaveChanges();
             }
             catch (Exception)
@@ -163,13 +166,14 @@ namespace Projecten3_Backend.Controllers
             if (comp == null) return BadRequest();
             if (!_categoryRepo.CategoriesExist(user.Categories)) return BadRequest();
             if (!_therapistRepo.TherapistsExist(user.Therapists)) return BadRequest();
+            List<Category> categories = _categoryRepo.GetCategoriesById(user.Categories).ToList();
+
             User u = new User {
                 FirstName = user.FirstName,
                 FamilyName = user.FamilyName,
                 Phone = user.Phone,
                 Email = user.Email,
                 Company = comp,
-                Categories = _categoryRepo.GetCategoriesById(user.Categories).ToList(),
                 Contract = comp.Contract
             };
             if (_userRepo.UserExists(u)) return StatusCode(303);
@@ -188,6 +192,11 @@ namespace Projecten3_Backend.Controllers
                     _userRepo.SaveChanges();
                     return Ok();
                 }
+
+
+                User usr = _userRepo.GetByEmail(u.Email);
+                usr.AddCategories(categories.Select(c => Model.User.MapCategoryToCategoryUser(c, usr)).ToList());
+                _userRepo.SaveChanges();
             }
             catch (Exception) {
                 return StatusCode(500);
@@ -252,8 +261,8 @@ namespace Projecten3_Backend.Controllers
                 return StatusCode(500);
             }
         }
-
-        /// leaderboard
+        
+                /// leaderboard
         /// <summary>
         /// Get leaderboard
         /// </summary>
@@ -273,11 +282,43 @@ namespace Projecten3_Backend.Controllers
             {
                 return NotFound();
             }
-            if (user.Company == null)
+            
+             if (user.Company == null)
             {
                 return NotFound();
             }
+
             return Ok(_userRepo.GetUsersOfCompany(user.Company.CompanyId).Select((u) => Model.User.MapUserToLeaderboardDTO(u)));
+         }
+            
+            
+
+        /// <summary>
+        /// get the therapist list from user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>
+        /// a list of therapists
+        /// </returns>
+        [Route("api/users/Category/{id}")]
+        [HttpGet]
+        public IActionResult GetCategoryUser(int id)
+        {
+            var user = _userRepo.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            try
+            {
+                IEnumerable<Category> th = _userRepo.GetUserCategories(id);
+                return Ok(th);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }
