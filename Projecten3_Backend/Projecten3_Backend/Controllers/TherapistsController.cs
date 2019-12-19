@@ -100,27 +100,14 @@ namespace Projecten3_Backend.Controllers
             if (therapist.PostalCode < 1000 || 9999 < therapist.PostalCode) return BadRequest();//Belgian postal codes
             if (therapist.HouseNumber < 1 || 999 < therapist.HouseNumber) return BadRequest();//House numbers
             if (!_therapistRepo.TherapistTypeExists(therapist.TherapistTypeId)) return BadRequest();//Therapist type
-            if (therapist.OpeningTimes == null || _therapistRepo.HasInvalidOpeningTimes(therapist.OpeningTimes)) return BadRequest(); //Opening times
-            if (!_userRepo.UsersExist(therapist.Clients)) return BadRequest();//Clients
 
             Therapist edited = _therapistRepo.GetById(therapist.TherapistId);
-            List<OpeningTimes> openingTimes = new List<OpeningTimes>(_therapistRepo.GetOpeningTimesForTherapist(therapist.TherapistId));
-            for (int i = 0; i < 7; i++) {
-                openingTimes[i].Interval = therapist.OpeningTimes[i];
-            }
-            ICollection<TherapistUser> therapistUsers = _userRepo.GetClientsOfTherapist(therapist.Clients).Select(u => new TherapistUser
-            {
-                UserId = u.UserId,
-                User = u,
-                TherapistId = edited.TherapistId,
-                Therapist = edited
-            }).ToList();
 
             if (edited == null) return BadRequest();
 
-            edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited, openingTimes, therapistUsers);
+            edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited);
 
-            if (_therapistRepo.TherapistExists(edited)) return StatusCode(303);
+            if (!_therapistRepo.TherapistExists(edited)) return StatusCode(303);
 
             _therapistRepo.UpdateTherapist(edited);
             try
