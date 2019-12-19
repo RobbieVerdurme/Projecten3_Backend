@@ -83,7 +83,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public IEnumerable<TherapistType> GetTherapistTypes()
         {
-            return _dbContext.TherapistType.ToList();
+            return _dbContext.TherapistType.Include(t => t.Categories).ToList();
         }
 
         public bool HasInvalidOpeningTimes(IList<string> times)
@@ -98,7 +98,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public TherapistType GetTherapistType(int id)
         {
-            return _dbContext.TherapistType.Where(t => t.TherapistTypeId == id).FirstOrDefault();
+            return _dbContext.TherapistType.Where(t => t.TherapistTypeId == id).Include(t => t.Categories).FirstOrDefault();
         }
 
         public IEnumerable<OpeningTimes> GetOpeningTimesForTherapist(int id)
