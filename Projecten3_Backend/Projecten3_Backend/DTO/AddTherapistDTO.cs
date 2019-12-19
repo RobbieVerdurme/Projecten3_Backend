@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Projecten3_Backend.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,5 +27,7 @@ namespace Projecten3_Backend.DTO
         public string City { get; set; }
 
         public int TherapistTypeId { get; set; }
+
+        public List<OpeningTimes> OpeningTimes { get; set; }
     }
 }
