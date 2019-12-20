@@ -46,8 +46,19 @@ namespace Projecten3_Backend.Data
                 TherapistType thType = new TherapistType() { Type = "Diëtist", Categories = new List<Category> { c } };
                 _dbContext.Add(thType);
 
+                //OpeningTimes
+                List<OpeningTimes> otList = new List<OpeningTimes>()
+                {
+                    new OpeningTimes(){Interval = "9-17"},
+                    new OpeningTimes(){Interval = "9-17"},
+                    new OpeningTimes(){Interval = "9-17"},
+                    new OpeningTimes(){Interval = "9-17"},
+                    new OpeningTimes(){Interval = "9-17"},
+                    new OpeningTimes(){Interval = "9-17"},
+                    new OpeningTimes(){Interval = "9-17"},
+                };
                 //Therapist
-                Therapist th = new Therapist() {FirstName = "Therapist",LastName = "De Peape", HouseNumber = 1, PhoneNumber = "", PostalCode = 9000, Street = "", Website = "", City = "Gent", Email = "TherapistDePeape@multimed.com", TherapistType = thType};
+                Therapist th = new Therapist() {FirstName = "Therapist",LastName = "De Peape", HouseNumber = 1, PhoneNumber = "0474139526", PostalCode = 9000, Street = "test", Website = "www.google.com", City = "Gent", Email = "TherapistDePeape@multimed.com", TherapistType = thType, OpeningTimes = otList };
                 await CreateUser("TestTh",th.Email, "P@ssword123", UserRole.THERAPIST);
                 _dbContext.Add(th);
 
