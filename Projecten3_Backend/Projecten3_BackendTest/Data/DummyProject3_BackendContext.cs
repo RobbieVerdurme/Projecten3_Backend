@@ -1,4 +1,5 @@
-﻿using Projecten3_Backend.DTO;
+﻿using Microsoft.AspNetCore.Identity;
+using Projecten3_Backend.DTO;
 using Projecten3_Backend.Model;
 using Projecten3_Backend.Model.ManyToMany;
 using System;
@@ -35,9 +36,13 @@ namespace Projecten3_BackendTest.Data
 
         public static DateTime CompleteChallengeDate = DateTime.Now;
         public ChallengesUserDTO ChallengesUserDTO { get; }
+        public EditAppUserDTO EditAppUserDTO { get; set; }
 
         //Objects
         public Category Category { get; }
+
+        //UserManager
+        public IdentityUser IdentityUser { get; set; }
         #endregion
 
         //Init used data
@@ -102,13 +107,17 @@ namespace Projecten3_BackendTest.Data
             EditUserDTO = new EditUserDTO { Categories = new List<int>() { 1 }, Email = "mail@mailto.com", FamilyName = "test", FirstName = "test", Phone = "0471236548", UserId = 1, Contract = new DateTime()};
             AddTherapistDTO = new AddTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 9000, Street = "test", TherapistTypeId = 0, Website = "test" };
             AddTherapistTypeDTO = new AddTherapistTypeDTO { Categories = new List<int>() { 1 }, Type = "test" };
-            EditTherapistDTO = new EditTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 5000, Street = "test", TherapistId = 0, Website = "test", TherapistTypeId = 0, Clients = new List<int>() { 1 }, OpeningTimes = new List<string>() { "test1", "test1", "test1", "test1", "test1", "test1", "test1" } };
+            EditTherapistDTO = new EditTherapistDTO { City = "test", Email = "test", FirstName = "test", HouseNumber = 1, LastName = "test", PhoneNumber = "test", PostalCode = 5000, Street = "test", TherapistId = 0, Website = "test", TherapistTypeId = 0, OpeningTimes = new List<OpeningTimes>() { new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0}, new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0 }, new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0 }, new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0 }, new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0 }, new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0 }, new OpeningTimes() { Interval = "9-19", OpeningTimesId = 0 } } };
             EditTherapistTypeDTO = new EditTherapistTypeDTO { Id = 0, Categories = new List<int>() { 0 }, Type = "therapisttype" };
             AddCompanyDTO = new AddCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test" };
             EditCompanyDTO = new EditCompanyDTO { City = "test", Contract = new DateTime(), Country = "test", HouseNumber = 3, Mail = "test", Name = "test", Phone = "test", PostalCode = 9000, Site = "test", Street = "test", CompanyId = 0, CompanyMembers = new List<User>() { user1, user2 } };
             AddChallengeDTO = new AddChallengeDTO { CategoryId = 0, ChallengeImage = "test", Description = "test", Title = "test" };
             CompleteChallengeDTO = new CompleteChallengeDTO { ChallengeID = 0, UserID = 0, Rating = 3, Feedback = "test", CompletedOn = CompleteChallengeDate };
             ChallengesUserDTO = new ChallengesUserDTO { ChallengeIds = new List<int>() { 0 }, UserId = 0 };
+            EditAppUserDTO = new EditAppUserDTO { UserId = 1, Email = "test@hotmail.com", FamilyName = "test", FirstName = "tests", Phone = "0474139526" };
+
+            //UserManager
+            IdentityUser = new IdentityUser();
         }
     }
 }
