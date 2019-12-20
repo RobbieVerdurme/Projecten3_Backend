@@ -114,8 +114,6 @@ namespace Projecten3_Backend.Controllers
 
             edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited);
 
-            if (!_therapistRepo.TherapistExists(edited)) return StatusCode(303);
-
             _therapistRepo.UpdateTherapist(edited);
             try
             {

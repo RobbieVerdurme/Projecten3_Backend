@@ -124,7 +124,6 @@ namespace Projecten3_Backend.Controllers
             u.Email = dto.Email;
             u.Phone = dto.Phone;
 
-            if (_userRepo.UserExists(u)) return StatusCode(303);
             try
             {
                 await _userManager.UpdateAsync(identityUser);
