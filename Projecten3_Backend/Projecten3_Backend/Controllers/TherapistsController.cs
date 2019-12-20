@@ -108,7 +108,7 @@ namespace Projecten3_Backend.Controllers
             TherapistType tt = _therapistRepo.GetTherapistType(therapist.TherapistTypeId);
             if (tt == null) return BadRequest();//Therapist type
 
-            Therapist edited = _therapistRepo.GetById(therapist.TherapistTypeId);
+            Therapist edited = _therapistRepo.GetById(therapist.TherapistId);
 
             if (edited == null) return BadRequest();
 
