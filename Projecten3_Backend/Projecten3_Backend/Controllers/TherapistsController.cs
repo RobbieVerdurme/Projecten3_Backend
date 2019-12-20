@@ -35,6 +35,13 @@ namespace Projecten3_Backend.Controllers
             _userManager = userManager;
         }
 
+        public TherapistsController(ITherapistRepository repo, IUserRepository userRepo, ICategoryRepository categoryRepository)
+        {
+            _therapistRepo = repo;
+            _userRepo = userRepo;
+            _categoryRepository = categoryRepository;
+        }
+
         [Route("api/therapist")]
         [HttpGet]
         public IActionResult GetTherapist()

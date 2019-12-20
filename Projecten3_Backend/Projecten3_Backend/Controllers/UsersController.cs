@@ -37,6 +37,15 @@ namespace Projecten3_Backend.Controllers
             _challengeRepo = challengeRepo;
             _userManager = userManager;
         }
+
+        public UsersController(IUserRepository userRepository, ICategoryRepository categoryRepository, ICompanyRepository companyRepo, ITherapistRepository therapistRepo, IChallengeRepository challengeRepo)
+        {
+            _userRepo = userRepository;
+            _categoryRepo = categoryRepository;
+            _companyRepo = companyRepo;
+            _therapistRepo = therapistRepo;
+            _challengeRepo = challengeRepo;
+        }
         #endregion
 
         [Route("api/users")]

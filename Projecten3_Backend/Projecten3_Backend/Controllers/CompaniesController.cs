@@ -72,8 +72,7 @@ namespace Projecten3_Backend.Controllers
         [HttpPost]
         public IActionResult AddCompany(AddCompanyDTO addCompany) {
             if (addCompany == null || string.IsNullOrEmpty(addCompany.City) || string.IsNullOrEmpty(addCompany.Country) || string.IsNullOrEmpty(addCompany.Mail)
-                || string.IsNullOrEmpty(addCompany.Name) || string.IsNullOrEmpty(addCompany.Phone) || string.IsNullOrEmpty(addCompany.Street)
-                || string.IsNullOrEmpty(addCompany.Site)) return BadRequest();
+                || string.IsNullOrEmpty(addCompany.Name) || string.IsNullOrEmpty(addCompany.Phone) || string.IsNullOrEmpty(addCompany.Street)) return BadRequest();
             if (addCompany.PostalCode < 1000 || 9999 < addCompany.PostalCode) return BadRequest();//Belgian postal codes
             if (addCompany.HouseNumber < 1 || 999 < addCompany.HouseNumber) return BadRequest();//House numbers
             Company company = Company.MapAddCompanyDTOToCompany(addCompany);
@@ -106,8 +105,7 @@ namespace Projecten3_Backend.Controllers
         public IActionResult EditCompany(EditCompanyDTO company)
         {
             if (company == null || string.IsNullOrEmpty(company.City) || string.IsNullOrEmpty(company.Country)
-                || string.IsNullOrEmpty(company.Mail) || string.IsNullOrEmpty(company.Name) || string.IsNullOrEmpty(company.Phone)
-                || string.IsNullOrEmpty(company.Site) || string.IsNullOrEmpty(company.Street)) return BadRequest();
+                || string.IsNullOrEmpty(company.Mail) || string.IsNullOrEmpty(company.Name) || string.IsNullOrEmpty(company.Phone) || string.IsNullOrEmpty(company.Street)) return BadRequest();
 
             if (company.PostalCode < 1000 || 9999 < company.PostalCode) return BadRequest();//Belgian postal codes
             if (company.HouseNumber < 1 || 999 < company.HouseNumber) return BadRequest();//House numbers
