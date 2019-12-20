@@ -81,9 +81,7 @@ namespace Projecten3_Backend.Data
                     chUsr
                 });
 
-                usr.AddCategories(cusr);
-
-                
+                usr.AddCategories(cusr); 
 
                 //account user
                 await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
@@ -93,8 +91,6 @@ namespace Projecten3_Backend.Data
 
                 th.AddClient(usr);
                 
-
-
                 #region Save changes
                 _dbContext.SaveChanges();
                 #endregion

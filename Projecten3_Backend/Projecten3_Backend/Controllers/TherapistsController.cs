@@ -102,7 +102,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
-        //[Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
+        [Authorize(Roles = UserRole.MULTIMED_AND_THERAPIST)]
         [Route("api/therapist/edit")]
         [HttpPut]
         public IActionResult EditTherapist(EditTherapistDTO therapist) {
@@ -141,7 +141,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 500 if saving failed.
         /// HTTP 200 if successful.
         /// </returns>
-        //[Authorize(Roles = UserRole.MULTIMED)]
+        [Authorize(Roles = UserRole.MULTIMED)]
         [Route("api/therapist/add")]
         [HttpPost]
         public async Task<IActionResult> AddTherapist(AddTherapistDTO therapist) {
