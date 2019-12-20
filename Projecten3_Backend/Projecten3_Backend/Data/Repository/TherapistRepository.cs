@@ -43,7 +43,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public Therapist GetById(int id)
         {
-            return _therapists.Include(t => t.Clients).ThenInclude(cl => cl.User).Include(t => t.OpeningTimes).Include(t => t.TherapistType).FirstOrDefault(t => t.TherapistId == id);
+            return _therapists.Include(t => t.Clients).ThenInclude(cl => cl.User).Include(t => t.OpeningTimes).Include(t => t.TherapistType).ThenInclude(tt => tt.Categories).FirstOrDefault(t => t.TherapistId == id);
         }
 
         public IEnumerable<Therapist> GetTherapists()
@@ -142,6 +142,11 @@ namespace Projecten3_Backend.Data.Repository
         public void AddTherapistsUsers(List<TherapistUser> therapistUsers)
         {
             _dbContext.TherapistUser.AddRange(therapistUsers);
+        }
+
+        public void EditOpeningsTimes(List<OpeningTimes> ot)
+        {
+            ot.ForEach(openingTime => _dbContext.OpeningTimes.Update(openingTime));
         }
     }
 }

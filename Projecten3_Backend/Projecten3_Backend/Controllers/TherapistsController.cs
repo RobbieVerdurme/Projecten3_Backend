@@ -111,9 +111,8 @@ namespace Projecten3_Backend.Controllers
             Therapist edited = _therapistRepo.GetById(therapist.TherapistId);
 
             if (edited == null) return BadRequest();
-
-            edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited);
-
+            edited = Therapist.MapEditTherapistDTOToTherapist(therapist, edited, tt);
+            _therapistRepo.EditOpeningsTimes(edited.OpeningTimes.ToList());
             _therapistRepo.UpdateTherapist(edited);
             try
             {
