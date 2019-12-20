@@ -47,6 +47,8 @@ namespace Projecten3_Backend.Data.IRepository
 
         void AddTherapistsUsers(List<TherapistUser> therapistUsers);
 
+        void EditOpeningsTimes(List<OpeningTimes> ot);
+
         void SaveChanges();
     }
 }

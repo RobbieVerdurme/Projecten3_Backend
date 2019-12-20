@@ -116,18 +116,18 @@ namespace Projecten3_Backend.Model
             return ther;
         }
 
-        public static Therapist MapEditTherapistDTOToTherapist(EditTherapistDTO therapist, Therapist edited)
+        public static Therapist MapEditTherapistDTOToTherapist(EditTherapistDTO therapist, Therapist edited, TherapistType tt)
         {
             edited.City = therapist.City;
             edited.Email = therapist.Email;
             edited.FirstName = therapist.FirstName;
             edited.HouseNumber = therapist.HouseNumber;
             edited.LastName = therapist.LastName;
-            edited.OpeningTimes = therapist.OpeningTimes;
             edited.PhoneNumber = therapist.PhoneNumber;
             edited.PostalCode = therapist.PostalCode;
             edited.Street = therapist.Street;
             edited.Website = therapist.Website;
+            edited.TherapistType = tt;
             return edited;
         }
 
