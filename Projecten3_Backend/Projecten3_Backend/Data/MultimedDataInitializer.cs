@@ -34,55 +34,7 @@ namespace Projecten3_Backend.Data
                
                 //Multimeduser
                 await CreateUser("SofieV","SofieV@gmail.com", "P@ssword123", UserRole.MULTIMED);
-
-                //categories
-                Category c = new Category() { Name = "Ondergewicht" };
-                _dbContext.Add(c);
-
-                //challenges
-                Challenge ch = new Challenge() { ChallengeImage = "", Description = "Loop 2 km", Title = "Lopen", Category = c, Level = 1 };
-
-                //TherapistType
-                TherapistType thType = new TherapistType() { Type = "Diëtist", Categories = new List<Category> { c } };
-                _dbContext.Add(thType);
-
-                //Therapist
-                Therapist th = new Therapist() {FirstName = "Therapist",LastName = "De Peape", HouseNumber = 1, PhoneNumber = "", PostalCode = 9000, Street = "", Website = "", City = "Gent", Email = "TherapistDePeape@multimed.com", TherapistType = thType};
-                await CreateUser("TestTh",th.Email, "P@ssword123", UserRole.THERAPIST);
-                _dbContext.Add(th);
-
-                //company
-                Company cmp = new Company() { Name = "Multimed", Street = "Multimedstraat", City = "Gent", Contract = DateTime.Now.AddYears(30), Country = "Belgie", Mail = "Multimed@gmail.com", Phone = "04785889764", PostalCode = 9000, HouseNumber = 1, Site = "multimed.be"};
-                _dbContext.Add(cmp);
-
-                //user
-                User usr = new User() { FirstName = "Boefer",FamilyName = "rob",Phone = "0478995888",ExperiencePoints = 16, Company = cmp, Email = "Boeferrob@live.be", Contract = cmp.Contract};
-                usr.AddTherapist(th);
-                //many to many from user
-                List<CategoryUser> cusr = new List<CategoryUser> { 
-                    new CategoryUser() { Category = c, User = usr, UserId = usr.UserId, CategoryId = c.CategoryId }
-                };
-
-                ChallengeUser chUsr = new ChallengeUser() { ChallengeUserId = usr.UserId, User = usr, ChallengeId = ch.ChallengeId, Challenge = ch };
-
-                usr.AddChallenges(new List<ChallengeUser> {
-                    chUsr
-                });
-
-                usr.AddCategories(cusr);
-
                 
-
-                //account user
-                await CreateUser("Boeferrob", usr.Email, "P@ssword123", UserRole.USER);
-                _dbContext.Add(usr);
-                _dbContext.ChallengeUser.Add(chUsr);
-
-
-                th.AddClient(usr);
-                
-
-
                 #region Save changes
                 _dbContext.SaveChanges();
                 #endregion

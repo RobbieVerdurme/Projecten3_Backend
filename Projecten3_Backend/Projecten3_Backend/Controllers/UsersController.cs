@@ -326,7 +326,6 @@ namespace Projecten3_Backend.Controllers
         /// </returns>
         [Route("api/users/leaderboard/{id:int}")]
         [HttpGet]
-        //[Authorize(Policy = UserRole.MULTIMED, Roles = UserRole.MULTIMED)]
         public IActionResult GetLeaderboard(int id)
         {
             var user = _userRepo.GetById(id);
