@@ -92,6 +92,55 @@ namespace Projecten3_Backend.Controllers
         }
 
         /// <summary>
+        /// Edit a user's personal details from the app.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>
+        /// HTTP 400 if the payload is malformed.
+        /// HTTP 500 if saving failed.
+        /// HTTP 303 if a user with the updated values already exists.
+        /// HTTP 200 if successful.
+        /// </returns>
+        [Route("api/users/app/edit")]
+        [HttpPut]
+        [Authorize(Roles = UserRole.USER)]
+        public async Task<ActionResult> EditUserFromApp(EditAppUserDTO dto) {
+            if (dto == null || string.IsNullOrEmpty(dto.FamilyName) || string.IsNullOrEmpty(dto.FirstName) || string.IsNullOrEmpty(dto.Phone) || string.IsNullOrEmpty(dto.Email))
+            {
+                return BadRequest();
+            }
+
+            User u = _userRepo.GetById(dto.UserId);
+            if (u == null) return BadRequest();
+
+
+            IdentityUser identityUser = await _userManager.FindByNameAsync(u.Email);
+            if (identityUser == null) return BadRequest();
+            identityUser.UserName = dto.Email;
+            identityUser.Email = dto.Email;
+
+            u.FirstName = dto.FirstName;
+            u.FamilyName = dto.FamilyName;
+            u.Email = dto.Email;
+            u.Phone = dto.Phone;
+
+            if (_userRepo.UserExists(u)) return StatusCode(303);
+            try
+            {
+                await _userManager.UpdateAsync(identityUser);
+                _userRepo.UpdateUser(u);
+                _userRepo.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok();
+        }
+
+
+        /// <summary>
         /// Edit a user's personal details
         /// </summary>
         /// <param name="user"></param>
@@ -103,7 +152,7 @@ namespace Projecten3_Backend.Controllers
         /// </returns>
         [Route("api/users/edit")]
         [HttpPut]
-        [Authorize(Roles = UserRole.MULTIMED_AND_USER)]
+        [Authorize(Roles = UserRole.MULTIMED)]
         public async Task<ActionResult> PutUser(EditUserDTO user)
         {
             if (user == null || string.IsNullOrEmpty(user.FamilyName) || string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.Phone) || string.IsNullOrEmpty(user.Email) || user.Categories == null)
