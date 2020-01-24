@@ -102,7 +102,7 @@ namespace Projecten3_Backend.Controllers
         /// HTTP 200 if successful.
         /// </returns>
         [Route("api/users/app/edit")]
-        [HttpPut]
+        [HttpPost]
         [Authorize(Roles = UserRole.USER)]
         public async Task<ActionResult> EditUserFromApp(EditAppUserDTO dto) {
             if (dto == null || string.IsNullOrEmpty(dto.FamilyName) || string.IsNullOrEmpty(dto.FirstName) || string.IsNullOrEmpty(dto.Phone) || string.IsNullOrEmpty(dto.Email))
