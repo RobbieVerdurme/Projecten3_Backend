@@ -103,7 +103,7 @@ namespace Projecten3_Backend.Data.Repository
 
         public IEnumerable<User> GetUsersOfCompany(int companyId)
         {
-            return _users.Where(u => u.Company.CompanyId == companyId);
+            return _users.Where(u => u.Company.CompanyId == companyId).Include( u => u.LeaderboardScores);
         }
 
         public IEnumerable<User> GetClientsOfTherapist(IList<int> clients)
